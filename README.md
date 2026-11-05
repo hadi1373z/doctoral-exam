@@ -19,6 +19,7 @@ The latest §10.2 assignment concerns planar maximum independent set. Earlier Eu
 
 ## Study tools
 
+- **[Educational videos](https://hadi1373z.github.io/doctoral-exam/#videos):** 21 source-linked lectures across the three subjects, including 15 advanced lectures. The library has 20 YouTube players, one official university-hosted MP4, subject/topic filters, and direct viewing links. Lecture and background coverage are labeled separately.
 - **600-question repository:** 12 original questions for every assigned topic: four doctoral proofs/constructions, four examiner challenges, two research seminar investigations and two short oral checks.
 - **100 research seminar investigations:** explicit hypotheses, a concrete deliverable, prerequisites, an adversarial follow-up and a proof route or reproducible investigation plan. These are research-style exercises, not claims of novel results.
 - **Two separately labeled open-problem agendas:** P versus NP and P versus BPP, with dated primary references and bounded seminar tasks. A solution of the unrestricted open problem is not expected and earns no exam credit.
@@ -60,7 +61,15 @@ Free-form proofs remain **self-reviewed**. Only numerical checks, timestamps and
 
 ## Use and privacy
 
-Open `index.html` or visit the live site. All code, styling, content, and graphics are inside the HTML file. There is no account, external asset dependency, backend, or AI grading service. Reference links open external source pages only when followed.
+Open `index.html` or visit the live site. The core study tools, code, styling, question content and graphics are inside the HTML file. There is no account, backend, or AI grading service. Educational videos require internet access and stream from their original providers; an external player loads when the video library is opened. Reference links open external source pages when followed.
+
+## Finding and playing educational videos
+
+Choose **Educational videos** at the top of the sidebar, or open the [video library](https://hadi1373z.github.io/doctoral-exam/#videos). Lessons and question pages also link to supporting lectures. Select **Watch here** to change the visible player. There is no automatic playback.
+
+If a player is blank, restricted or blocked by the network, use **Watch on YouTube**, **Open university video** or **Official lecture page** beneath it. A downloaded HTML file directs YouTube playback to the hosted site, since local-file embedding may lack the referrer required by the provider. Direct lecture links remain available.
+
+The catalogue maps verified support to 29 of the 50 assigned study units. For the other units the library explicitly offers related subject lectures; it does not claim exact coverage. In particular, these recordings do not replace the full BFL multilinearity or GMW certification arguments. See the [source-linked video index](videos/README.md) and [portable metadata](data/videos.json). Source links were checked on 6 November 2026. Watching videos earns no cold-exam credit.
 
 Progress stays in this browser on this device. Existing versions one through three are preserved alongside question drafts, stars and repair notes. Export a JSON backup before changing devices or clearing browser data. Downloaded-file progress and hosted-site progress use different browser origins.
 
@@ -73,6 +82,7 @@ After editing source, regenerate the HTML, portable dataset and 50 topic files w
 ```sh
 node src/build-exam.cjs ..
 node src/verify-bank.cjs ..
+node src/verify-videos.cjs ..
 node src/verify-calibration.cjs ..
 node src/verify-depth.cjs ..
 ```

@@ -5,13 +5,13 @@ const root=__dirname;
 const out=path.resolve(root,process.argv[2]||'doctoral-exam');
 fs.mkdirSync(out,{recursive:true});
 let html=fs.readFileSync(path.join(root,'doctoral-exam-before-hardening.html'),'utf8');
-const css=['exam-depth.css','question-bank.css'].map(f=>fs.readFileSync(path.join(root,f),'utf8')).join('\n');
-const code=['core-units.js','exam-depth.js','visual-labs.js','exam-transfers.js','exam-calibration.js','bank-approx.js','bank-complexity.js','bank-probability.js','question-bank-data.js','question-bank-ui.js'].map(f=>fs.readFileSync(path.join(root,f),'utf8')).join('\n');
+const css=['exam-depth.css','question-bank.css','video-library.css'].map(f=>fs.readFileSync(path.join(root,f),'utf8')).join('\n');
+const code=['core-units.js','exam-depth.js','visual-labs.js','exam-transfers.js','exam-calibration.js','bank-approx.js','bank-complexity.js','bank-probability.js','question-bank-data.js','question-bank-ui.js','video-resources.js','video-library.js'].map(f=>fs.readFileSync(path.join(root,f),'utf8')).join('\n');
 if(/<\/script/i.test(code))throw Error('Unexpected script closing sequence');
 html=html.replace('</style>',()=>css+'\n</style>').replace('</body>',()=>'<script>\n'+code+'\n</script>\n</body>');
 fs.writeFileSync(path.join(out,'index.html'),html);
 const dataContext=vm.createContext({});
-for(const file of ['core-units.js','bank-approx.js','bank-complexity.js','bank-probability.js','question-bank-data.js'])vm.runInContext(fs.readFileSync(path.join(root,file),'utf8'),dataContext);
+for(const file of ['core-units.js','bank-approx.js','bank-complexity.js','bank-probability.js','question-bank-data.js','video-resources.js'])vm.runInContext(fs.readFileSync(path.join(root,file),'utf8'),dataContext);
 const bank=JSON.parse(vm.runInContext('JSON.stringify(questionBankDocument())',dataContext));
 fs.mkdirSync(path.join(out,'data'),{recursive:true});
 fs.writeFileSync(path.join(out,'data','questions.json'),JSON.stringify(bank,null,2)+'\n');
@@ -32,8 +32,17 @@ for(const [subject,name]of Object.entries(names)){
 }
 fs.writeFileSync(path.join(questionRoot,'README.md'),index);
 fs.writeFileSync(path.join(questionRoot,'open-problems.md'),'# Supplementary open-problem agendas\n\nStatus references checked 5 November 2026. These agendas are separate from the 600 course questions. A proof of the unrestricted question is not expected; each agenda specifies a bounded seminar task.\n\n'+bank.openProblems.map(questionMarkdown).join('\n---\n\n'));
-const sourceFiles=['doctoral-exam-before-hardening.html','core-units.js','exam-depth.js','exam-depth.css','visual-labs.js','exam-transfers.js','exam-calibration.js','bank-approx.js','bank-complexity.js','bank-probability.js','question-bank-data.js','question-bank-ui.js','question-bank.css','build-exam.cjs','verify-bank.cjs','verify-calibration.cjs','verify-depth.cjs','research-audits.cjs'];
+const videos=JSON.parse(vm.runInContext('JSON.stringify(EDUCATIONAL_VIDEOS)',dataContext)),videoDate=vm.runInContext('VIDEO_VERIFIED_DATE',dataContext);
+fs.writeFileSync(path.join(out,'data','videos.json'),JSON.stringify({schema:'doctoral-educational-videos-v1',sourceLinksChecked:videoDate,videos},null,2)+'\n');
+fs.mkdirSync(path.join(out,'videos'),{recursive:true});
+let videoIndex='# Educational videos\n\n[Open the video library](https://hadi1373z.github.io/doctoral-exam/#videos)\n\n'+videos.length+' public lectures across the three exam subjects. Each resource retains its official source and viewing URL. Topic lectures and background support are labeled separately; none is claimed to replace every proof in the assigned books or papers. Watching earns no cold-exam credit. Source links checked '+videoDate+'.\n\nUse the live website for in-page playback. If a provider restricts its player, use the direct viewing link or official lecture page.\n';
+for(const [subject,name]of Object.entries(names)){videoIndex+='\n## '+name+'\n\n';for(const v of videos.filter(v=>v.subject===subject))videoIndex+='### '+v.title+'\n\n'+v.speaker+' · '+v.institution+' · '+v.level+' · '+v.coverage+' support\n\n'+v.scopeNote+'\n\n[Watch lecture]('+v.watchUrl+') · [Official source]('+v.sourceUrl+') · [Open player](https://hadi1373z.github.io/doctoral-exam/#video/'+v.id+')\n\nTopics: '+v.topics.map(id=>units.find(u=>u.id===id).title).join('; ')+'.\n\n';}
+videoIndex+='\n## Assigned-topic coverage\n\nThe catalogue has verified mappings for '+new Set(videos.flatMap(v=>v.topics)).size+' of '+units.length+' study units. Unmapped topics use clearly labeled related-subject lectures in the website.\n\n';
+for(const u of units){const matches=videos.filter(v=>v.topics.includes(u.id));videoIndex+='- **'+u.title+'**: '+(matches.length?matches.map(v=>'['+v.title+']('+v.watchUrl+') ('+v.coverage+')').join('; '):'No verified exact-topic mapping yet; related subject lectures are offered.')+'\n';}
+fs.writeFileSync(path.join(out,'videos','README.md'),videoIndex);
+const sourceFiles=['doctoral-exam-before-hardening.html','core-units.js','exam-depth.js','exam-depth.css','visual-labs.js','exam-transfers.js','exam-calibration.js','bank-approx.js','bank-complexity.js','bank-probability.js','question-bank-data.js','question-bank-ui.js','question-bank.css','video-resources.js','video-library.js','video-library.css','build-exam.cjs','verify-bank.cjs','verify-calibration.cjs','verify-depth.cjs','verify-videos.cjs','research-audits.cjs'];
 fs.mkdirSync(path.join(out,'src'),{recursive:true});
 for(const file of sourceFiles){const from=path.join(root,file),to=path.join(out,'src',file);if(path.resolve(from)!==path.resolve(to))fs.copyFileSync(from,to);}
 console.log('Built standalone site:',Buffer.byteLength(html),'bytes');
 console.log('Built question repository:',bank.questions.length,'course questions,',bank.openProblems.length,'open agendas,',units.length,'topic files.');
+console.log('Built educational video library:',videos.length,'lectures.');

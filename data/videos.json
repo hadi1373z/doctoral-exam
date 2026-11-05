@@ -1,0 +1,379 @@
+{
+  "schema": "doctoral-educational-videos-v1",
+  "sourceLinksChecked": "2026-11-06",
+  "videos": [
+    {
+      "id": "video-approx-OacQnsvauZs",
+      "subject": "approx",
+      "title": "A Second Course in Algorithms (Lecture 15: Introduction to Approximation Algorithms)",
+      "speaker": "Tim Roughgarden",
+      "institution": "Stanford University",
+      "sourceUrl": "https://timroughgarden.org/w16/w16.html",
+      "watchUrl": "https://www.youtube.com/watch?v=OacQnsvauZs",
+      "youtubeId": "OacQnsvauZs",
+      "topics": [
+        "core-knapsack",
+        "core-scheduling-scheme",
+        "core-steiner"
+      ],
+      "coverage": "background",
+      "level": "foundation",
+      "scopeNote": "Overview of approximation guarantees, makespan scheduling, a brief knapsack scaling summary, and the terminal-MST approximation for Steiner tree. Preparation for the assigned FPTAS, configuration PTAS and Steiner-forest proofs; it does not supply those complete proofs. The instructor's course page links this video; its associated Lecture 15 notes confirm the topic scope.",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "video-approx-bCsnLNZaoPQ",
+      "subject": "approx",
+      "title": "A Second Course in Algorithms (Lecture 17: Linear Programming and Approximation Algorithms)",
+      "speaker": "Tim Roughgarden",
+      "institution": "Stanford University",
+      "sourceUrl": "https://timroughgarden.org/w16/w16.html",
+      "watchUrl": "https://www.youtube.com/watch?v=bCsnLNZaoPQ",
+      "youtubeId": "bCsnLNZaoPQ",
+      "topics": [
+        "core-dual-cover"
+      ],
+      "coverage": "direct",
+      "level": "advanced",
+      "scopeNote": "Set-cover LP duality and dual fitting, followed by LP rounding and a primal-dual algorithm for weighted vertex cover. Directly illustrates tight-set charging in the frequency-two special case; the general frequency-f proof remains an extension. The instructor's linked Lecture 17 notes contain the primal-dual algorithm and its full charging argument.",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "video-approx-bfxz88uupx0",
+      "subject": "approx",
+      "title": "A Second Course in Algorithms (Lecture 18: Five Essential Tools for Analyzing Randomized Algorithms)",
+      "speaker": "Tim Roughgarden",
+      "institution": "Stanford University",
+      "sourceUrl": "https://timroughgarden.org/w16/w16.html",
+      "watchUrl": "https://www.youtube.com/watch?v=bfxz88uupx0",
+      "youtubeId": "bfxz88uupx0",
+      "topics": [
+        "core-sat-random",
+        "core-flow"
+      ],
+      "coverage": "direct",
+      "level": "advanced",
+      "scopeNote": "Fair-assignment MAX-3SAT, expectation and tail inequalities, Chernoff bounds, and independent path rounding for low-congestion routing. The associated Lecture 18 notes derive logarithmic-over-loglog congestion for unit capacities and demands. It does not cover the MAX-SAT LP's 3/4 guarantee or arbitrary-demand routing without additional hypotheses.",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "video-approx-8IwoS1io5BM",
+      "subject": "approx",
+      "title": "A Second Course in Algorithms (Lecture 20: Semidefinite Programming and the Maximum Cut Problem)",
+      "speaker": "Tim Roughgarden",
+      "institution": "Stanford University",
+      "sourceUrl": "https://timroughgarden.org/w16/w16.html",
+      "watchUrl": "https://www.youtube.com/watch?v=8IwoS1io5BM",
+      "youtubeId": "8IwoS1io5BM",
+      "topics": [
+        "core-sdp-cut"
+      ],
+      "coverage": "direct",
+      "level": "advanced",
+      "scopeNote": "Derives the vector and Gram-matrix MAX-CUT relaxation, PSD feasibility, random-hyperplane rounding, angular separation probability and the approximately 0.878 approximation. The instructor's linked Lecture 20 notes substantiate this scope. Vector-coloring semicolorings and positive-threshold Gaussian independent-set extraction are separate topics.",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "video-approx-MEz1J9wY2iM",
+      "subject": "approx",
+      "title": "17. Complexity: Approximation Algorithms",
+      "speaker": "Srinivas Devadas",
+      "institution": "Massachusetts Institute of Technology — OpenCourseWare",
+      "sourceUrl": "https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/resources/lecture-17-complexity-approximation-algorithms/",
+      "watchUrl": "https://www.youtube.com/watch?v=MEz1J9wY2iM",
+      "youtubeId": "MEz1J9wY2iM",
+      "topics": [
+        "core-scheduling-scheme",
+        "core-dual-cover"
+      ],
+      "coverage": "background",
+      "level": "foundation",
+      "scopeNote": "Introductory approximation ratios and PTAS/FPTAS distinctions, matching-based vertex cover, greedy set cover, and a two-way partition PTAS. The official transcript confirms these examples. Useful preparation for general identical-machine schemes and primal-dual cover, but not the assigned configuration or general-frequency proofs.",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "video-approx-approximation-schemes-in-planar-graphs-branchwidth-and-baker-s-technique",
+      "subject": "approx",
+      "title": "Approximation schemes in planar graphs: Branchwidth and Baker's technique.",
+      "speaker": "Shay Mozes",
+      "institution": "Massachusetts Institute of Technology",
+      "sourceUrl": "https://courses.csail.mit.edu/6.889/fall11/lectures/L08.html",
+      "watchUrl": "https://courses.csail.mit.edu/6.889/fall11/lectures/video/L08_720p.mp4",
+      "mediaUrl": "https://courses.csail.mit.edu/6.889/fall11/lectures/video/L08_720p.mp4",
+      "topics": [
+        "core-planar-mis"
+      ],
+      "coverage": "background",
+      "level": "advanced",
+      "scopeNote": "MIT 6.889 Lecture 8 develops carving/branch decompositions, a planar radius-to-width bound, and Baker's technique through minimum vertex cover. It supports the structural idea behind planar MIS, but uses a different objective and decomposition presentation from the assigned proof.",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "video-complexity-6MshCKY5bTc",
+      "subject": "complexity",
+      "title": "2020.08.27 - IP#1 - Graph Non-Isomorphism & PSPACE Upper Bound",
+      "speaker": "Alessandro Chiesa",
+      "institution": "University of California, Berkeley",
+      "sourceUrl": "https://ic-people.epfl.ch/~achiesa/classes/CS294-F2020.html",
+      "watchUrl": "https://www.youtube.com/watch?v=6MshCKY5bTc",
+      "youtubeId": "6MshCKY5bTc",
+      "topics": [
+        "core-private-ip",
+        "core-gmw-gni"
+      ],
+      "coverage": "background",
+      "level": "foundation",
+      "scopeNote": "Introduces interactive proofs, basic GNI and the PSPACE upper bound. Use alongside the public-transcript consistency argument and GMW's additional malicious-verifier certification; those refinements require separate study.",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "video-complexity-ShI2dOpg7kA",
+      "subject": "complexity",
+      "title": "Instance Checking and the Permanent: Graduate Complexity Lecture 16 at CMU",
+      "speaker": "Ryan O'Donnell",
+      "institution": "Carnegie Mellon University",
+      "sourceUrl": "https://www.cs.cmu.edu/~odonnell/complexity17/",
+      "watchUrl": "https://www.youtube.com/watch?v=ShI2dOpg7kA",
+      "youtubeId": "ShI2dOpg7kA",
+      "topics": [
+        "core-lfkn-permanent",
+        "core-lfkn-consequences"
+      ],
+      "coverage": "background",
+      "level": "advanced",
+      "scopeNote": "Graduate treatment of permanent self-reductions and instance checking. Provides algebraic and program-checking context for LFKN; the assigned paper's complete compression protocol and consequences remain separate reading.",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "video-complexity-iqSMRO78UD0",
+      "subject": "complexity",
+      "title": "Lecture 1: Interactive Proofs and the Sum-Check Protocol, Part 1",
+      "speaker": "Yael Tauman Kalai",
+      "institution": "Massachusetts Institute of Technology",
+      "sourceUrl": "https://ocw.mit.edu/courses/6-5630-advanced-topics-in-cryptography-fall-2023/resources/65630-f23-lecture-1-part-1_mp4/",
+      "watchUrl": "https://www.youtube.com/watch?v=iqSMRO78UD0",
+      "youtubeId": "iqSMRO78UD0",
+      "topics": [
+        "core-lfkn-consequences"
+      ],
+      "coverage": "direct",
+      "level": "advanced",
+      "scopeNote": "MIT graduate lecture on interactive proofs and sum-check, with #SAT listed in the official lecture description. Supports algebraic counting verification; supplement it with LFKN's permanent-specific reduction and closure arguments.",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "video-complexity-yKD0lLiM3ME",
+      "subject": "complexity",
+      "title": "2020.09.03 - IP#3 - IP=PSPACE",
+      "speaker": "Alessandro Chiesa",
+      "institution": "University of California, Berkeley",
+      "sourceUrl": "https://ic-people.epfl.ch/~achiesa/classes/CS294-F2020.html",
+      "watchUrl": "https://www.youtube.com/watch?v=yKD0lLiM3ME",
+      "youtubeId": "yKD0lLiM3ME",
+      "topics": [
+        "core-qbf"
+      ],
+      "coverage": "direct",
+      "level": "advanced",
+      "scopeNote": "Covers QBF arithmetization and PSPACE contained in IP. The syllabus explicitly identifies Shamir's protocol with Shen's degree reduction, matching the guide's modern operator presentation.",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "video-complexity-Y7skqTcTjCo",
+      "subject": "complexity",
+      "title": "[CSS.203.1] Computational Complexity - Lecture 28",
+      "speaker": "Prahladh Harsha",
+      "institution": "Tata Institute of Fundamental Research",
+      "sourceUrl": "https://www.tcs.tifr.res.in/~prahladh/teaching/2020-21/complexity/",
+      "watchUrl": "https://www.youtube.com/watch?v=Y7skqTcTjCo",
+      "youtubeId": "Y7skqTcTjCo",
+      "topics": [
+        "core-bfl-oracle",
+        "core-bfl-nexp"
+      ],
+      "coverage": "direct",
+      "level": "foundation",
+      "scopeNote": "Introduces the multiprover model, fixed answer tables, MIP=NEXP and the PCP connection. The accompanying Lecture 28 notes confirm the instructor and topics; this is an overview, not the full BFL multilinearity/decoding proof.",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "video-complexity-IEZmhLuup0o",
+      "subject": "complexity",
+      "title": "2020.09.17 - IP#7 - Zero Knowledge Interactive Proofs",
+      "speaker": "Alessandro Chiesa",
+      "institution": "University of California, Berkeley",
+      "sourceUrl": "https://ic-people.epfl.ch/~achiesa/classes/CS294-F2020.html",
+      "watchUrl": "https://www.youtube.com/watch?v=IEZmhLuup0o",
+      "youtubeId": "IEZmhLuup0o",
+      "topics": [
+        "core-gmw-def"
+      ],
+      "coverage": "direct",
+      "level": "advanced",
+      "scopeNote": "Covers GI, honest- and malicious-verifier zero knowledge, and perfect/statistical/computational simulation notions. Supports the definitions and GI unit; the GMW NP construction and GNI certification need their own proofs.",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "video-complexity-uchjTIlPzFo",
+      "subject": "complexity",
+      "title": "ZKP MOOC Lecture 1: Introduction and History of ZKP",
+      "speaker": "Shafi Goldwasser",
+      "institution": "University of California, Berkeley — RDI",
+      "sourceUrl": "https://rdi.berkeley.edu/zk-learning/",
+      "watchUrl": "https://www.youtube.com/watch?v=uchjTIlPzFo",
+      "youtubeId": "uchjTIlPzFo",
+      "topics": [
+        "core-gmw-def",
+        "core-gmw-np"
+      ],
+      "coverage": "background",
+      "level": "foundation",
+      "scopeNote": "Historical and conceptual orientation. The official slides include GMW's graph-3-coloring commitment construction; this introduction does not replace the complete paper's cryptographic assumptions and malicious-verifier simulation analysis.",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "video-probability-FUwr_EtcPIU",
+      "subject": "probability",
+      "title": "Bounded Differences Inequality (aka Azuma-Hoeffding Inequality)",
+      "speaker": "Yufei Zhao",
+      "institution": "Massachusetts Institute of Technology",
+      "sourceUrl": "https://ocw.mit.edu/courses/18-226-probabilistic-methods-in-combinatorics-fall-2022/resources/18226-bounded-differences-inequality_mp4/",
+      "watchUrl": "https://www.youtube.com/watch?v=FUwr_EtcPIU",
+      "youtubeId": "FUwr_EtcPIU",
+      "topics": [
+        "core-azuma",
+        "core-azuma-app",
+        "core-chromatic"
+      ],
+      "coverage": "direct",
+      "level": "advanced",
+      "scopeNote": "MIT 18.226 short lecture on bounded differences, with coupon-collector and random-graph chromatic-number applications. Direct support for the basic concentration mechanism; it does not replace the assigned sparse four-value chromatic-window argument.",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "video-probability-GwVjWQykCDw",
+      "subject": "probability",
+      "title": "Lecture 23: Martingales (Plain, Sub, and Super)",
+      "speaker": "Robert Gallager",
+      "institution": "Massachusetts Institute of Technology",
+      "sourceUrl": "https://ocw.mit.edu/courses/6-262-discrete-stochastic-processes-spring-2011/resources/lecture-23-martingales-plain-sub-and-super/",
+      "watchUrl": "https://www.youtube.com/watch?v=GwVjWQykCDw",
+      "youtubeId": "GwVjWQykCDw",
+      "topics": [
+        "core-azuma",
+        "core-gradation"
+      ],
+      "coverage": "background",
+      "level": "foundation",
+      "scopeNote": "MIT 6.262 lecture introducing martingales, submartingales, supermartingales and stopped processes after Wald's identity. Builds the conditional-expectation vocabulary; the official description does not promise the assigned Azuma or adaptive-variance proofs.",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "video-probability-eCs870ZS7Zk",
+      "subject": "probability",
+      "title": "Information Theory in Combinatorics I",
+      "speaker": "Shachar Lovett",
+      "institution": "University of California, San Diego; Simons Institute, University of California, Berkeley (host)",
+      "sourceUrl": "https://simons.berkeley.edu/talks/information-theory-combinatorics-i",
+      "watchUrl": "https://www.youtube.com/watch?v=eCs870ZS7Zk",
+      "youtubeId": "eCs870ZS7Zk",
+      "topics": [
+        "core-entropy",
+        "core-shearer"
+      ],
+      "coverage": "direct",
+      "level": "advanced",
+      "scopeNote": "Information Theory Boot Camp, January 2015. The official I–II series abstract and shared notes cover entropy, conditioning, chain rules, Shearer's lemma and combinatorial counting. Session I supplies the introduction; not every advertised I–II application is claimed to occur in this one recording.",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "video-probability-PNBFUV-ZetY",
+      "subject": "probability",
+      "title": "Polar Codes I",
+      "speaker": "Erdal Arıkan",
+      "institution": "Bilkent University; Simons Institute, University of California, Berkeley (host)",
+      "sourceUrl": "https://simons.berkeley.edu/talks/polar-codes-i",
+      "watchUrl": "https://www.youtube.com/watch?v=PNBFUV-ZetY",
+      "youtubeId": "PNBFUV-ZetY",
+      "topics": [
+        "core-shannon"
+      ],
+      "coverage": "background",
+      "level": "advanced",
+      "scopeNote": "Graduate tutorial on information polarization, polar-code construction and decoding. Useful constructive channel-coding context for Shannon's theorem, rather than the book's random-coding proof. The official abstract assumes basic information theory and elementary martingales.",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "video-probability-kQsQ4f2PxAE",
+      "subject": "probability",
+      "title": "Correlation inequalities for Schur functions and Young tableaux",
+      "speaker": "Igor Pak",
+      "institution": "University of California, Los Angeles; Institute for Pure and Applied Mathematics (IPAM)",
+      "sourceUrl": "https://www.mathinstitutes.org/videos/21560",
+      "watchUrl": "https://www.youtube.com/watch?v=kQsQ4f2PxAE",
+      "youtubeId": "kQsQ4f2PxAE",
+      "topics": [
+        "core-fkg",
+        "core-xyz"
+      ],
+      "coverage": "background",
+      "level": "advanced",
+      "scopeNote": "IPAM workshop lecture recorded April 17, 2024, listed by the institutes' official video archive and published on IPAM's channel. Research overview of FKG-type correlation inequalities and poset/algebraic applications; not a substitute for the assigned Four Functions or XYZ proofs.",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "video-probability-RD9AWDdj-Yk",
+      "subject": "probability",
+      "title": "Lecture 7: Szemerédi’s Graph Regularity Lemma II: Triangle Removal Lemma",
+      "speaker": "Yufei Zhao",
+      "institution": "Massachusetts Institute of Technology",
+      "sourceUrl": "https://ocw.mit.edu/courses/18-225-graph-theory-and-additive-combinatorics-fall-2023/resources/lecture-7-szemeredi2019s-graph-regularity-lemma-ii-triangle-removal-lemma/",
+      "watchUrl": "https://www.youtube.com/watch?v=RD9AWDdj-Yk",
+      "youtubeId": "RD9AWDdj-Yk",
+      "topics": [
+        "core-triangle-removal"
+      ],
+      "coverage": "direct",
+      "level": "advanced",
+      "scopeNote": "Triangle counting, the partition–clean–count method, triangle removal and the graph-theoretic proof of Roth's theorem. MIT's current course page is labeled Fall 2023, but its video gallery explicitly says these lectures were recorded for 18.217 in 2019.",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "video-probability-3IxWLibV_tU",
+      "subject": "probability",
+      "title": "Lecture 9: Szemerédi’s Graph Regularity Lemma IV: Induced Removal Lemma",
+      "speaker": "Yufei Zhao",
+      "institution": "Massachusetts Institute of Technology",
+      "sourceUrl": "https://ocw.mit.edu/courses/18-225-graph-theory-and-additive-combinatorics-fall-2023/resources/lecture-9-szemeredi2019s-graph-regularity-lemma-iv-induced-removal-lemma/",
+      "watchUrl": "https://www.youtube.com/watch?v=3IxWLibV_tU",
+      "youtubeId": "3IxWLibV_tU",
+      "topics": [
+        "core-hereditary",
+        "core-tester-color"
+      ],
+      "coverage": "direct",
+      "level": "advanced",
+      "scopeNote": "The official description covers stronger graph regularity, induced removal and graph property testing. Direct support for the structural input in Chapter 17; the exact 3-color restriction tree and semi-hereditary characterization are not asserted here. Recording is from 2019 despite the current Fall 2023 course label.",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "video-probability-JzYGN28dv_Q",
+      "subject": "probability",
+      "title": "Property Testing for Graphs",
+      "speaker": "Artur Czumaj",
+      "institution": "University of Warwick; Simons Institute, University of California, Berkeley (host)",
+      "sourceUrl": "https://simons.berkeley.edu/talks/artur-czumaj-university-warwick-2024-05-21",
+      "watchUrl": "https://www.youtube.com/watch?v=JzYGN28dv_Q",
+      "youtubeId": "JzYGN28dv_Q",
+      "topics": [
+        "core-tester-color",
+        "core-triangle-removal",
+        "core-hereditary"
+      ],
+      "coverage": "background",
+      "level": "advanced",
+      "scopeNote": "Sublinear Algorithms Boot Camp lecture, May 21, 2024. A graph-testing survey to orient the Chapter 17 material; the official page does not identify it as a proof of Alon–Spencer's particular colorability tester, so that precise coverage is not claimed.",
+      "verified": "2026-11-06"
+    }
+  ]
+}
