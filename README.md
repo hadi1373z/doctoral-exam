@@ -19,6 +19,11 @@ The latest §10.2 assignment concerns planar maximum independent set. Earlier Eu
 
 ## Study tools
 
+- **600-question repository:** 12 original questions for every assigned topic: four doctoral proofs/constructions, four examiner challenges, two research seminar investigations and two short oral checks.
+- **100 research seminar investigations:** explicit hypotheses, a concrete deliverable, prerequisites, an adversarial follow-up and a proof route or reproducible investigation plan. These are research-style exercises, not claims of novel results.
+- **Two separately labeled open-problem agendas:** P versus NP and P versus BPP, with dated primary references and bounded seminar tasks. A solution of the unrestricted open problem is not expected and earns no exam credit.
+- Topic, subject, level and task filters; full-text question search; starred questions; locally saved written drafts and repair notes; shareable question links; printable question sheets; JSON exports.
+- **[Per-topic question files](questions/README.md)** and a **[portable JSON dataset](data/questions.json)** mirror the website. The 100 cold-exam transfer forms stay outside this study repository and remain hidden in the normal UI until proof commitment.
 - **Cold exam for all 50 assigned units:** locked proof snapshots, staged transfer and objection prompts, a parameterized numerical checkpoint, six separate proof criteria, and a declared practice time budget.
 - **100 new adversarial transfer questions:** two different forms per unit, with counterexamples and detailed resolutions held back until the response is committed.
 - **Examiner critique:** eight concrete weaknesses of the earlier site and the corresponding changes to questions, evidence, retention and review.
@@ -29,6 +34,17 @@ The latest §10.2 assignment concerns planar maximum independent set. Earlier Eu
 - Three-subject committee draws, local drafts, inspection of locked saved work, progress export/import, and an HTML examiner packet containing exact questions, responses, calculations, timings, criterion reviews and repair reflections.
 
 The new visual experiments cover knapsack scaling, conditional expectation, hyperplane rounding, shortest-path dual potentials, tree stretch, correlation inequalities, Doob martingales, Hamming balls, the Tenure Game, entropy, Shearer projections, graph-property testing, and algebraic identity checks.
+
+## Question coverage
+
+| Subject | Assigned topics | Course questions | Research seminar exercises |
+| --- | ---: | ---: | ---: |
+| Approximation algorithms | 19 | 228 | 38 |
+| Interactive proofs and zero knowledge | 10 | 120 | 20 |
+| Probabilistic method | 21 | 252 | 42 |
+| Total | 50 | 600 | 100 |
+
+The repository adds 450 new topic-specific problems to the 150 central-task and short-oral prompts already present. The 500 substantive proof, examiner and research tasks are counted separately from the 100 short oral checks. Questions in the research tier ask for a precise extension, comparison, reduction, model audit or finite experiment with a baseline and failure criterion. Guides identify deep imported lemmas rather than silently treating them as proved. QBF operator exercises explicitly identify their modern multilinearization presentation instead of attributing the notation verbatim to Shamir's paper.
 
 ## Assessment
 
@@ -46,10 +62,23 @@ Free-form proofs remain **self-reviewed**. Only numerical checks, timestamps and
 
 Open `index.html` or visit the live site. All code, styling, content, and graphics are inside the HTML file. There is no account, external asset dependency, backend, or AI grading service. Reference links open external source pages only when followed.
 
-Progress stays in this browser on this device. Existing version-one and version-two records are preserved. Export a JSON backup before changing devices or clearing browser data. Downloaded-file progress and hosted-site progress use different browser origins.
+Progress stays in this browser on this device. Existing versions one through three are preserved alongside question drafts, stars and repair notes. Export a JSON backup before changing devices or clearing browser data. Downloaded-file progress and hosted-site progress use different browser origins.
 
 ## Hosting and editing
 
-GitHub Pages serves `main` at the repository root; `.nojekyll` keeps deployment static. Edit the self-contained `index.html` to update the site.
+GitHub Pages serves `main` at the repository root; `.nojekyll` keeps deployment static. The self-contained `index.html` needs no install or backend. Editable source modules are in `src/`; the question collections are `src/bank-approx.js`, `src/bank-complexity.js` and `src/bank-probability.js`.
 
-The mathematical experiments have been checked against exact enumeration, including all 256 binary-triple families for the Shearer example and all 64 initial partitions of the Tenure example. Assessment checks cover criterion vetoes, assistance and timing gates, no activity credit, different-form retention, freshness, later-failure revocation, coverage of all 50 units, 300 checkpoint parameter cases, and backup migration. Browser checks cover the staged cold workflow, locked responses, feedback, saved-work inspection, export/import, persistence and responsive layout.
+After editing source, regenerate the HTML, portable dataset and 50 topic files with Node:
+
+```sh
+node src/build-exam.cjs ..
+node src/verify-bank.cjs ..
+node src/verify-calibration.cjs ..
+node src/verify-depth.cjs ..
+```
+
+The build uses only Node standard-library modules. Generated topic files and JSON should be rebuilt together so their stable question IDs match the website.
+
+For small independent research baselines, run `node src/research-audits.cjs`. It exhaustively computes the one- and two-copy classical CHSH values, checks a Four Functions counterexample on the non-distributive M3 lattice, and checks the two prize-collecting threshold coefficients numerically. These are finite or numerical audits, not replacements for the general proofs.
+
+The mathematical experiments have been checked against exact enumeration, including all 256 binary-triple families for the Shearer example and all 64 initial partitions of the Tenure example. Assessment checks cover criterion vetoes, assistance and timing gates, no activity credit, different-form retention, freshness, later-failure revocation, coverage of all 50 units, 300 checkpoint parameter cases, and backup migration. Repository checks verify counts and tiers for every topic, unique prompts and IDs, withheld cold transfers, JSON/topic-file agreement, search and filters, pagination, blind/revealed views, escaping and draft migration. Browser checks cover question browsing, guides, drafts, links, exports, responsive layout and the cold-evidence workflow.
