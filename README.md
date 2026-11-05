@@ -38,6 +38,8 @@ A cold pass needs: statement, construction, bounds/resources, transfer and defen
 
 Retention needs the other transfer form at least seven days after an earlier passed response. It stays current for thirty days after the last pass. A later failed, assisted or overtime attempt reopens that unit and retention must be rebuilt after the gap. The seven-day interval, thirty-day freshness window and selectable 20–90 minute budgets are explicit training policies, not official exam rules.
 
+Finishing automatically archives the locked responses before feedback appears. Unreviewed finished attempts block credit until their review is completed, so abandoning a failed checkpoint cannot conceal it. Saving the criterion review finalizes that same record. Attempt chronology follows when the response finished; reviewing an older attempt later cannot erase a newer failure.
+
 Free-form proofs remain **self-reviewed**. Only numerical checks, timestamps and the recorded sequence are automated. The page does not predict an exam grade or pass probability. Export a packet for independent examiner calibration and additional unseen questions. Study units group source results; their outlines do not replace complete proofs of every lemma in the assigned works.
 
 ## Use and privacy
