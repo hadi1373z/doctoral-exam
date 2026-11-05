@@ -1,6 +1,6 @@
 # Doctoral Exam Studio
 
-**Live site:** https://hadi1373z.github.io/doctoral-exam/
+**GitHub Pages URL:** https://hadi1373z.github.io/doctoral-exam/
 
 An interactive preparation workspace for Approximation Algorithms, Interactive Proof Systems, and the Probabilistic Method.
 
@@ -19,28 +19,35 @@ The latest §10.2 assignment concerns planar maximum independent set. Earlier Eu
 
 ## Study tools
 
-- **50 examiner challenges** with original written-proof questions, two staged follow-ups each, reference proof guides, source checkpoints, and a strict 20-point self-review rubric.
+- **Cold exam for all 50 assigned units:** locked proof snapshots, staged transfer and objection prompts, a parameterized numerical checkpoint, six separate proof criteria, and a declared practice time budget.
+- **100 new adversarial transfer questions:** two different forms per unit, with counterexamples and detailed resolutions held back until the response is committed.
+- **Examiner critique:** eight concrete weaknesses of the earlier site and the corresponding changes to questions, evidence, retention and review.
+- **50 training challenges** with the earlier written-proof questions, two follow-ups, source-linked proof outlines and a 20-point training self-review.
 - **83 lessons:** 50 assigned-source units plus the original 33 foundation/background lessons.
 - **17 mathematical playgrounds:** 13 new SVG experiments plus the original four numerical labs.
 - The original **68 concept questions**, **13 proof-order exercises**, and timed oral simulator.
-- Local drafts, saved written defenses, progress export/import, and an HTML written-evidence report.
+- Three-subject committee draws, local drafts, inspection of locked saved work, progress export/import, and an HTML examiner packet containing exact questions, responses, calculations, timings, criterion reviews and repair reflections.
 
 The new visual experiments cover knapsack scaling, conditional expectation, hyperplane rounding, shortest-path dual potentials, tree stretch, correlation inequalities, Doob martingales, Hamming balls, the Tenure Game, entropy, Shearer projections, graph-property testing, and algebraic identity checks.
 
 ## Assessment
 
-Free-form proofs and oral performance use self-reported scores. Opening a proof guide before finishing the written attempt marks it assisted. Assisted attempts contribute no hard-score points. Unresolved critical gaps cap an attempt's hard-score contribution at 10/20. Advanced evidence requires three distinct assigned challenges with at least 16/20, unaided, with all critical checks confirmed, in addition to the foundation requirements.
+Progress counts per-unit cold evidence. Reading marks, MCQs, supplied proof-order tasks, playground use and earlier training scores earn no cold-exam credit. Existing records are preserved as training; they are not retroactively certified.
 
-The displayed metric is 40% foundation evidence and 60% unaided written challenge evidence, scaled by the number of distinct attempts. It is a preparation record rather than an independently examined qualification.
+A cold pass needs: statement, construction, bounds/resources, transfer and defense each at least 3/4; central proof exactly 4/4; every numerical checkpoint answer correct; all critical-gap checks; an unaided declaration; and completion within the declared working budget. A high average cannot compensate for a central gap. Text-length thresholds only confirm that a draft exists, not its correctness.
+
+Retention needs the other transfer form at least seven days after an earlier passed response. It stays current for thirty days after the last pass. A later failed, assisted or overtime attempt reopens that unit and retention must be rebuilt after the gap. The seven-day interval, thirty-day freshness window and selectable 20–90 minute budgets are explicit training policies, not official exam rules.
+
+Free-form proofs remain **self-reviewed**. Only numerical checks, timestamps and the recorded sequence are automated. The page does not predict an exam grade or pass probability. Export a packet for independent examiner calibration and additional unseen questions. Study units group source results; their outlines do not replace complete proofs of every lemma in the assigned works.
 
 ## Use and privacy
 
 Open `index.html` or visit the live site. All code, styling, content, and graphics are inside the HTML file. There is no account, external asset dependency, backend, or AI grading service. Reference links open external source pages only when followed.
 
-Progress stays in this browser on this device. Existing version-one records are preserved. Export a JSON backup before changing devices or clearing browser data. Downloaded-file progress and hosted-site progress use different browser origins.
+Progress stays in this browser on this device. Existing version-one and version-two records are preserved. Export a JSON backup before changing devices or clearing browser data. Downloaded-file progress and hosted-site progress use different browser origins.
 
 ## Hosting and editing
 
 GitHub Pages serves `main` at the repository root; `.nojekyll` keeps deployment static. Edit the self-contained `index.html` to update the site.
 
-The mathematical experiments have been checked against exact enumeration, including all 256 binary-triple families for the Shearer example and all 64 initial partitions of the Tenure example. Browser checks cover staged proof entry, saving and reloads, all new visual modules, parameter controls, and sampling actions.
+The mathematical experiments have been checked against exact enumeration, including all 256 binary-triple families for the Shearer example and all 64 initial partitions of the Tenure example. Assessment checks cover criterion vetoes, assistance and timing gates, no activity credit, different-form retention, freshness, later-failure revocation, coverage of all 50 units, 300 checkpoint parameter cases, and backup migration. Browser checks cover the staged cold workflow, locked responses, feedback, saved-work inspection, export/import, persistence and responsive layout.
