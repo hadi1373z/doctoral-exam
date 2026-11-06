@@ -17,6 +17,8 @@ The Syllabus & Sources page maps 50 study units to the latest confirmed reading 
 
 The latest §10.2 assignment concerns planar maximum independent set. Earlier Euclidean TSP (§10.1) and the original general background topics remain available in the library.
 
+The study library marks confirmed units **Assigned** in green and optional background lessons **Additional** in amber. Labels use words as well as color. Choose Assigned reading, All topics, or Additional only; subject filters apply to each view. Probability has 21 assigned units (Chapters 6, 7, 15 and 17) and 10 additional background lessons. Every assigned probability unit has a lesson, a source checklist and 12 practice questions. These are study outlines; the original reading supplies omitted proof details. Additional lessons can support prerequisites without adding required exam units. Scope labels also appear in lesson details, warm-up quizzes, proof drills, oral prompts and playgrounds. The separate open-problem agendas are marked Additional.
+
 ## Study tools
 
 - **[Educational videos](https://hadi1373z.github.io/doctoral-exam/#videos):** 21 source-linked lectures across the three subjects, including 15 advanced lectures. The library has 20 YouTube players, one official university-hosted MP4, subject/topic filters, and direct viewing links. Lecture and background coverage are labeled separately.
