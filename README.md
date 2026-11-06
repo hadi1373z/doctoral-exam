@@ -4,9 +4,19 @@
 
 An interactive preparation workspace for Approximation Algorithms, Interactive Proof Systems, and the Probabilistic Method.
 
+## Guided learning course
+
+The default experience is now [Learn step by step](https://hadi1373z.github.io/doctoral-exam/#learn/probability): **50 authored lessons, 300 reading stages and 300 formative checkpoints**, covering every assigned study unit. Each lesson teaches intuition, notation, a worked example, a proof mechanism, two changed cases, and a retrieval recap. The prose is original teaching material based on the assigned sources; detailed feedback explains each choice. Deep source theorems used as inputs are identified explicitly.
+
+Worked calculations and proof implications reveal one step at a time. Pure-numeric example checks use free entry with fractions, decimals or scientific notation; other checks use specific choices and explanatory feedback. An incorrect response keeps the next stage locked. The two changed cases must both pass before the recap. A lesson is complete after its six checks and the recap declaration; a reflection is optional and is never judged correct based on length.
+
+Your stage, answers, attempts, opened worked steps, reflection and completed lessons save locally. The guided course has its own progress record within the existing backup, separate from cold-exam evidence. Earlier reading marks remain preserved; they do not automatically count as completed guided lessons. Existing proof attempts and question drafts are not changed. Use Export/Import progress to move between browser origins or devices.
+
+The focused reader hides the main navigation while reading, with a button to show it. Mapped playgrounds and lectures can open inside the worked-example stage. Additional background remains available through Reference lessons and retains its amber label. The course teaches central mechanisms and examples; use the full assigned books and papers for omitted technical details and complete examination proofs.
+
 ## Study roadmap and topic workspaces
 
-The home page is now an [exam roadmap](https://hadi1373z.github.io/doctoral-exam/#roadmap), with a 50-unit evidence map, subject and chapter filters, search, explicit reading scope, resource counts and an evidence-based next priority. [Open the probability roadmap](https://hadi1373z.github.io/doctoral-exam/#roadmap/probability) for the 21 assigned Alon–Spencer units; additional background remains a separate amber scope.
+The [exam roadmap](https://hadi1373z.github.io/doctoral-exam/#roadmap) complements the learning course with a 50-unit evidence map, subject and chapter filters, search, explicit reading scope, resource counts and an evidence-based next priority. [Open the probability roadmap](https://hadi1373z.github.io/doctoral-exam/#roadmap/probability) for the 21 assigned Alon–Spencer units; additional background remains a separate amber scope.
 
 - **Topic workspace:** every assigned unit connects its statement, source, lesson, 12 questions, mapped videos and exact visual labs. A proof/examiner/research question ladder offers three starting points. For example, [Shearer's lemma](https://hadi1373z.github.io/doctoral-exam/#unit/core-shearer) links directly to its projections playground and lecture. Missing exact-resource mappings are stated explicitly.
 - **Blackboard notes:** topic notes autosave in the existing local progress record, share the oral-practice notes field, and can be exported. Existing answers, notes and locked exam responses are preserved. Notes and reading marks add no cold-exam credit.
@@ -99,6 +109,7 @@ node src/verify-videos.cjs ..
 node src/verify-calibration.cjs ..
 node src/verify-depth.cjs ..
 node src/verify-roadmap.cjs ..
+node src/verify-guided.cjs ..
 ```
 
 The build uses only Node standard-library modules. Generated topic files and JSON should be rebuilt together so their stable question IDs match the website.
