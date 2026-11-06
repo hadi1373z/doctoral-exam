@@ -4,6 +4,17 @@
 
 An interactive preparation workspace for Approximation Algorithms, Interactive Proof Systems, and the Probabilistic Method.
 
+## Study roadmap and topic workspaces
+
+The home page is now an [exam roadmap](https://hadi1373z.github.io/doctoral-exam/#roadmap), with a 50-unit evidence map, subject and chapter filters, search, explicit reading scope, resource counts and an evidence-based next priority. [Open the probability roadmap](https://hadi1373z.github.io/doctoral-exam/#roadmap/probability) for the 21 assigned Alon–Spencer units; additional background remains a separate amber scope.
+
+- **Topic workspace:** every assigned unit connects its statement, source, lesson, 12 questions, mapped videos and exact visual labs. A proof/examiner/research question ladder offers three starting points. For example, [Shearer's lemma](https://hadi1373z.github.io/doctoral-exam/#unit/core-shearer) links directly to its projections playground and lecture. Missing exact-resource mappings are stated explicitly.
+- **Blackboard notes:** topic notes autosave in the existing local progress record, share the oral-practice notes field, and can be exported. Existing answers, notes and locked exam responses are preserved. Notes and reading marks add no cold-exam credit.
+- **Repair desk:** [pending reviews, failed criteria and overdue retests](https://hadi1373z.github.io/doctoral-exam/#repairs) are prioritized from the existing evidence records. Each topic shows its latest six criterion ratings, recorded blockers and recent locked attempts. The site does not infer a grade from a free-form proof.
+- **Focused sessions:** 30-, 60- and 90-minute planning guides connect a cold test to review, visual exploration and reconstruction. Lock the cold attempt before opening study resources; choose the actual working budget on the exam screen. These planning times are not official exam requirements.
+
+Roadmap, topic and repair links work on reload. The interface is responsive, including the evidence grid, resource tiles, chapter filters and notes. Progress still uses the original strict evidence policy and storage schema; no activity has been promoted into cold evidence.
+
 ## Assigned material
 
 The Syllabus & Sources page maps 50 study units to the latest confirmed reading list:
@@ -87,6 +98,7 @@ node src/verify-bank.cjs ..
 node src/verify-videos.cjs ..
 node src/verify-calibration.cjs ..
 node src/verify-depth.cjs ..
+node src/verify-roadmap.cjs ..
 ```
 
 The build uses only Node standard-library modules. Generated topic files and JSON should be rebuilt together so their stable question IDs match the website.
