@@ -6,7 +6,7 @@ An interactive preparation workspace for Approximation Algorithms, Interactive P
 
 ## A calmer place to read
 
-The studio uses warm paper, forest-green accents, editorial headings and larger reading text. The learning course has a clear starting point, short lesson previews and an illustrated progress panel. Inside a lesson, the focused reader gives the explanation and checkpoint room to breathe; its stage navigation adapts to a phone screen. Practice, examination and reference tools remain available in expandable sidebar groups.
+The studio uses warm paper, forest-green accents, editorial headings and larger reading text. The learning course has a clear starting point, short lesson previews and a progress panel. Inside a lesson, the focused reader gives the explanation and checkpoint room to breathe; its stage navigation adapts to a phone screen. Practice, examination and reference tools remain available in expandable sidebar groups.
 
 The design is fully offline and uses system fonts. All existing lessons, source mappings, saved progress, staged checkpoints and cold-exam evidence rules are preserved.
 
@@ -56,7 +56,7 @@ The study library marks confirmed units **Assigned** in green and optional backg
 - **[Per-topic question files](questions/README.md)** and a **[portable JSON dataset](data/questions.json)** mirror the website. The 100 cold-exam transfer forms stay outside this study repository and remain hidden in the normal UI until proof commitment.
 - **Cold exam for all 50 assigned units:** locked proof snapshots, staged transfer and objection prompts, a parameterized numerical checkpoint, six separate proof criteria, and a declared practice time budget.
 - **100 new adversarial transfer questions:** two different forms per unit, with counterexamples and detailed resolutions held back until the response is committed.
-- **Examiner critique:** eight concrete weaknesses of the earlier site and the corresponding changes to questions, evidence, retention and review.
+- **Assessment guide:** practical criteria for reviewing proofs, testing changed assumptions, planning delayed retests and seeking independent review.
 - **50 training challenges** with the earlier written-proof questions, two follow-ups, source-linked proof outlines and a 20-point training self-review.
 - **83 lessons:** 50 assigned-source units plus the original 33 foundation/background lessons.
 - **17 mathematical playgrounds:** 13 new SVG experiments plus the original four numerical labs.
