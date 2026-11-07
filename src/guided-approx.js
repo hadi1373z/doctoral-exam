@@ -33,7 +33,7 @@ const GUIDED_APPROX = {
         },
         {
           "term": "Scaling unit K",
-          "meaning": "Set K=εPmax/n, using the requested relative error ε."
+          "meaning": "If no feasible item has positive profit, return the empty solution. Otherwise set K=εPmax/n, using the requested relative error ε; then K>0."
         },
         {
           "term": "Scaled profit",
@@ -42,7 +42,7 @@ const GUIDED_APPROX = {
       ],
       "paragraphs": [
         "For each total scaled profit, store the minimum original weight achieving it. Processing an item either leaves a state unchanged or adds its weight and scaled profit. Returning the largest scaled-profit state whose weight fits the capacity produces an originally feasible subset.",
-        "Every remaining profit is at most Pmax, so p′ᵢ≤n/ε. There are at most n²/ε total-profit states. Meanwhile Pmax≤OPT, which turns the additive rounding loss nK into a relative εOPT loss. Neither comparison requires knowing the optimal subset."
+        "Every remaining profit is at most Pmax, so p′ᵢ≤n/ε. The total scaled profit is at most n²/ε, giving O(n²/ε) profit states including zero. Meanwhile Pmax≤OPT, which turns the additive rounding loss nK into a relative εOPT loss. Neither comparison requires knowing the optimal subset."
       ],
       "formula": "K∑ᵢ∈O p′ᵢ ≥ OPT−nK ≥ (1−ε)OPT",
       "question": {

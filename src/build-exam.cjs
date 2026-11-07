@@ -5,8 +5,8 @@ const root=__dirname;
 const out=path.resolve(root,process.argv[2]||'doctoral-exam');
 fs.mkdirSync(out,{recursive:true});
 let html=fs.readFileSync(path.join(root,'doctoral-exam-before-hardening.html'),'utf8');
-const css=['exam-depth.css','question-bank.css','video-library.css','study-roadmap.css','guided-reader.css'].map(f=>fs.readFileSync(path.join(root,f),'utf8')).join('\n');
-const code=['core-units.js','exam-depth.js','visual-labs.js','exam-transfers.js','exam-calibration.js','bank-approx.js','bank-complexity.js','bank-probability.js','question-bank-data.js','question-bank-ui.js','video-resources.js','video-library.js','study-roadmap.js','guided-approx.js','guided-complexity.js','guided-probability.js','guided-reader.js'].map(f=>fs.readFileSync(path.join(root,f),'utf8')).join('\n');
+const css=['exam-depth.css','question-bank.css','video-library.css','study-roadmap.css','reading-studio.css','guided-reader.css'].map(f=>fs.readFileSync(path.join(root,f),'utf8')).join('\n');
+const code=['core-units.js','exam-depth.js','visual-labs.js','exam-transfers.js','exam-calibration.js','bank-approx.js','bank-complexity.js','bank-probability.js','question-bank-data.js','question-bank-ui.js','video-resources.js','video-library.js','study-roadmap.js','guided-approx.js','guided-complexity.js','guided-probability.js','guided-reader.js','reading-studio.js'].map(f=>fs.readFileSync(path.join(root,f),'utf8')).join('\n');
 if(/<\/script/i.test(code))throw Error('Unexpected script closing sequence');
 html=html.replace('</style>',()=>css+'\n</style>').replace('</body>',()=>'<script>\n'+code+'\n</script>\n</body>');
 fs.writeFileSync(path.join(out,'index.html'),html);
@@ -42,7 +42,7 @@ for(const u of units){const matches=videos.filter(v=>v.topics.includes(u.id));vi
 fs.writeFileSync(path.join(out,'videos','README.md'),videoIndex);
 const sourceFiles=['doctoral-exam-before-hardening.html','core-units.js','exam-depth.js','exam-depth.css','visual-labs.js','exam-transfers.js','exam-calibration.js','bank-approx.js','bank-complexity.js','bank-probability.js','question-bank-data.js','question-bank-ui.js','question-bank.css','video-resources.js','video-library.js','video-library.css','build-exam.cjs','verify-bank.cjs','verify-calibration.cjs','verify-depth.cjs','verify-videos.cjs','study-roadmap.js','study-roadmap.css','verify-roadmap.cjs','guided-approx.js','guided-complexity.js','guided-probability.js','guided-reader.js','guided-reader.css','verify-guided.cjs','research-audits.cjs'];
 fs.mkdirSync(path.join(out,'src'),{recursive:true});
-for(const file of sourceFiles){const from=path.join(root,file),to=path.join(out,'src',file);if(path.resolve(from)!==path.resolve(to))fs.copyFileSync(from,to);}
+for(const file of [...sourceFiles,'reading-studio.css','reading-studio.js']){const from=path.join(root,file),to=path.join(out,'src',file);if(path.resolve(from)!==path.resolve(to))fs.copyFileSync(from,to);}
 console.log('Built standalone site:',Buffer.byteLength(html),'bytes');
 console.log('Built question repository:',bank.questions.length,'course questions,',bank.openProblems.length,'open agendas,',units.length,'topic files.');
 console.log('Built educational video library:',videos.length,'lectures.');
