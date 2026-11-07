@@ -4,6 +4,12 @@
 
 An interactive preparation workspace for Approximation Algorithms, Interactive Proof Systems, and the Probabilistic Method.
 
+## A calmer place to read
+
+The studio uses warm paper, forest-green accents, editorial headings and larger reading text. The learning course has a clear starting point, short lesson previews and an illustrated progress panel. Inside a lesson, the focused reader gives the explanation and checkpoint room to breathe; its stage navigation adapts to a phone screen. Practice, examination and reference tools remain available in expandable sidebar groups.
+
+The design is fully offline and uses system fonts. All existing lessons, source mappings, saved progress, staged checkpoints and cold-exam evidence rules are preserved.
+
 ## Guided learning course
 
 The default experience is now [Learn step by step](https://hadi1373z.github.io/doctoral-exam/#learn/probability): **50 authored lessons, 300 reading stages and 300 formative checkpoints**, covering every assigned study unit. Each lesson teaches intuition, notation, a worked example, a proof mechanism, two changed cases, and a retrieval recap. The prose is original teaching material based on the assigned sources; detailed feedback explains each choice. Deep source theorems used as inputs are identified explicitly.
