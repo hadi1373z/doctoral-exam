@@ -1,0 +1,15 @@
+const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict');
+const root=path.resolve(__dirname,process.argv[2]||'doctoral-exam'),html=fs.readFileSync(path.join(root,'index.html'),'utf8');
+const c={console,document:{addEventListener(){},getElementById(){return null;}},localStorage:{getItem(){return null;},setItem(){}}};vm.createContext(c);
+for(const m of html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi))vm.runInContext(m[1],c);
+const run=s=>vm.runInContext(s,c),ids=run('CORE_UNITS.map(u=>u.id)'),compiled=require('./math-build.cjs')(__dirname);
+assert.equal(ids.length,50);assert.deepEqual(compiled.ids.sort(),Array.from(ids).sort());
+const before=run('JSON.stringify(progress)');
+for(const id of ids){const eq=run(`renderLessonEquation(${JSON.stringify(id)})`);assert.ok(eq.includes('<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">'),id+' must render semantic display math');assert.ok(eq.includes('<annotation encoding="application/x-tex">'),id+' must preserve authored LaTeX');assert.ok(!eq.includes('katex-error')&&!eq.includes('undefined'),id);assert.ok(eq.includes('LaTeX source'),id+' copyable source is missing');assert.equal(run(`LESSON_MATH_HTML[${JSON.stringify(id)}]`),compiled.html[id],id+' built formula differs from its validated source');}
+assert.equal(run('JSON.stringify(progress)'),before,'Typesetting must not alter saved learning or exam evidence');
+const target=run("renderLessonEquation('core-four-functions')");assert.equal([...target.matchAll(/<mo(?:\s[^>]*)?>∑<\/mo>/g)].length,4,'Use four summation operators, not uppercase Sigma letters');assert.equal([...target.matchAll(/<munder>/g)].length,4,'Each sum needs a properly placed lower bound');for(const variable of ['A','B','C','D'])assert.ok(run(`LESSON_LATEX['core-four-functions'].tex.includes(${JSON.stringify('\\sum_{'+variable+'\\subseteq[n]}')})`),variable+' summation domain');assert.ok(!target.includes('ΣA α(A)'));
+assert.ok(run("LESSON_MATH_HTML['core-azuma'].includes('<mfrac>')"),'Tail exponent must use a real fraction');assert.ok(run("LESSON_MATH_HTML['core-entropy'].includes('<msup>')"),'Entropy bound must render its exponent');
+for(const id of ids){assert.ok(run(`renderGuidedStage(${JSON.stringify(id)},1)`).includes('lesson-equation'),id+' main lesson equation did not use the typesetter');run(`ui.proofTutor.id=${JSON.stringify(id)}`);assert.ok(run('renderProofTutor()').includes('lesson-equation'),id+' proof definitions omit the key equation');}
+assert.ok(!/<script[^>]+src=["'][^"']*(?:katex|mathjax)/i.test(html),'The published equations must work without a math CDN');assert.equal(run('examTotals().cold'),0);assert.equal(run('guidedTotals().completed'),0);
+console.log('PASS: 50 authored LaTeX equations compile strictly to offline MathML, including four explicitly scoped sums, true fractions, subscripts and exponents.');
+console.log('PASS: equations appear in lessons and proof definitions; copyable LaTeX is retained; typesetting preserves learning and exam evidence.');

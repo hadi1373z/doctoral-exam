@@ -4,6 +4,8 @@
 
 An interactive preparation workspace for Approximation Algorithms, Interactive Proof Systems, and the Probabilistic Method.
 
+The 50 main lesson equations are authored in LaTeX and compiled to semantic MathML with KaTeX at build time. Summation ranges, fractions, limits, subscripts and exponents render as mathematics in the lesson and proof definitions. Each equation includes expandable LaTeX source. The published equations work offline without a math CDN; the MIT-licensed build dependency is bundled under `src/vendor/`.
+
 ## A calmer place to read
 
 The studio uses warm paper, forest-green accents, editorial headings and larger reading text. The learning course has a clear starting point, short lesson previews and a progress panel. Inside a lesson, the focused reader gives the explanation and checkpoint room to breathe; its stage navigation adapts to a phone screen. Practice, examination and reference tools remain available in expandable sidebar groups.
