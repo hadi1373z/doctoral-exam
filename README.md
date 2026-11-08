@@ -18,6 +18,14 @@ Worked calculations and proof implications reveal one step at a time. Pure-numer
 
 Every assigned lesson now includes an interactive teaching picture: change a probability measure, reveal a random process, choose a graph configuration, or explore a concrete optimization or proof-protocol example. Worked examples and proofs also have visual step chains. The studio uses a bright paper palette with teal, coral and violet accents, plus brief checkpoint celebrations that respect reduced-motion settings. Picture experiments do not award course or exam credit.
 
+## Visual proofs and examiner extensions
+
+The [visual proof workspace](https://hadi1373z.github.io/doctoral-exam/#proof/core-four-functions) develops each assigned topic through four or five mathematical pictures. Each inference has a prediction prompt, a diagram of its actual objects or inequalities, a reveal explaining why the claim follows, and a fact to carry into the next inference. Completed steps can be revisited. The scope note identifies imported lemmas and the precise mechanism developed.
+
+Each worked-example stage also contains **two new examiner extensions: 100 problems across the 50 topics**. These require a derivation, counterexample, proof repair, or changed-parameter analysis. Every problem includes two staged hints, an exact numerical or logical subcheck, a worked solution, three concrete proof obligations, a common mistaken argument, and a further bounded question. A written attempt is committed before opening the worked solution. The first argument, revised draft, hints, consequences and self-review save locally and travel with the existing progress backup.
+
+Exact consequence checks are automatic; written arguments use worked solutions and human review. Their practice counters remain separate from the guided course and cold-exam evidence. [Browse all visual proof topics](proofs/README.md) or use the [portable teaching dataset](data/proof-tutor.json). The scheduling lesson now follows the assigned source's downward-rounding construction and original-volume short-job analysis.
+
 Your stage, answers, attempts, opened worked steps, reflection and completed lessons save locally. The guided course has its own progress record within the existing backup, separate from cold-exam evidence. Earlier reading marks remain preserved; they do not automatically count as completed guided lessons. Existing proof attempts and question drafts are not changed. Use Export/Import progress to move between browser origins or devices.
 
 The focused reader hides the main navigation while reading, with a button to show it. Mapped playgrounds and lectures can open inside the worked-example stage. Additional background remains available through Reference lessons and retains its amber label. The course teaches central mechanisms and examples; use the full assigned books and papers for omitted technical details and complete examination proofs.

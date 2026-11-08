@@ -234,7 +234,7 @@ const GUIDED_APPROX = {
       "title": "Remember job types instead of job identities",
       "paragraphs": [
         "A makespan schedule on identical machines assigns each job to one machine and minimizes the largest machine load. Greedy placement gives a useful constant factor, but a PTAS must exploit the fact that only a few genuinely large jobs can fit on a machine near the optimum.",
-        "The compression idea has two layers. Ignore small differences between large processing times by rounding them upward. Then describe a machine by the numbers of jobs of each rounded size that it receives. With fixed accuracy, the number of possible descriptions is bounded independently of the number of jobs."
+        "The source compresses long jobs by rounding their processing times downward. It then describes each machine by counts of rounded job types, restores the original processing times, and inserts the short jobs. The proof must bound these two construction stages without charging the approximation slack twice."
       ],
       "question": {
         "prompt": "Why can large-job configurations be a bounded family when ε is fixed?",
@@ -261,8 +261,8 @@ const GUIDED_APPROX = {
           "meaning": "A candidate bound on the optimal makespan, to be searched or guessed."
         },
         {
-          "term": "Large job",
-          "meaning": "A job of processing time above εT in the current feasibility test."
+          "term": "Long job",
+          "meaning": "A job with original processing time greater than T/k, where k is a fixed accuracy parameter (about 1/ε). Short jobs have size at most T/k."
         },
         {
           "term": "Configuration",
@@ -270,12 +270,12 @@ const GUIDED_APPROX = {
         }
       ],
       "paragraphs": [
-        "Use rounding granularity ε²T for large processing times. A machine whose original large-job load was at most T contains at most 1/ε large jobs. Rounding every one up adds at most εT to its load. This explains why upward rounding can preserve a useful near-feasible comparison.",
-        "After placing the large jobs, insert the small jobs on least-loaded machines. If an inserted job is the last one to finish, its own size is at most εT. Its start time is controlled by the average assigned load. Combine this with the rounded large-load bound, then choose the internal accuracy parameter to meet the requested final ε."
+        "Test a target T only after checking max pⱼ≤T and total processing volume at most mT. Round each long processing time downward to a multiple of q=T/k². A truly feasible T-schedule remains feasible after this reduction, so a count-state dynamic program must not reject such a target. Each rounded long job has size at least T/k, hence a rounded T-machine holds at most k long jobs.",
+        "Restore each assigned long job to its original length. Each restoration adds less than q, so every restored machine has load at most T+kq=(1+1/k)T. Now place short jobs on a least-loaded machine. If a short job j is last on a machine, its start time is at most the current average, which is at most the original total processing volume divided by m, hence at most T. Therefore Cⱼ≤T+pⱼ≤(1+1/k)T. This uses original volume; it does not add another T/k to the restored maximum."
       ],
-      "formula": "large-job rounding increase per machine ≤ (1/ε)·ε²T = εT",
+      "formula": "restored long load ≤ T+k(T/k²) = (1+1/k)T; last short job: Cⱼ ≤ (Σpᵢ)/m+pⱼ ≤ T+T/k",
       "question": {
-        "prompt": "For T=100 and internal ε=0.1, what upper bound does this counting argument give on rounding increase per machine?",
+        "prompt": "For T=100 and k=10, what uniform upper bound does restoration add to a rounded long-job machine?",
         "options": [
           "1",
           "100",
@@ -284,16 +284,16 @@ const GUIDED_APPROX = {
         ],
         "answer": 2,
         "feedback": [
-          "One is the per-job granularity ε²T, not the sum over a machine.",
+          "One is the per-job granularity T/k². A rounded configuration may contain up to k long jobs.",
           "This ignores the small internal accuracy parameter in the additive increase.",
-          "Correct: at most ten large jobs each gain at most one time unit.",
+          "Correct: at most ten long jobs are restored, each by less than one, so ten is a valid uniform upper bound.",
           "This multiplies by too many possible jobs; large-job capacity bounds their count."
         ]
       }
     },
     "example": {
       "title": "From actual lengths to a machine description",
-      "setup": "Take target T=100 and internal ε=0.1. Use rounding unit ε²T=1. Consider one machine with large jobs of lengths 26.2, 24.4 and 38.1.",
+      "setup": "Take target T=100 and k=10, so the long-job threshold is 10 and the downward-rounding unit q=T/k² is one. One machine receives long jobs with original lengths 26.2, 24.4 and 38.1.",
       "table": {
         "headers": [
           "Job",
@@ -304,77 +304,77 @@ const GUIDED_APPROX = {
           [
             "A",
             "26.2",
-            "27"
+            "26"
           ],
           [
             "B",
             "24.4",
-            "25"
+            "24"
           ],
           [
             "C",
             "38.1",
-            "39"
+            "38"
           ]
         ]
       },
       "steps": [
         {
-          "title": "Classify the jobs",
-          "explanation": "Every displayed job exceeds εT=10, so all three enter the large-job configuration problem."
+          "title": "Classify before rounding",
+          "explanation": "Each original job is longer than T/k=10. Each rounded value is still at least ten, preserving the k-jobs-per-configuration bound."
         },
         {
-          "title": "Compare loads",
-          "explanation": "The original load is 88.7 and the rounded load is 91. The actual increase is 2.3, below the uniform upper bound εT=10."
+          "title": "Construct the rounded configuration",
+          "explanation": "The rounded load is 26+24+38=88, while the original load is 88.7. Downward rounding preserves any feasible T-assignment as a witness for the compressed instance."
         },
         {
-          "title": "Forget item identities",
-          "explanation": "This machine is represented by one job of type 25, one of type 27 and one of type 39. Equivalent jobs elsewhere can use the same configuration description."
+          "title": "Restore the actual jobs",
+          "explanation": "Restoration adds 0.2+0.4+0.1=0.7 on this machine. Uniformly, at most ten jobs each add less than q=1, giving restored load at most 110 for every rounded T-configuration."
         },
         {
-          "title": "Insert a small job",
-          "explanation": "A small job of length 8 is inserted by the least-load rule. Its start time is analyzed using all machine loads, not merely the displayed machine. Its final-job overshoot is at most 10."
+          "title": "Use original volume for short jobs",
+          "explanation": "For a short job of length eight, use the least-loaded machine and the total-volume lower bound. Its start time is at most T=100, hence it finishes by 108. One must compare this with the restored-long-job bound 110; adding eight or ten to 110 would double-count the slack."
         }
       ],
-      "conclusion": "This example demonstrates upward rounding and type compression. It is not a feasibility certificate for a whole input until all large-job counts and machine counts are satisfied.",
+      "conclusion": "The configuration uses types 24, 26 and 38, and its rounded load is 88. The restored load is 88.7. This illustrates the source’s downward construction; a full schedule additionally satisfies every type count and the machine-count limit.",
       "question": {
-        "prompt": "What is the rounded load of the displayed machine?",
+        "prompt": "What is the rounded load used by the source’s configuration DP for this machine?",
         "options": [
           "88.7",
           "90",
           "100",
-          "91"
+          "88"
         ],
         "answer": 3,
         "feedback": [
-          "That is the original load, before configuration compression.",
-          "The three individual ceiling operations do not sum to 90.",
-          "T is the target bound, not the rounded sum of these three jobs.",
-          "Correct: 27+25+39=91 after each processing time is rounded upward."
+          "That is the original load, which is restored only after assigning rounded configurations.",
+          "Rounding each processing time downward gives 26, 24 and 38; their sum is not ninety.",
+          "T is a capacity bound for configurations, not the sum of these three rounded jobs.",
+          "Correct: floor(26.2)+floor(24.4)+floor(38.1)=26+24+38=88."
         ]
       }
     },
     "proof": {
       "title": "Keep feasibility and approximation separate",
       "paragraphs": [
-        "A target test must be justified in both directions needed by the search. If a T-schedule exists, the rounded large-job description must fit the permitted slack. The algorithm then constructs a schedule with a controlled enlarged makespan, rather than proving that every rounded input fits exactly into T."
+        "A valid target test has two distinct guarantees. A feasible original T-schedule induces a feasible rounded count solution because rounding is downward. Conversely, a rounded solution using at most m machines can be restored and extended to a schedule of makespan at most (1+1/k)T, provided the original-volume lower-bound check holds. The short-job argument uses the total volume rather than the already-enlarged maximum."
       ],
       "steps": [
         {
-          "claim": "There are at most O(1/ε²) rounded large sizes up to T plus rounding slack.",
-          "why": "The relevant size interval is divided into steps of ε²T; for fixed ε its number of types does not depend on n."
+          "claim": "Only O(k²) rounded long sizes are relevant.",
+          "why": "After rejecting jobs longer than T, the unit T/k² partitions the remaining size interval into a number of types depending only on k."
         },
         {
-          "claim": "An optimal T-schedule induces feasible counts of these types.",
-          "why": "Round its jobs machine by machine and permit the proved additive large-load slack."
+          "claim": "A feasible T-schedule induces rounded configurations of capacity T.",
+          "why": "Downward rounding never enlarges a job, and each original job contributes to exactly one global type count."
         },
         {
-          "claim": "A configuration DP or enumeration assigns all rounded type counts to machines.",
-          "why": "Its states track counts, not arbitrary partitions of the named jobs; fixed ε keeps the number of types bounded."
+          "claim": "Every rounded configuration contains at most k long jobs, so restoration costs at most T/k.",
+          "why": "Each rounded long job has size at least T/k and each individual restoration adds less than T/k²."
         },
         {
-          "claim": "Small-job insertion adds only a controlled last-job term.",
-          "why": "The least-loaded machine has load at most the current average, while each remaining job is at most εT."
+          "claim": "Short-job insertion preserves the same (1+1/k)T bound.",
+          "why": "A last short job starts no later than the current average, bounded by original total volume/m≤T. Its own size is at most T/k. Machines with no short job retain the restoration bound."
         }
       ],
       "question": {
@@ -383,14 +383,14 @@ const GUIDED_APPROX = {
           "For fixed ε, their descriptions use boundedly many types and bounded counts.",
           "Every assignment of named jobs is enumerated in constant time.",
           "The dynamic program can ignore how many jobs of each type exist.",
-          "Upward rounding reduces the target makespan."
+          "Downward rounding preserves every original job length exactly."
         ],
         "answer": 0,
         "feedback": [
           "Correct: the enumeration is over compressed descriptions, not all named-job partitions.",
           "Named-job partitions remain exponentially numerous; compression is the essential step.",
           "Type counts must be satisfied globally, or jobs could be omitted or duplicated.",
-          "Upward rounding increases lengths and requires explicitly budgeted slack."
+          "Rounding changes lengths. Feasibility transfers downward; original lengths must then be restored with an explicit loss bound."
         ]
       }
     },
@@ -416,7 +416,7 @@ const GUIDED_APPROX = {
               "Its length exceeds both the large threshold and the target.",
               "Correct: a nonpreemptive job must fit entirely on one machine.",
               "The assigned problem does not permit splitting a job across machines.",
-              "Upward rounding never shortens an infeasible long job."
+              "The target test rejects an original job longer than T before rounding; rounding cannot certify original feasibility."
             ]
           }
         },
@@ -444,14 +444,14 @@ const GUIDED_APPROX = {
     },
     "recap": {
       "takeaways": [
-        "Separate large and small jobs relative to a proposed T.",
-        "Round large jobs upward and explicitly pay for the increase.",
-        "Solve a bounded-type counting problem before inserting small jobs.",
-        "Distinguish fixed-ε polynomial time from an FPTAS bound."
+        "Separate long and short jobs relative to the target T/k.",
+        "Round long jobs downward, solve the type-count problem, then restore their original lengths.",
+        "Use the original total volume to analyze the last short job, avoiding a second slack charge.",
+        "The number of types depends on k≈1/ε: polynomial time for each fixed ε is not an FPTAS guarantee."
       ],
-      "retrieval": "Starting from a hypothetical T-schedule, derive a feasible rounded configuration solution and then explain the last-small-job bound without assuming that greedy placement is optimal."
+      "retrieval": "From a hypothetical T-schedule, prove that the rounded count DP accepts. Then bound restoration and the last short-job completion separately to obtain (1+1/k)T, explaining exactly where original total volume is used."
     },
-    "sourceNote": "Develops Williamson–Shmoys §3.2. A complete PTAS also needs the source’s target-search and configuration implementation details."
+    "sourceNote": "Develops the downward-rounding PTAS in Williamson–Shmoys §3.2. The configuration dynamic program and target search are used as described in the assigned source."
   },
   "core-bin-scheme": {
     "intro": {
