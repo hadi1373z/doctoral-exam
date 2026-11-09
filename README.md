@@ -2,6 +2,16 @@
 
 **GitHub Pages URL:** https://hadi1373z.github.io/doctoral-exam/
 
+**New textbook reader:** https://hadi1373z.github.io/doctoral-exam/textbook/
+
+## Textbook first — four complete exam drafts
+
+The [mathematical textbook](textbook/index.html) is now the first reading option in the homepage navigation and hero. It provides section-by-section reading with native MathML, chapter search, outline navigation, proof-oriented introductions and worked examples. The reader links back to the existing interactive lessons and examinations without modifying their progress records.
+
+The **four original working drafts** are included unchanged as editable LaTeX sources: [Research statement](textbook/summaries/01_research_statement_hadi_zamani.tex), [Approximation algorithms](textbook/summaries/02_approximation_algorithms_summary_hadi_zamani.tex), [Interactive proof systems](textbook/summaries/03_interactive_proofs_summary_hadi_zamani.tex) and [Probabilistic method](textbook/summaries/04_probabilistic_method_summary_hadi_zamani.tex). The browser reader also presents the full source text as accessible mathematical HTML. See the [textbook README](textbook/README.md) for details.
+
+
+
 An interactive preparation workspace for Approximation Algorithms, Interactive Proof Systems, and the Probabilistic Method.
 
 The 50 main lesson equations are authored in LaTeX and compiled to semantic MathML with KaTeX at build time. Summation ranges, fractions, limits, subscripts and exponents render as mathematics in the lesson and proof definitions. Each equation includes expandable LaTeX source. The published equations work offline without a math CDN; the MIT-licensed build dependency is bundled under `src/vendor/`.
