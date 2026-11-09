@@ -1,0 +1,240 @@
+% Revised 30 August 2026
+\documentclass[10pt]{article}
+\usepackage[margin=0.75in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{enumitem,booktabs,tabularx,xcolor,hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue!45!black,urlcolor=blue!45!black}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+\setlist{leftmargin=*,itemsep=1pt,topsep=2pt}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Gspace}{\mathfrak G}
+\newtheorem{theorem}{Theorem}
+
+\begin{document}
+\begin{center}
+{\LARGE\bfseries Research Statement\par}
+\vspace{1mm}
+{\large Local information and global structure in countable graphs\par}
+\vspace{2mm}
+{Hadi Zamani --- Computer Science Institute, Charles University\par}
+{Supervisor: Robert \v{S}\'amal\par}
+{\small 30 August 2026}
+\end{center}
+
+\begin{abstract}
+My research concerns local-to-global questions in sparse and countable graphs.  My
+current joint work with Robert \v{S}\'amal has three concrete parts: extending
+nowhere-zero flow theory to countably infinite locally finite graphs, comparing
+Baire-category notions of typicality in rooted and unrooted bounded-degree graph
+spaces, and proving an undecidability theorem for reconstruction from exact finite
+local data.  A further direction is to understand the recent explicit construction of
+a nonsofic group and to investigate whether its non-approximability argument has a
+direct combinatorial formulation.
+\end{abstract}
+
+\section{Guiding question}
+
+A bounded-degree graph is observed locally through its finite rooted balls, but global
+features such as ends, bridges, flows, and approximation by finite graphs need not be
+determined by any one ball.  My guiding question is:
+\begin{quote}
+\emph{Which global properties of a countable locally finite graph are forced by its
+finite neighbourhoods, and how does the answer depend on what local information is
+retained?}
+\end{quote}
+The last clause is essential.  A rooted topology records the neighbourhood of one
+distinguished vertex; an unrooted local-spectrum topology records which rooted
+neighbourhood types occur anywhere; Benjamini--Schramm convergence records their
+frequencies.  These observation models answer different questions and should not be
+identified.
+
+\section{Established work: flows and bridges}
+
+My current joint manuscript with Robert \v{S}\'amal is entitled
+\emph{Typical properties of countable graphs: flows and bridges}.  Its first part
+studies nowhere-zero flows in countably infinite locally finite graphs.
+
+Fix an orientation of a locally finite graph $G$.  For an abelian group $A$, a
+\emph{weak $A$-flow} assigns an element of $A$ to every directed edge and satisfies
+Kirchhoff's law at every vertex.  A \emph{strong $A$-flow} requires the corresponding
+identity across every finite edge cut.  These conditions coincide for finite graphs,
+but not for infinite graphs.
+
+If $e$ is a bridge, then $G-e$ has two components.  We call $e$ \emph{one-way
+infinite} if one component is finite, and \emph{two-way infinite} if both components
+are infinite.  Summing the vertex equations over the finite component shows that a
+weak flow must vanish on every one-way infinite bridge.  Our theorem proves that this
+necessary obstruction is also sufficient for a nowhere-zero $\Z_6$-flow.
+
+\begin{theorem}[Weak infinite $6$-flow theorem]
+Let $G$ be connected, countably infinite, and locally finite.  Then $G$ admits a weak
+nowhere-zero $\Z_6$-flow if and only if $G$ has no one-way infinite bridge.
+\end{theorem}
+
+For sufficiency, root $G$ and form finite multigraphs by contracting the complement
+of successively larger rooted balls.  The absence of a one-way infinite bridge makes
+the relevant finite contractions bridgeless.  Seymour's finite $6$-flow theorem gives
+a nowhere-zero $\Z_6$-flow on each finite model, and compactness produces a single
+edge assignment satisfying all vertex equations of $G$.  The proof therefore depends
+on choosing finite models that preserve exactly the obstruction relevant to weak
+conservation.
+
+\section{Established work: Baire-category typicality}
+
+There is no canonical uniform probability distribution on isomorphism classes of all
+countably infinite bounded-degree graphs.  In the spaces considered in our manuscript,
+we instead call a property \emph{typical} when its class is comeagre.  The definition is
+always relative to a specified topology.
+
+In the rooted space $\Gspace^{\bullet}_{\leq D}$, two graphs are close when large
+balls around their roots are isomorphic.  For every $D\geq3$, the class of bridgeless
+graphs is nowhere dense.  The analogous statement in the rooted $D$-regular space is
+proved for odd $D$.  In the rooted spaces treated in the manuscript, graphs with a
+two-way infinite bridge form a meagre class, while graphs with no cut vertex and
+$D$-edge-colourable graphs form nowhere-dense classes for $D\geq3$.  The proofs extend
+an arbitrary prescribed rooted ball far from the root so that every graph in a smaller
+open neighbourhood contains the required obstruction.
+
+The unrooted setting uses occurrence rather than one distinguished viewpoint.  Define
+the radius-$r$ local spectrum by
+\[
+  \operatorname{Spec}_r(G)
+  =\bigl\{[B_G(v,r),v]:v\in V(G)\bigr\},
+\]
+with multiplicities ignored.  Comparing these finite sets for increasing $r$ gives a
+pseudometric: nonisomorphic graphs may have distance zero when they have exactly the
+same finite rooted neighbourhood types.
+
+We construct infinite \emph{strongly isolated} graphs, meaning that some finite radius
+separates the graph from every nonisomorphic graph in the space.  These examples give
+the following nonmeagreness statements in $\Gspace^{\infty}_{\leq D}$:
+\begin{enumerate}
+\item for every $D\geq3$, the graphs with a one-way infinite bridge and the graphs
+      without one are both nonmeagre;
+\item for every $D\geq3$, the graphs with a two-way but no one-way infinite bridge
+      form a nonmeagre class;
+\item for every $D\geq4$, the bridgeless graphs form a nonmeagre class.
+\end{enumerate}
+Thus the rooted and unrooted conclusions are genuinely different.  This contrast is
+one of the main results of the manuscript; it is not a change of terminology, but a
+change in the information encoded by the topology.
+
+\section{Established work: undecidability from exact local data}
+
+The manuscript also studies whether finite local information determines a unique
+infinite graph.  Given a radius $r$ and a finite family $\mathcal F$ of rooted
+radius-$r$ graphs, let
+\[
+ \Gspace_{r,\mathcal F}^{=,\infty}
+ :=\bigl\{[G]:G\text{ is countably infinite, connected, locally finite, and }
+              \operatorname{Spec}_r(G)=\mathcal F\bigr\}.
+\]
+The existence problem asks whether this class is nonempty.  Our new result concerns
+uniqueness after existence has been promised.
+
+\begin{theorem}[Promised uniqueness is undecidable]
+Even under the promise that
+$\Gspace_{r,\mathcal F}^{=,\infty}\neq\varnothing$, there is no algorithm that
+always decides whether
+\[
+  \bigl|\Gspace_{r,\mathcal F}^{=,\infty}\bigr|=1.
+\]
+The statement remains true when every realization is required to be a simple
+unlabelled graph of maximum degree at most $3$.
+\end{theorem}
+
+Equivalently, exact finite local data may determine one isomorphism type or may admit
+at least two nonisomorphic infinite realizations, but no algorithm always distinguishes
+these cases, even under the nonemptiness promise.  The reduction passes from finite
+presentations to connected covers and then to exact-spectrum graphs; the subcubic
+encoding shows that the obstruction is not caused by labels, multiple edges, or
+unbounded degree.
+
+\section{A direction for study: the explicit nonsofic construction}
+
+The Aldous--Lyons conjecture asked whether every unimodular random rooted network is
+a local weak limit of finite networks.  It was disproved by Bowen, Chapman, Lubotzky,
+and Vidick, together with Bowen, Chapman, and Vidick~\cite{BCLV,BCV}.  That result
+established the existence of non-approximable unimodular networks, but did not produce
+a nonsofic group.
+
+The 2026 OpenAI report \emph{Ten Advances in Mathematics and Theoretical Computer
+Science} gives an explicit nonsofic group~\cite{OAI}.  More precisely, with
+$R=L_{\mathbb F_2}(1,2)$, its proof constructs the finitely generated subgroup
+\[
+  G\cong \operatorname{EL}_9(R)\leq R^{\times}
+\]
+and proves that $G$ is not sofic.  For a finite generating tuple, the corresponding
+directed generator-marked Cayley diagram is therefore a deterministic unimodular
+network that is not a local weak limit of finite networks with the same markings.
+
+The known argument proves non-approximability through soficity, group actions, and the
+algebraic structure of the Leavitt group.  I would like first to understand this proof
+and the role of each of these ingredients.  A natural question arising from that study
+is:
+\begin{quote}
+\emph{Does there exist a direct combinatorial construction and proof of a
+bounded-degree unimodular network that is not a Benjamini--Schramm limit of finite
+graphs, without using group soficity or other group-theoretic machinery?}
+\end{quote}
+The immediate aim is not to claim a new construction.  It is to identify which steps
+of the existing proof are genuinely group-theoretic and which can be expressed using
+finite neighbourhoods, expansion, matchings, or counting.  This may clarify whether a
+direct graph-theoretic proof is realistic and how the result fits the theory of local
+convergence.
+
+\section{Research plan}
+
+My immediate programme is deliberately limited to questions for which the object and
+the required conclusion are explicit:
+\begin{enumerate}
+\item \textbf{Complete the flows-and-typicality manuscript.}  Finalize the proofs and
+      state every result with its degree bound, rooted or unrooted ambient space, and
+      weak or strong conservation convention; include the exact-spectrum
+      undecidability theorem with its nonemptiness promise and subcubic restriction.
+\item \textbf{Study regular strong isolation.}  Determine whether infinite
+      $D$-regular strongly isolated graphs exist and whether the degree threshold for
+      the bridgeless unrooted construction can be reduced from four to three.
+\item \textbf{Understand the explicit nonsofic construction.}  Study the OpenAI
+      proof, identify its combinatorial core, and investigate whether any part of the
+      non-approximability argument can be reformulated directly in the language of
+      bounded-degree graphs.
+\item \textbf{Compare approximation with category.}  Formulate the unlabelled
+      bounded-degree problem in the space of unimodular laws and study the ergodic
+      subspace separately from the full convex space.
+\end{enumerate}
+
+The flow, Baire-category, and promised-uniqueness theorems are results of the current
+manuscript.  The regular-isolation, nonsofic-construction, and ergodic approximation
+topics are directions for further study.
+
+\textbf{Current research output.}
+R.~\v{S}\'amal and H.~Zamani,
+\emph{Typical properties of countable graphs: flows and bridges}, manuscript in
+preparation (2026).
+
+\renewcommand{\refname}{Selected references}
+\begin{thebibliography}{9}
+\footnotesize
+\setlength{\itemsep}{0pt}
+\setlength{\parskip}{0pt}
+\bibitem{BCLV}
+L.~Bowen, M.~Chapman, A.~Lubotzky, and T.~Vidick,
+\emph{The Aldous--Lyons conjecture I: Subgroup tests},
+arXiv:2408.00110, 2024.
+
+\bibitem{BCV}
+L.~Bowen, M.~Chapman, and T.~Vidick,
+\emph{The Aldous--Lyons conjecture II: Undecidability},
+arXiv:2501.00173, 2025.
+
+\bibitem{OAI}
+OpenAI, \emph{Nonsofic groups exist}, Chapter~3 in
+\emph{Ten Advances in Mathematics and Theoretical Computer Science}, 2026,
+\url{https://cdn.openai.com/pdf/ten-proofs-oai.pdf}.
+\end{thebibliography}
+
+\end{document}
