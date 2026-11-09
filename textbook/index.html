@@ -2750,13 +2750,9 @@ within
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mi>i</mi></msup><annotation encoding="application/x-tex">2^i</annotation></semantics></math>
 steps. The naïve recurrence duplicates
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>R</mi><mi>i</mi></msub><annotation encoding="application/x-tex">R_i</annotation></semantics></math>;
-the following quantified selector keeps one copy: <span class="math display">$$\begin{aligned}
-R_{i+1}(C,D):={}&amp;\exists M\ \forall b\ \exists U,V\;[
-(b=0\Rightarrow(U=C\wedge V=M))\\
-&amp;\hspace{36mm}\wedge
-(b=1\Rightarrow(U=M\wedge V=D))
-\wedge R_i(U,V)].
-\end{aligned}$$</span> Here
+the following quantified selector keeps one copy:
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>R</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>C</mi><mo>,</mo><mi>D</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>:=</mo><mo>∃</mo><mi>M</mi><mspace width="0.222em"></mspace><mo>∀</mo><mi>b</mi><mspace width="0.222em"></mspace><mo>∃</mo><mi>U</mi><mo>,</mo><mi>V</mi><mspace width="0.278em"></mspace><mrow><mo form="prefix" stretchy="true">[</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>b</mi><mo>=</mo><mn>0</mn><mo>⇒</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>U</mi><mo>=</mo><mi>C</mi><mo>∧</mo><mi>V</mi><mo>=</mo><mi>M</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mo>∧</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>b</mi><mo>=</mo><mn>1</mn><mo>⇒</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>U</mi><mo>=</mo><mi>M</mi><mo>∧</mo><mi>V</mi><mo>=</mo><mi>D</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mo>∧</mo><msub><mi>R</mi><mi>i</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>U</mi><mo>,</mo><mi>V</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">R_{i+1}(C,D):=\exists M\ \forall b\ \exists U,V\;[(b=0\Rightarrow(U=C\wedge V=M))\wedge(b=1\Rightarrow(U=M\wedge V=D))\wedge R_i(U,V)].</annotation></semantics></math>
+Here
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mo>,</mo><mi>U</mi><mo>,</mo><mi>V</mi></mrow><annotation encoding="application/x-tex">M,U,V</annotation></semantics></math>
 are configuration-sized bit vectors, and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>R</mi><mn>0</mn></msub><annotation encoding="application/x-tex">R_0</annotation></semantics></math>
