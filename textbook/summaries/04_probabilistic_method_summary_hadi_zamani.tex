@@ -1,0 +1,807 @@
+% Updated 30 August 2026
+\documentclass[10pt]{article}
+\usepackage[margin=0.62in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{enumitem,booktabs,tabularx,array,multicol,xcolor}
+\usepackage[bookmarks=false]{hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue!45!black,urlcolor=blue!45!black}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+\setlist{leftmargin=*,itemsep=1pt,topsep=2pt}
+\newcommand{\E}{\mathbb E}
+\newcommand{\Prb}{\mathbb P}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\Cov}{\operatorname{Cov}}
+\newcommand{\1}{\mathbf 1}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newtheorem*{theorem}{Theorem}
+\newtheorem*{lemma}{Lemma}
+\newenvironment{keybox}{\begin{quote}\small\itshape}{\end{quote}}
+
+\begin{document}
+\begin{center}
+{\LARGE\bfseries The Probabilistic Method\par}
+\vspace{1mm}
+{Hadi Zamani \qquad Examiner: Martin Tancer\par}
+{\small 30 August 2026}
+\end{center}
+
+\section*{Assigned chapters}
+\begin{itemize}
+\item Chapter 6: Correlation Inequalities
+\item Chapter 7: Martingales and Tight Concentration
+\item Chapter 15: Codes, Games, and Entropy
+\item Chapter 17: Graph Property Testing
+\end{itemize}
+
+\subsection*{Chapter map: main theorems and techniques}
+\begingroup
+\scriptsize
+\setlength{\tabcolsep}{3.5pt}
+\renewcommand{\arraystretch}{1.08}
+\begin{center}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.08\textwidth}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Chapter} & \textbf{Main theorems and results} &
+\textbf{Characteristic techniques}\\
+\midrule
+6 & Ahlswede--Daykin Four Functions; FKG and Harris--Kleitman correlation;
+the XYZ theorem for random linear extensions. & Finite distributive lattices;
+log-supermodularity; increasing/decreasing events; complement one event for negative
+correlation; limiting perturbations of random labels.\\
+7 & Azuma--Hoeffding/McDiarmid; Shamir--Spencer concentration of chromatic
+number; Talagrand convex-distance inequality; Kim--Vu polynomial concentration.
+& Doob martingales and carefully chosen exposures; exponential moments;
+Lipschitz bounds plus small certificates; formal derivatives and expectation hierarchy.\\
+15 & Binary symmetric channel capacity $1-H(p)$; Hamming-sphere/ChipLiar bounds;
+balancing-game value $\Theta(\sqrt{n\log n})$; Shearer's entropy inequality and its
+projection corollary. & Random coding and entropy estimates for Hamming balls;
+random adversarial strategies; potential functions; entropy chain rule, conditioning,
+and submodularity.\\
+17 & One-sided testing of $k$-colourability by an
+$O(k\log k/\varepsilon^2)$-vertex sample (the stated $k=3$ bound is
+$40/\varepsilon^2$); triangle-removal testing; every hereditary dense-graph property
+is one-sided testable. & Random induced samples; colour-list restriction trees;
+Szemer\'edi regularity and removal; induced-removal for forbidden induced subgraphs.\\
+\bottomrule
+\end{tabularx}
+\end{center}
+\endgroup
+
+\section*{Theorem inventory}
+\begingroup
+\small
+
+\subsection*{Short proof-hint index}
+Use these as the first sentence of an oral proof; the detailed arguments appear
+in the corresponding chapter sections below.
+\begin{itemize}
+\item \textbf{Chapter 6:} verify the pointwise join/meet inequality, sum it by
+the Four Functions Theorem, and specialise the log-supermodular measure to
+increasing events (FKG/Harris--Kleitman).
+\item \textbf{Chapter 7:} reveal independent coordinates to form a Doob
+martingale; use bounded differences for Azuma, and combine Lipschitz control
+with a small certificate for Talagrand's convex-distance bound.
+\item \textbf{Chapter 15:} estimate Hamming-ball volume by binary entropy,
+then use random coding/union bounds; for liar games, track the sphere-bound
+potential after every answer.
+\item \textbf{Chapter 17:} sample an induced subgraph; if the graph is far from
+the property, convert that distance into many small witnesses, using removal
+or induced-removal when the forbidden family is not fixed.
+\end{itemize}
+
+\subsection*{Chapter 6: correlation inequalities}
+\begin{itemize}
+\item \textbf{Theorem 6.1.1 (Four Functions).} If nonnegative functions on
+$2^N$ satisfy
+$\alpha(A)\beta(B)\leq\gamma(A\cup B)\delta(A\cap B)$ pointwise, then the
+corresponding inequality holds after summing over any two families.
+\item \textbf{Corollary 6.1.2.} The Four Functions Theorem holds on every
+finite distributive lattice, with union/intersection replaced by join/meet.
+\item \textbf{Corollary 6.1.3.} For $X,Y$ in a finite distributive lattice,
+$|X||Y|\leq|X\vee Y||X\wedge Y|$.
+\item \textbf{Corollary 6.1.4.} Every set family $\mathcal A$ satisfies
+$|\mathcal A-\mathcal A|\geq|\mathcal A|$.
+\item \textbf{Theorem 6.2.1 (FKG).} Under a log-supermodular weight on a
+finite distributive lattice, two nonnegative increasing functions are positively
+correlated.
+\item \textbf{Proposition 6.3.1 (Harris--Kleitman, uniform case).} Two
+increasing events, or two decreasing events, are positively correlated; an
+increasing and a decreasing event are negatively correlated.
+\item \textbf{Theorem 6.3.2 (Harris--Kleitman, product measure).} The same
+three correlation inequalities hold for arbitrary independent coordinate
+probabilities $p_1,\ldots,p_n$.
+\item \textbf{Theorem 6.3.3.} Increasing/decreasing random-graph properties
+obey the corresponding positive/negative correlation inequalities in $G(n,p)$.
+\item \textbf{Theorem 6.4.1 (XYZ theorem).} In a uniformly random linear
+extension of a finite poset,
+$\Prb[a_1<a_2\text{ and }a_1<a_3]\geq
+\Prb[a_1<a_2]\Prb[a_1<a_3]$.
+\end{itemize}
+
+\subsection*{Chapter 7: martingales and tight concentration}
+\begin{itemize}
+\item \textbf{Theorem 7.2.1 (Azuma).} If $X_0=0,\ldots,X_m$ is a martingale
+with $|X_{i+1}-X_i|\leq1$, then
+$\Prb[X_m>\lambda\sqrt m]<e^{-\lambda^2/2}$.
+\item \textbf{Corollary 7.2.2.} For $X_0=c$ under the same bound,
+$\Prb[|X_m-c|>\lambda\sqrt m]<2e^{-\lambda^2/2}$.
+\item \textbf{Theorem 7.2.3.} Edge-Lipschitz functions have unit differences
+in the edge-exposure martingale; vertex-Lipschitz functions have unit
+differences in the vertex-exposure martingale.
+\item \textbf{Theorem 7.2.4 (Shamir--Spencer).} For $G\sim G(n,p)$,
+$\chi(G)$ lies within $\lambda\sqrt{n-1}$ of its mean except with probability
+at most $2e^{-\lambda^2/2}$.
+\item \textbf{Lemma 7.3.1.} The auxiliary edge-disjoint clique-packing variable
+$Y$ satisfies $\E Y\geq(1+o(1))n^2/(2k^4)$.
+\item \textbf{Theorem 7.3.2.} For the stated $k\sim2\log_2 n$ regime,
+$\Prb[\omega(G)<k]$ is at most
+$\exp\{-\Omega(n^2/\ln^8 n)\}$.
+\item \textbf{Theorem 7.3.3.} If $p=n^{-\alpha}$ with fixed
+$\alpha>5/6$, then for some integer $u=u(n,p)$,
+$u\leq\chi(G(n,p))\leq u+3$ asymptotically almost surely.
+\item \textbf{Lemma 7.3.4.} Under the hypotheses of Theorem 7.3.3, every
+$c\sqrt n$-vertex induced subgraph is $3$-colourable asymptotically almost
+surely.
+\item \textbf{Theorem 7.4.1.} A function Lipschitz relative to a gradation has
+Doob-martingale differences bounded by $1$.
+\item \textbf{Theorem 7.4.2.} Such a length-$m$ gradation gives both Azuma
+tails $e^{-\lambda^2/2}$ at distance $\lambda\sqrt m$ from the mean.
+\item \textbf{Theorem 7.4.3.} An adaptive exposure strategy whose every line
+has total conditional variance at most $\sigma^2$ gives an essentially Gaussian
+tail $2e^{-\alpha^2/(2(1+\varepsilon))}$ in its stated range.
+\item \textbf{Theorem 7.5.1.} The number $L(g)$ of values missed by a uniformly
+random map $g:[n]\to[n]$ is concentrated within $\lambda\sqrt n+1$ of $n/e$.
+\item \textbf{Theorem 7.5.2.} For independent random signs and
+$\|v_i\|\leq1$, the norm $\|\sum_i\varepsilon_i v_i\|$ has two-sided
+subgaussian deviations of scale $\sqrt n$ about its mean.
+\item \textbf{Theorem 7.5.3.} If $A\subseteq\{0,1\}^n$ has density at least
+$\varepsilon$, then a Hamming neighbourhood of radius
+$2\sqrt{2n\ln(1/\varepsilon)}$ covers density at least $1-\varepsilon$.
+\item \textbf{Theorem 7.6.1.} Talagrand's convex distance from $x$ to $A$
+equals the Euclidean distance from the origin to the convex hull of the
+admissible difference vectors $U(A,x)$.
+\item \textbf{Theorem 7.6.2 (Talagrand).} On a product space,
+$\int\exp(\rho(A,x)^2/4)\,dx\leq1/\Prb[A]$.
+\item \textbf{Theorem 7.7.1.} A $1$-Lipschitz, $f$-certifiable variable $X$
+satisfies
+$\Prb[X\leq b-t\sqrt{f(b)}]\Prb[X\geq b]\leq e^{-t^2/4}$.
+\item \textbf{Theorem 7.8.1 (Kim--Vu).} A positive degree-$k$ polynomial of
+independent Bernoulli variables concentrates around its mean at scale
+$a_k(EE')^{1/2}\lambda^k$, with failure probability at most
+$d_ke^{-\lambda}n^{k-1}$.
+\end{itemize}
+
+\subsection*{Chapter 15: codes, games, and entropy}
+\begin{itemize}
+\item \textbf{Theorem 15.1.1 (Shannon).} For a binary symmetric channel with
+error probability $p<1/2$, rates arbitrarily close to $1-H(p)$ from below are
+achievable with arbitrarily small decoding error.
+\item \textbf{Theorem 15.1.2.} The same capacity lower bound is achievable by
+binary linear (group) codes.
+\item \textbf{Theorem 15.2.1.} In the ChipLiar game, if
+$\sum_{i=0}^k x_i B(q,i)>1$, then Carole has a winning strategy.
+\item \textbf{Corollary 15.2.2 (sphere bound).} If
+$n>2^q/\sum_{i=0}^k\binom qi$, then Carole wins the $(n,q,k)$ liar game.
+\item \textbf{Theorem 15.3.1.} If $\sum_i x_i2^{-i}<1$, Carole wins the
+$(x_1,\ldots,x_k)$ tenure game.
+\item \textbf{Lemma 15.3.2.} Chips of total weight at least $1$ can be split
+into two parts, each of weight at least $1/2$.
+\item \textbf{Theorem 15.3.3.} If $\sum_i x_i2^{-i}\geq1$, Paul wins the
+tenure game; together with Theorem 15.3.1 this is an exact criterion.
+\item \textbf{Theorem 15.4.1.} If
+$\Prb[|S_n|>\alpha]<1/n$, then the balancing-vector game has
+$\operatorname{VAL}(n)\leq\alpha$.
+\item \textbf{Corollary 15.4.2.}
+$\operatorname{VAL}(n)=O(\sqrt{n\ln n})$.
+\item \textbf{Theorem 15.4.3.} If
+$\Prb[|S_n|>\alpha]>cn^{-1/2}$ for the stated absolute constant $c$, then
+$\operatorname{VAL}(n)>\alpha$.
+\item \textbf{Corollary 15.4.4.}
+$\operatorname{VAL}(n)=\Theta(\sqrt{n\ln n})$.
+\item \textbf{Section 15.5.} There is no numbered theorem; the balancing game
+identifies the optimal worst-case guarantee for nonadaptive online discrepancy.
+\item \textbf{Theorem 15.6.1.} For every fixed $k\geq1$, the half-liar-game
+capacity satisfies $A_k(q)\sim2^{q+k}/\binom qk$.
+\item \textbf{Lemma 15.7.1.} Entropy is bounded by log-support size, is
+monotone under adjoining variables, is subadditive, and decreases under
+conditioning.
+\item \textbf{Proposition 15.7.2.} Joint entropy is at most the sum of the
+coordinate entropies: $H(X_1,\ldots,X_n)\leq\sum_iH(X_i)$.
+\item \textbf{Corollary 15.7.3.} If $p_i$ is the fraction of members of a set
+family containing $i$, then
+$|\mathcal F|\leq2^{\sum_iH(p_i)}$.
+\item \textbf{Proposition 15.7.4 (Shearer).} If each coordinate belongs to at
+least $k$ members of $\mathcal G$, then
+$kH(X)\leq\sum_{G\in\mathcal G}H(X_G)$.
+\item \textbf{Corollary 15.7.5.} For a family of vectors and coordinate
+projections $\mathcal F_i$, Shearer's condition gives
+$|\mathcal F|^k\leq\prod_i|\mathcal F_i|$.
+\item \textbf{Corollary 15.7.6 (Loomis--Whitney).} The volume of a body obeys
+$\operatorname{Vol}(B)^{n-1}\leq\prod_i\operatorname{Vol}(B_i)$.
+\item \textbf{Corollary 15.7.7.} The projection inequality of Corollary 15.7.5
+specializes to families of subsets.
+\item \textbf{Corollary 15.7.8.} A family of labelled graphs in which every two
+members share a triangle has size less than
+$2^{\binom t2}/4$.
+\end{itemize}
+
+\subsection*{Chapter 17: graph property testing}
+\begin{itemize}
+\item \textbf{Theorem 17.2.1.} If $0<\varepsilon<0.1$,
+$n>400/\varepsilon^3$, and an $n$-vertex graph is
+$\varepsilon$-far from $3$-colourable, then a uniformly random induced
+subgraph on $40/\varepsilon^2$ vertices is $3$-colourable with probability at
+most $0.1$.
+\item \textbf{Claims 17.2.2--17.2.3.} The colour-list extension bound converts
+distance from $3$-colourability into a set of at least $\varepsilon n/2$
+vertices that force progress in the restriction tree.
+\item \textbf{Claims 17.2.4--17.2.6.} The restriction tree has depth at most
+$3/\varepsilon$; once all leaves are terminal the sample is not
+$3$-colourable; after $40/\varepsilon^2$ samples this occurs with probability
+at least $0.9$.
+\item \textbf{Lemma 17.3.1 (triangle removal).} Every graph
+$\varepsilon$-far from triangle-free contains at least
+$\delta(\varepsilon)n^3$ triangles.
+\item \textbf{Corollary 17.3.2.} Triangle-freeness has a one-sided
+constant-query tester.
+\item \textbf{Lemma 17.4.1.} A uniform induced-removal statement for a family
+$\mathcal F$ implies one-sided testability of induced-$\mathcal F$-freeness.
+\item \textbf{Theorem 17.4.2 (Alon--Shapira).} The required induced-removal
+functions exist for every finite or infinite forbidden family $\mathcal F$.
+\item \textbf{Theorem 17.4.3.} Every hereditary dense-graph property is
+testable with one-sided error.
+\item \textbf{Corollary 17.4.4.} If a graph is $\varepsilon$-far from a
+hereditary property $\mathcal P$, it has a bounded-size induced subgraph, of
+size at most $W_{\mathcal P}(\varepsilon)$, that violates $\mathcal P$.
+\item \textbf{Theorem 17.4.5.} A graph property has an oblivious one-sided
+tester if and only if it is semi-hereditary.
+\end{itemize}
+
+\endgroup
+
+\section{Chapter 6: correlation inequalities}
+
+\subsection{Lattices, monotonicity, and the Four Functions Theorem}
+
+A finite lattice $(L,\leq)$ has a meet $x\wedge y$ and join $x\vee y$.
+It is distributive when meet and join distribute over each other.  The main
+example is $L=2^{[n]}$ ordered by inclusion, with
+$A\wedge B=A\cap B$ and $A\vee B=A\cup B$.
+A function $f:L\to\mathbb R$ is increasing if $x\leq y$ implies
+$f(x)\leq f(y)$.
+
+For nonnegative $\alpha,\beta,\gamma,\delta:L\to\mathbb R_{\geq0}$, suppose
+\[
+ \alpha(x)\beta(y)\leq\gamma(x\vee y)\delta(x\wedge y)
+ \qquad\text{for all }x,y\in L.                       \tag{4F-local}
+\]
+Writing $\alpha(\mathcal A)=\sum_{x\in\mathcal A}\alpha(x)$ and
+\[
+ \mathcal A\vee\mathcal B=\{x\vee y:x\in\mathcal A,y\in\mathcal B\},
+ \qquad
+ \mathcal A\wedge\mathcal B=\{x\wedge y:x\in\mathcal A,y\in\mathcal B\},
+\]
+the Ahlswede--Daykin Four Functions Theorem gives
+\[
+ \alpha(\mathcal A)\beta(\mathcal B)
+ \leq\gamma(\mathcal A\vee\mathcal B)
+       \delta(\mathcal A\wedge\mathcal B).             \tag{4F-global}
+\]
+The striking point is that a pointwise lattice inequality survives summation.
+The proof is an induction on the lattice/ground-set size, splitting according
+to one coordinate and applying the hypothesis to the induced functions.
+
+\subsection{FKG and Harris--Kleitman}
+
+A nonnegative weight $\mu:L\to\mathbb R_{\geq0}$ is
+\emph{log-supermodular} if
+\[
+ \mu(x\vee y)\mu(x\wedge y)\geq\mu(x)\mu(y).
+\]
+After normalization, regard $\mu$ as a probability distribution.  The FKG
+inequality states that for increasing $f,g:L\to\mathbb R$,
+\[
+ \E_\mu[fg]\geq\E_\mu[f]\,\E_\mu[g].                  \tag{FKG}
+\]
+For increasing events $A,B$, take indicator functions:
+\[
+ \Prb_\mu(A\cap B)\geq\Prb_\mu(A)\Prb_\mu(B).
+\]
+Proof route: combine log-supermodularity of $\mu$ and monotonicity of $f,g$ to
+form four functions satisfying (4F-local), apply Four Functions, and normalize.
+
+For independent coordinates, the product measure on $2^{[n]}$ has
+\[
+ \mu(S)=\prod_{i\in S}p_i\prod_{i\notin S}(1-p_i)
+\quad\Longrightarrow\quad
+\mu(A\cup B)\mu(A\cap B)=\mu(A)\mu(B).
+\]
+Therefore increasing events are positively correlated (Harris--Kleitman).
+If $A$ is increasing and $D$ is decreasing, then $D^c$ is increasing and
+\[
+ \Prb(A\cap D)\leq\Prb(A)\Prb(D).
+\]
+
+\textbf{Graph-property application.}  In $G(n,p)$, containing a Hamilton cycle
+and being connected are increasing; planarity and being triangle-free are
+decreasing.  Thus two increasing properties are positively correlated, while
+an increasing and a decreasing property are negatively correlated.
+Independence is false in general even though the edges themselves are independent.
+
+\subsection{The XYZ theorem for linear extensions}
+
+Choose a linear extension of a finite poset $P$ uniformly.  For any elements
+$x,y,z$ (where $x<y$ denotes that $x$ precedes $y$ in the random extension),
+\[
+ \Prb[x<y\ \wedge\ x<z]\geq
+ \Prb[x<y]\Prb[x<z].                                  \tag{XYZ}
+\]
+The proof embeds order-preserving integer labelings into a carefully chosen
+finite distributive lattice.  The set of labelings has a log-supermodular
+indicator, while the two order events are increasing.  Apply FKG and let the
+label range tend to infinity; ties become negligible, leaving uniform linear
+extensions.  The lesson is not that arbitrary order events correlate positively:
+the lattice order and monotonicity must be verified.
+
+\begin{keybox}
+Correlation checklist: identify the lattice; determine which events/functions
+are increasing; verify log-supermodularity; apply FKG; reverse the sign by
+complementing exactly one increasing event.  Never infer correlation merely from
+a verbal intuition that two events are both likely.
+\end{keybox}
+
+\section{Chapter 7: martingales and tight concentration}
+
+\subsection{Definitions and the Doob construction}
+
+For a filtration
+$\mathcal F_0\subseteq\cdots\subseteq\mathcal F_m$, a process $(X_i)$ is a
+martingale if $X_i$ is $\mathcal F_i$-measurable, integrable, and
+\[
+ \E[X_{i+1}\mid\mathcal F_i]=X_i.
+\]
+Given any integrable random variable $Y$, exposing random choices one at a time
+gives the Doob martingale
+\[
+ X_i=\E[Y\mid\mathcal F_i],\qquad X_0=\E Y,\quad X_m=Y.
+\]
+The method separates the work into two parts: choose an exposure revealing $Y$,
+then bound how much each new piece of information changes the conditional
+expectation.
+
+\subsection{Azuma--Hoeffding and bounded differences}
+
+If $D_i=X_i-X_{i-1}$ and $|D_i|\leq c_i$ almost surely, Hoeffding's lemma gives
+\[
+ \E[e^{\lambda D_i}\mid\mathcal F_{i-1}]
+ \leq e^{\lambda^2c_i^2/2}.
+\]
+Iterating conditional expectation and applying Markov to
+$e^{\lambda(X_m-X_0)}$, then optimizing
+$\lambda=t/\sum_i c_i^2$, yields
+\[
+ \Prb[X_m-X_0\geq t]\leq
+ \exp\!\left(-\frac{t^2}{2\sum_i c_i^2}\right),
+\]
+\[
+ \Prb[|X_m-X_0|\geq t]\leq
+ 2\exp\!\left(-\frac{t^2}{2\sum_i c_i^2}\right).       \tag{Azuma}
+\]
+
+McDiarmid's bounded-differences inequality is the product-space corollary:
+if $Y=f(Z_1,\ldots,Z_m)$ for independent coordinates and changing coordinate
+$i$ changes $f$ by at most $c_i$, then the same two-sided tail bound holds
+around $\E Y$.
+
+\subsection{Two exposure choices in random graphs}
+
+\textbf{Edge exposure.}  Reveal the $\binom n2$ potential edges.  Use this when
+one edge changes the statistic by $O(1)$.  For instance, the maximum number of
+edge-disjoint $K_r$'s is edge-Lipschitz, while the total number of $K_r$'s is
+not: one edge may lie in many cliques.
+
+\textbf{Vertex exposure.}  At step $i$, reveal all still-unrevealed edges from
+vertex $i$.  If two graphs differ only in the edges incident with one vertex,
+their chromatic numbers differ by at most one, because deleting that vertex
+leaves the same graph.  Hence for $G\sim G(n,p)$ and
+$c=\E[\chi(G)]$,
+\[
+ \Prb\!\left(|\chi(G)-c|>\lambda\sqrt{n-1}\right)
+ <2e^{-\lambda^2/2}.                                  \tag{Shamir--Spencer}
+\]
+The coarser coordinate block produces a much stronger bound than treating
+all $\binom n2$ edges separately.
+
+\subsection{General gradations and certificate-sensitive bounds}
+
+A gradation
+$\varnothing=B_0\subset B_1\subset\cdots\subset B_m=B$
+exposes a random map one block at a time.  If a statistic is Lipschitz relative
+to the gradation, then the induced Doob differences are bounded and Azuma
+applies.  In sparse product spaces, a query/certificate analysis can replace
+the crude number of all coordinates by the variance proxy
+\[
+ \sigma^2=\sum_i p_i(1-p_i)c_i^2,
+\]
+provided an adaptive procedure determines the statistic with bounded query
+influence.  State the hypotheses before using the improved exponent.
+
+\subsection{Talagrand's convex-distance inequality}
+
+Let $\Omega=\prod_{i=1}^n\Omega_i$ have product measure.  For $A\subseteq\Omega$
+and $x\in\Omega$, define
+\[
+ d_T(x,A)=\sup_{\|\alpha\|_2=1}\ 
+ \inf_{y\in A}\sum_{i:x_i\neq y_i}|\alpha_i|.
+\]
+Talagrand's inequality states
+\[
+ \Prb(A)\Prb\{x:d_T(x,A)\geq t\}\leq e^{-t^2/4}.        \tag{Talagrand}
+\]
+Ordinary Hamming distance counts changed coordinates equally; $d_T$ lets the
+worst unit vector weight important coordinates.  An equivalent exponential
+moment form is
+\[
+ \E\!\left[e^{d_T(X,A)^2/4}\right]\leq\frac1{\Prb(A)}.
+\]
+
+Application pattern: show $Y$ is 1-Lipschitz and that $Y\geq s$ can be certified
+by at most $f(s)$ coordinates.  If $Y$ is far above a median, every nearby point
+must preserve enough certificate coordinates, forcing large convex distance
+from the lower-level set.  Talagrand can then yield a fluctuation scale
+$O(\sqrt{f(\operatorname{med}Y)})$, much sharper than Azuma's
+$O(\sqrt n)$ when certificates are small.
+
+More explicitly, let $M$ be a median and $A=\{Y\leq M\}$.  If $Y(x)\geq M+t$
+and a certificate for $x$ uses at most $f(Y(x))$ coordinates, then any $y\in A$
+must disagree with $x$ on at least $t$ certificate coordinates (under the usual
+unit-Lipschitz certificate hypothesis).  Give those certificate coordinates equal
+weight $1/\sqrt{f(Y(x))}$.  This exhibits
+\[
+ d_T(x,A)\geq \frac{t}{\sqrt{f(Y(x))}}.
+\]
+Substitution into Talagrand's inequality converts certificate size directly into a
+tail bound.  The proof step to remember is the construction of the weight vector;
+quoting ``small certificates'' without it leaves the concentration argument incomplete.
+
+\subsection{Kim--Vu polynomial concentration}
+
+Let $H$ be a weighted hypergraph of rank at most $k$, let $t_i$ be independent
+indicators, and
+\[
+ Y=\sum_{e\in E(H)}w_e\prod_{i\in e}t_i,\qquad \mu=\E Y.
+\]
+For $A\subseteq V(H)$ let $Y_A$ be the formal partial derivative with respect to
+the variables indexed by $A$, put
+\[
+ E_j=\max_{|A|=j}\E Y_A,\qquad
+ E'=\max_{1\leq j\leq k}E_j,\qquad E=\max\{\mu,E'\}.
+\]
+The Kim--Vu theorem gives, for $\lambda>1$,
+\[
+ \Prb\!\left(|Y-\mu|>a_k(EE')^{1/2}\lambda^k\right)
+ <d_k e^{-\lambda}n^{k-1},                            \tag{Kim--Vu}
+\]
+where one may take $a_k=8^k\sqrt{k!}$ and $d_k=2e^2$.
+For fixed $k$, choose $\lambda\gg\log n$ so the exponential beats the polynomial
+factor.  Computing the derivative expectations $E_j$ is the combinatorial core;
+they measure the largest expected extension count after conditioning on a
+partial pattern.
+
+\begin{keybox}
+Concentration checklist: choose coordinates/exposure; prove the exact Lipschitz
+or difference bound; locate the center (expectation or median); compare the
+desired deviation with the resulting scale.  Azuma may fail because the
+exposure is poor, not because the variable is genuinely unconcentrated.
+\end{keybox}
+
+\section{Chapter 15: codes, games, and entropy}
+
+\subsection{Binary entropy and volumes}
+
+For $p\in(0,1)$, the binary entropy is
+\[
+ H(p)=-p\log_2p-(1-p)\log_2(1-p).
+\]
+For fixed $0<p<1/2$,
+\[
+ \sum_{i\leq pn}\binom ni=2^{H(p)n+o(n)}.
+\]
+This is the exponential size of a Hamming ball of relative radius $p$.
+Whenever a coding bound contains $1-H(p)$, it comes from the exponent
+$2^n/2^{H(p)n}$: the ambient cube divided by the effective error-ball volume.
+
+\subsection{Shannon's theorem by random coding}
+
+In the binary symmetric channel $\operatorname{BSC}(p)$, every transmitted bit
+is independently flipped with probability $p<1/2$.  A code with $M=2^{Rn}$
+length-$n$ codewords has rate $R$.  Shannon's theorem says that for every
+$\varepsilon>0$ there are schemes of rate
+\[
+ R>1-H(p)-\varepsilon
+\]
+with decoding error below $\varepsilon$ for sufficiently large $n$.
+
+Proof skeleton: select codewords randomly and decode to the unique codeword
+within Hamming distance $(p+\eta)n$ when one exists.  Chernoff bounds make the
+actual error pattern atypically large with probability $o(1)$.  The ball bound
+gives at most $2^{H(p+\eta)n}$ plausible received strings around a competitor.
+A union bound over $M-1$ competitors is exponentially small when
+\[
+ R+H(p+\eta)<1.
+\]
+Averaging supplies a deterministic code.  Random linear/group codes use the
+same collision calculation while giving a succinct algebraic encoder.
+The converse direction says a rate above $1-H(p)+\varepsilon$ must retain
+significant error; capacity is therefore $1-H(p)$.
+
+\subsection{The liar game and the sphere bound}
+
+Paul must identify one of $n$ possibilities using $q$ yes/no questions while
+Carole may lie at most $k$ times.  A truthful answer string has
+\[
+ V(q,k)=\sum_{j=0}^k\binom qj
+\]
+strings within $k$ lies.  Distinguishability therefore requires the Hamming
+sphere bound
+\[
+ nV(q,k)\leq2^q.                                      \tag{sphere bound}
+\]
+
+In the ChipLiar formulation, let $x_i$ be the number of chips that can tolerate
+$i$ further lies and put
+\[
+ B(q,i)=2^{-q}\sum_{j=0}^i\binom qj.
+\]
+If
+\[
+ \sum_{i=0}^k x_iB(q,i)>1,
+\]
+then Carole wins.  Proof: fix any strategy of Paul and let Carole choose each
+answer by a fair coin.  A chip starting at level $i$ survives with probability
+$B(q,i)$, so the expected number of survivors exceeds one.  Some answer sequence
+therefore leaves at least two candidates.  This is a clean example of using a
+random strategy to prove that an adversarial player has a deterministic winning
+strategy.
+
+\subsection{Balancing, tenure, and online viewpoints}
+
+In the balancing game, Pusher proposes a sign vector and Chooser selects its
+global sign.  A potential based on random-walk tail probabilities makes the two
+successor potentials average to the current one.  Chooser selects the smaller
+potential for an upper bound; Pusher selects coordinates to keep the two
+successors close for a lower bound.  This yields the scale
+\[
+ \operatorname{VAL}(n)=\Theta(\sqrt{n\log n}).
+\]
+The nonadaptive/online discrepancy interpretation is that columns arrive one at
+a time and their signs must be fixed irrevocably.  The half-liar game changes
+the allowed direction of a lie, so ordinary symmetric Hamming balls no longer
+describe the state space; the weighted decision-tree argument must respect the
+asymmetry.  Across these games the invariant is the same: define a potential
+whose average over the opponent's two moves is controlled.
+
+\subsection{Entropy identities and Shearer's inequality}
+
+For a finite random variable $X$,
+\[
+ H(X)=-\sum_x\Prb(X=x)\log_2\Prb(X=x),\qquad
+ H(X\mid Y)=H(X,Y)-H(Y).
+\]
+Core facts:
+\[
+ 0\leq H(X)\leq\log_2|\operatorname{supp}X|,
+\quad H(X,Y)=H(Y)+H(X\mid Y),
+\]
+\[
+ H(X\mid Y,Z)\leq H(X\mid Y),
+\qquad
+ H(X_1,\ldots,X_n)\leq\sum_iH(X_i).
+\]
+Equality in subadditivity holds for mutually independent coordinates.
+
+Let $X=(X_1,\ldots,X_n)$ and let $\mathcal A$ be a multiset of subsets of
+$[n]$ such that every coordinate belongs to at least $r$ members.  Shearer's
+inequality is
+\[
+ rH(X)\leq\sum_{A\in\mathcal A}H(X_A).                 \tag{Shearer}
+\]
+One proof repeatedly replaces two sets by their union and intersection, using
+submodularity of entropy,
+\[
+ H(X_{A\cup B})+H(X_{A\cap B})
+ \leq H(X_A)+H(X_B),
+\]
+until one copy of $[n]$ can be removed and induction on $r$ applies.
+
+If $\mathcal F\subseteq S_1\times\cdots\times S_n$, choose $X$ uniformly from
+$\mathcal F$.  For the projection $\mathcal F_A$ onto coordinates $A$,
+$H(X)=\log_2|\mathcal F|$ and $H(X_A)\leq\log_2|\mathcal F_A|$.  Therefore
+\[
+ |\mathcal F|^r\leq\prod_{A\in\mathcal A}|\mathcal F_A|.
+\]
+This entropy-to-counting conversion is a standard oral-exam proof pattern.
+
+\section{Chapter 17: graph property testing}
+\begingroup
+\small
+
+\subsection{Dense-graph model and definitions}
+
+The input is an $n$-vertex graph accessed through adjacency queries:
+"is $uv$ an edge?"  A graph is $\varepsilon$-far from property $\mathcal P$
+if at least $\varepsilon n^2$ edge additions/deletions are needed to put it in
+$\mathcal P$.  A tester makes $q(\varepsilon)$ queries, independent of $n$:
+\[
+\begin{array}{ll}
+G\in\mathcal P &\Longrightarrow \Prb[\text{accept}]\geq2/3,\\
+G\text{ is }\varepsilon\text{-far from }\mathcal P
+ &\Longrightarrow \Prb[\text{reject}]\geq2/3.
+\end{array}
+\]
+One-sided error means every $G\in\mathcal P$ is accepted with probability one;
+rejection exhibits an actual forbidden witness.  An oblivious tester samples a
+constant number of vertices and decides from their induced subgraph.
+
+\begin{keybox}
+This is the dense adjacency-query model.  In the bounded-degree model, distance
+is normalized by $\varepsilon dn$ edge edits and queries ask for neighbors.
+Theorems and query complexities do not transfer automatically between the two
+models.
+\end{keybox}
+
+\subsection{Testing $k$-colourability}
+
+The one-sided tester samples a uniform vertex set $R$ and accepts iff $G[R]$ is
+$k$-colourable.  If $G$ is $k$-colourable, every induced subgraph is, so
+completeness is perfect.  The hard direction is a small-witness theorem:
+if $G$ is $\varepsilon$-far from $k$-colourable, a random induced subgraph on
+\[
+ O\!\left(\frac{k\log k}{\varepsilon^2}\right)
+\]
+vertices is non-$k$-colourable with high constant probability.  For the
+book's $k=3$ presentation, when $0<\varepsilon<0.1$ and
+$n>400/\varepsilon^3$, a sample of $40/\varepsilon^2$ vertices is
+3-colourable with probability at most $0.1$.
+
+Proof architecture for $k=3$: maintain feasible colour lists relative to a
+partially coloured sample.  Either many vertices are already colourless, so the
+sample soon hits a direct obstruction, or many vertices are \emph{restricting}:
+whatever feasible colour they receive, they remove that colour from at least
+$\varepsilon n$ other lists.  Each restriction lowers the total list mass,
+so a branch has depth at most $3/\varepsilon$.  A bounded branching tree plus a
+sampling tail bound shows that all candidate colourings acquire an obstruction.
+
+Here is the quantitative engine.  For a proper partial colouring
+$\phi:S\to\{1,2,3\}$, let $L_\phi(v)$ be the colours not yet forbidden by
+neighbours of $v$ in $S$, and let $U$ be the vertices with
+$L_\phi(v)=\varnothing$.  For $v\notin S\cup U$, define
+\[
+ \delta_\phi(v)=
+ \min_{i\in L_\phi(v)}
+ \bigl|\{u\in N(v)\setminus(S\cup U):i\in L_\phi(u)\}\bigr|,
+\]
+and call $v$ restricting when $\delta_\phi(v)\geq\varepsilon n$; write $W$
+for the restricting set.  Claim 17.2.2 constructs a total colouring after
+deleting at most
+\[
+ (n-1)|S\cup U|+
+ \frac12\sum_{v\notin S\cup U}\delta_\phi(v)
+\]
+monochromatic edges.  Since $G$ is $\varepsilon$-far, separating the terms
+from $W$ and its complement gives Claim 17.2.3:
+\[
+ |S\cup U\cup W|\geq \frac{\varepsilon n}{2}.
+\]
+
+The proof now grows a ternary restriction tree.  A live leaf records one
+partial colouring.  Hitting $U$ makes all three children terminal; hitting
+$W$ branches over the at most three feasible colours and decreases the total
+list mass by at least $\varepsilon n$.  Because that mass begins at $3n$,
+every branch has depth at most $3/\varepsilon$ (Claim 17.2.4).  During the
+$s=40/\varepsilon^2$ samples, $|S|\leq s\leq\varepsilon n/10$, so every fixed
+live node advances in each round with conditional probability at least
+$0.4\varepsilon$.  Thus its failure probability is bounded by
+\[
+ \Pr\!\left[\operatorname{Bin}
+   \left(\frac{40}{\varepsilon^2},0.4\varepsilon\right)
+   \leq\frac3\varepsilon\right]
+ \leq \exp\!\left(-\frac{169}{32\varepsilon}\right).
+\]
+There are fewer than $3^{3/\varepsilon+1}$ possible tree nodes, so the union
+bound is below $0.1$.  With probability at least $0.9$ every leaf is terminal;
+Claim 17.2.5 then says that the sampled induced graph has no proper
+3-colouring.  This is the exact role of Claims 17.2.2--17.2.6: edit distance
+forces progress, list mass bounds depth, and the binomial tail completes all
+branches simultaneously.
+
+\subsection{Triangle-freeness and the removal lemma}
+
+The triangle-removal lemma says that for every $\varepsilon>0$ there is
+$\delta(\varepsilon)>0$ such that any $n$-vertex graph that is
+$\varepsilon$-far from triangle-free contains at least
+$\delta(\varepsilon)n^3$ triangles.  Its proof uses Szemerédi regularity:
+delete edges incident with the exceptional class, inside parts, in irregular
+pairs, and in low-density regular pairs.  If fewer than $\varepsilon n^2$
+edges were deleted, one triangle remains among three dense regular pairs; the
+counting argument then produces $\delta n^3$ triangles in the original graph.
+
+The tester samples uniform triples and rejects if one spans a triangle.
+It never rejects a triangle-free graph.  If $G$ is far, a random ordered triple
+is a triangle with probability $\Omega(\delta)$, so
+$O(1/\delta(\varepsilon))$ independent trials give constant rejection
+probability.  Equivalently, sample a constant-size vertex set and query all
+pairs.  The dependence on $\varepsilon$ is enormous because the regularity
+lemma is quantitative, but it is independent of $n$.
+
+\subsection{Hereditary properties}
+
+A graph property is hereditary if it is closed under deleting vertices;
+equivalently, it is characterized by a possibly infinite collection of forbidden
+induced subgraphs.  Perfectness, chordality, and being an interval graph are
+hereditary; a hereditary property need not be monotone under edge deletion.
+
+The induced-removal theorem implies that every hereditary graph property is
+testable with one-sided error in the dense model.  For every $\varepsilon>0$
+there is $q=q_{\mathcal P}(\varepsilon)$ such that if $G$ is
+$\varepsilon$-far from $\mathcal P$, then a uniform induced $q$-vertex subgraph
+violates $\mathcal P$ with constant probability.  The tester samples $q$
+vertices, queries all $\binom q2$ pairs, and checks the induced graph.
+The distinction between ordinary and induced copies is essential:
+edge-monotone properties use ordinary removal; hereditary properties require
+induced removal.
+\endgroup
+
+\section*{Oral-exam decision map and traps}
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\textbf{If asked} & \textbf{Start with}\\
+\midrule
+Why two events correlate & lattice order, monotonicity, log-supermodular measure,
+then FKG\\
+Why a graph statistic concentrates & exposure/gradation, Doob martingale,
+bounded difference, Azuma\\
+Why Azuma is weak & redesign exposure or use a small certificate/Talagrand\\
+Why a subgraph count concentrates & express it as a positive polynomial and
+compute Kim--Vu derivative expectations\\
+Where $1-H(p)$ comes from & exponential Hamming-ball volume and random-code
+union bound\\
+How randomness proves an adversarial lower bound & fix the opponent's strategy,
+randomize the response, and use expectation/potential\\
+How entropy proves counting & choose a uniform object, apply Shearer, bound
+projection entropies by log support sizes\\
+Why constant graph queries suffice & far implies many constant witnesses via a
+removal/small-witness theorem\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\begin{enumerate}
+\item FKG requires both the correct partial order and a log-supermodular
+measure; product measure is a special case, not the definition.
+\item A martingale is not automatically concentrated: bounded differences or
+another tail hypothesis must be proved.
+\item Talagrand is centered naturally around a median/level set; translating to
+the mean needs an additional argument.
+\item The sphere bound is necessary for liar games/codes; existence at the
+bound needs a separate construction.
+\item Shannon's channel-coding radius is near $pn$ typical errors, not a
+worst-case distance guarantee against every error pattern.
+\item Property testing distinguishes graphs in $\mathcal P$ from graphs
+$\varepsilon$-far from $\mathcal P$; behavior on graphs that are close but not
+in $\mathcal P$ is unrestricted.
+\item One-sided rejection must exhibit a real witness; for hereditary
+properties the witness is an induced forbidden graph.
+\end{enumerate}
+
+\section*{Primary reference}
+N.~Alon and J.~H.~Spencer, \emph{The Probabilistic Method}, 4th edition,
+Wiley, 2016: Chapters 6, 7, 15, and 17 only.
+
+\end{document}
