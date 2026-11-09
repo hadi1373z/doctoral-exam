@@ -38,6 +38,7 @@
       <div class="side-caption">WORKSPACE</div>
       <nav id="side-nav" aria-label="Main navigation">
         <button class="nav-link active" data-action="nav" data-view="overview"><span class="nav-symbol">▦</span> Overview <span class="nav-bullet" aria-hidden="true"></span></button>
+        <a class="nav-link" href="textbook/#home" style="text-decoration:none;border-color:#c6d6cb;background:#eaf0e8;color:#204b3d;font-weight:750;"><span class="nav-symbol">▤</span> Textbook &amp; summaries <span class="nav-arrow" aria-hidden="true">↗</span></a>
         <button class="nav-link" data-action="nav" data-view="learn"><span class="nav-symbol">◧</span> Learn <span class="nav-arrow">↗</span></button>
         <button class="nav-link" data-action="nav" data-view="practice"><span class="nav-symbol">☷</span> Practice tests <span class="nav-arrow">↗</span></button>
         <button class="nav-link" data-action="nav" data-view="proofs"><span class="nav-symbol">⋈</span> Proof lab <span class="nav-arrow">↗</span></button>
@@ -478,7 +479,7 @@ function renderOverview(){
  const o=overall(),next=recommendation();
  const trackRows=Object.entries(SUBJECTS).map(([id,s])=>{const st=subjectStats(id);return `<div class="track-row"><div><div class="track-name">${s.name}</div><div class="track-sub">${st.level}</div></div>${progressBar(st.score,s.color)}<div class="track-score">${st.score}%</div></div>`;}).join('');
  const rec=next.topic;
- return `<div class="hero"><div class="hero-grid"></div><div class="hero-content"><div class="eyebrow"><span class="eyebrow-rule"></span> YOUR DOCTORAL EXAM WORKSPACE</div><h1>Learn the theorem.<br><em>Defend the proof.</em></h1><p>From approximation algorithms to interactive proofs and probabilistic combinatorics. Study precisely, test yourself, and build evidence of mastery.</p><div class="hero-actions">${button('Continue learning <span>↗</span>','openLesson','primary',`data-topic="${rec.id}"`)}${button('Take a diagnostic <span>↗</span>','startDiagnostic','ghost')}</div></div></div>
+ return `<div class="hero"><div class="hero-grid"></div><div class="hero-content"><div class="eyebrow"><span class="eyebrow-rule"></span> YOUR DOCTORAL EXAM WORKSPACE</div><h1>Learn the theorem.<br><em>Defend the proof.</em></h1><p>From approximation algorithms to interactive proofs and probabilistic combinatorics. Study precisely, test yourself, and build evidence of mastery.</p><div class="hero-actions"><a href="textbook/#home" class="btn primary" style="text-decoration:none;background:#204b3d;color:white;border-color:#204b3d">Read textbook &amp; four summaries <span aria-hidden="true">↗</span></a>${button('Continue learning <span>↗</span>','openLesson','ghost',`data-topic="${rec.id}"`)}${button('Take a diagnostic <span>↗</span>','startDiagnostic','ghost')}</div></div></div>
  <div class="stat-row">
   <div class="stat-card"><div class="stat-title">SYLLABUS COVERED</div><div class="stat-value number">${o.completed}</div><div class="stat-detail">of ${o.total} lessons marked complete</div></div>
   <div class="stat-card"><div class="stat-title">TEST ACCURACY</div><div class="stat-value number">${o.attempted?o.accuracy+'%':'—'}</div><div class="stat-detail">${o.attempted} distinct questions answered</div></div>
