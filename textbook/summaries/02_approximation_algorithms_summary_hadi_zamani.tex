@@ -1,0 +1,1249 @@
+% Updated 30 August 2026
+\documentclass[10pt]{article}
+\usepackage[margin=0.62in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{enumitem,booktabs,tabularx,array,multicol,xcolor}
+\usepackage[bookmarks=false]{hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue!45!black,urlcolor=blue!45!black}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+\setlist{leftmargin=*,itemsep=1pt,topsep=2pt}
+\newcommand{\OPT}{\operatorname{OPT}}
+\newcommand{\ALG}{\operatorname{ALG}}
+\newcommand{\E}{\mathbb E}
+\newcommand{\Prb}{\mathbb P}
+\newcommand{\R}{\mathbb R}
+\newcommand{\1}{\mathbf 1}
+\newtheorem*{theorem}{Theorem}
+\newtheorem*{lemma}{Lemma}
+\newenvironment{keybox}{\begin{quote}\small\itshape}{\end{quote}}
+\newcommand{\catalogue}[4]{%
+  \item \textbf{#1.} #2\par
+  {\footnotesize\emph{Core mechanism:} #3
+  \emph{Expected depth: #4.}}}
+
+\begin{document}
+\begin{center}
+{\LARGE\bfseries Approximation Algorithms\par}
+\vspace{1mm}
+{Hadi Zamani \qquad Examiner: Ji\v{r}\'i Sgall\par}
+{\small 30 August 2026}
+\end{center}
+
+\section*{Assigned chapters and sections}
+\begin{itemize}
+\item Sections 3.1--3.3
+\item Chapter 5
+\item Sections 6.1, 6.2, 6.5, and 13.2
+\item Sections 7.1, 7.3, and 7.4
+\item Sections 8.5 and 8.6
+\item Section 10.2
+\item Sections 16.1 and 16.3
+\end{itemize}
+
+\subsection*{Chapter/section map: main theorems and techniques}
+\begingroup
+\scriptsize
+\setlength{\tabcolsep}{3.5pt}
+\renewcommand{\arraystretch}{1.08}
+\begin{center}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.13\textwidth}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Assigned source} & \textbf{Main theorem or guarantee} &
+\textbf{Characteristic techniques}\\
+\midrule
+\S\S3.1--3.3 & Knapsack FPTAS; identical-machine makespan PTAS;
+bin packing APTAS. & Scale and round numerical data; pseudo-polynomial DP;
+large/small classification; configuration enumeration; linear grouping and greedy insertion.\\
+Chapter 5 & Random assignment gives a $1/2$-approximation for MAX-CUT and a
+$7/8$-approximation for MAX-E3SAT; LP rounding supplies expectation and
+high-probability guarantees. & Linearity of expectation; conditional expectation;
+independent/scaled rounding; Chernoff bounds; alteration and repair.\\
+\S\S6.1--6.2 & Goemans--Williamson gives
+$\alpha_{GW}\approx0.87856$ for MAX-CUT. & SDP/Gram-matrix relaxation; unit-vector
+geometry; random-hyperplane rounding; angle-by-angle comparison.\\
+\S\S6.5, 13.2 & A 3-colourable graph can be coloured with
+$\widetilde O(n^{0.387})$ colours; stronger independent-set rounding yields
+$\widetilde O(n^{1/4})$. & SDP vector colourings; repeated semicolouring;
+degree-regime balancing; Gaussian threshold rounding; delete conflicts and repeat.\\
+\S\S7.1, 7.3, 7.4 & Frequency-$f$ set cover has an $f$-approximation; shortest
+path is recovered exactly; generalized Steiner tree/forest has a $2$-approximation.
+& Grow feasible duals until constraints become tight; charge primal cost to the dual;
+merge components; reverse-delete redundant edges.\\
+\S\S8.5--8.6 & FRT embeds every $n$-point metric into a dominating random tree
+with expected $O(\log n)$ stretch; buy-at-bulk consequently has an
+$O(\log n)$ approximation. & Random hierarchical partitions; harmonic-sum stretch
+analysis; solve the unique-path tree instance; map routes back using concavity.\\
+\S10.2 & Maximum independent set in planar graphs has a PTAS. & Baker layering;
+delete one residue class; bounded-treewidth dynamic programming; averaging over shifts.\\
+\S\S16.1, 16.3 & No $(3/2-\varepsilon)$ approximation for unrelated-machine
+makespan unless $P=NP$; MAX-E3SAT is hard beyond $7/8+\delta$. & Completeness/soundness
+gap reductions; encode PCP verifier randomness as constraints; transfer the gap to an
+approximation threshold.\\
+\bottomrule
+\end{tabularx}
+\end{center}
+\endgroup
+
+\section*{Theorem inventory}
+\begingroup
+\small
+
+\subsection*{Completeness checklist}
+\noindent\textbf{Primary results.}
+\S3: Thms.~3.1, 3.5--3.8, 3.12;
+Ch.~5: Thms.~5.1--5.3, 5.5, 5.7, 5.10--5.12, 5.17, 5.19,
+5.21, 5.23--5.24, 5.29, 5.31--5.32 and Cors.~5.18, 5.28, 5.30,
+5.35;
+\S6: Thms.~6.9--6.11, 6.20, 6.23--6.24 and Cors.~6.6, 6.22;
+\S7: Thms.~7.1, 7.6, 7.8;
+\S8: Thms.~8.17, 8.19, 8.23 and Cor.~8.20;
+\S10.2: Thms.~10.9--10.12, 10.16;
+\S13.2: Thm.~13.9;
+\S16: Thms.~16.1--16.2, 16.18--16.19, 16.21--16.24 and
+Cor.~16.20.
+
+\noindent\textbf{Supporting results.}
+Defs.~3.2--3.4, 3.9; Lemmas~3.10--3.11;
+Lemmas~5.4, 5.6, 5.14--5.16, 5.20, 5.22, 5.25--5.27,
+5.33--5.34 and Facts~5.8--5.9;
+Def.~6.1, Fact~6.2, Lemmas~6.3, 6.7--6.8, 6.21 and
+Facts~6.4--6.5;
+Lemmas~7.5, 7.7; Lemmas~8.18, 8.21--8.22;
+Lemmas~10.13--10.15; Lemmas~13.6--13.8.
+
+\medskip
+\noindent\emph{Depth convention.} ``Prove fully'' means that the assigned text
+develops the proof and its intermediate estimates. ``Know proof architecture''
+means that the text states or imports a deep theorem, or that the main exam task
+is to explain the reduction/rounding pipeline rather than reproduce the imported
+proof. This classification records the assigned text's treatment, not an
+examiner preference.
+
+\subsection*{Sections 3.1--3.3: rounding data and dynamic programming}
+\begin{itemize}
+\catalogue{Definition 3.2}{An algorithm is pseudopolynomial when its running
+time is polynomial in the input length after the numeric data are encoded in
+unary.}{Distinguish a number's magnitude from its binary bit length.}
+{prove fully}
+
+\catalogue{Definition 3.3}{A PTAS is a family $\{A_\varepsilon\}$ in which,
+for every fixed $\varepsilon>0$, $A_\varepsilon$ is polynomial time and has
+ratio $1+\varepsilon$ for minimisation or $1-\varepsilon$ for maximisation.}
+{Keep $\varepsilon$ fixed when interpreting polynomial time.}{prove fully}
+
+\catalogue{Definition 3.4}{An FPTAS is a PTAS whose running time is also
+polynomial in $1/\varepsilon$.}{Check both the ordinary input length and the
+accuracy parameter.}{prove fully}
+
+\catalogue{Theorem 3.1}{Algorithm~3.1 correctly computes the optimum knapsack
+value in $O(n\min\{B,V\})$ time, where $V=\sum_i v_i$.}{Induct on the item
+prefix and show that the nondominated list contains a pair dominating every
+feasible subset of that prefix.}{prove fully}
+
+\catalogue{Theorem 3.5}{Algorithm~3.2 is a knapsack FPTAS: it returns value at
+least $(1-\varepsilon)\OPT$ in $O(n^3/\varepsilon)$ time.}{Let
+$M=\max_i v_i$, set $\mu=\varepsilon M/n$, round
+$v_i'=\lfloor v_i/\mu\rfloor$, solve exactly, and charge at most
+$n\mu=\varepsilon M\leq\varepsilon\OPT$.}{prove fully}
+
+\catalogue{Theorem 3.6}{For any fixed number $m$ of identical parallel
+machines, the family $\{A_k\}$ is a PTAS for makespan; $A_k$ has ratio
+$1+1/k$.}{There are at most $km$ long jobs; enumerate their machine
+assignments optimally and list-schedule the short jobs, whose last-job error is
+at most $\OPT/k$.}{prove fully}
+
+\catalogue{Theorem 3.7}{When the number of identical machines is part of the
+input, minimum makespan still has a PTAS; for $k=\lceil1/\varepsilon\rceil$,
+the target-$T$ subroutine either rejects $T$ or returns a schedule of length
+at most $(1+1/k)T$.}{Round long jobs down to multiples of $T/k^2$, dynamic
+program over the at most $(k+1)^{k^2}$ machine configurations, list-schedule
+short jobs, and binary-search the integral target $T$.}{prove fully}
+
+\catalogue{Theorem 3.8}{Unless $P=NP$, bin packing has no
+$\rho$-approximation for any $\rho<3/2$.}{Reduce PARTITION: a yes-instance
+packs in two bins, whereas a no-instance requires at least three, so a ratio
+below $3/2$ distinguishes them.}{prove fully}
+
+\catalogue{Definition 3.9}{An APTAS for minimisation is a family
+$\{A_\varepsilon\}$ and a constant $c$ such that
+$A_\varepsilon(I)\leq(1+\varepsilon)\OPT(I)+c$.}{Bin packing lacks the
+rescaling property that would wash out the additive constant.}{prove fully}
+
+\catalogue{Lemma 3.10}{Any packing of all pieces larger than $\gamma$ into
+$\ell$ bins extends by First Fit to a packing of all pieces in at most
+\[
+\max\!\left\{\ell,\frac{\operatorname{SIZE}(I)}{1-\gamma}+1\right\}
+\]
+bins.}{If First Fit opens a new bin, every earlier bin has load at least
+$1-\gamma$; sum those loads.}{prove fully}
+
+\catalogue{Lemma 3.11}{If $I'$ is obtained from $I$ by linear grouping with
+group size $k$, then
+$\OPT(I')\leq\OPT(I)\leq\OPT(I')+k$, and any packing of $I'$ lifts to one of
+$I$ with at most $k$ extra bins.}{Shift each rounded group to the preceding
+original group and isolate the largest group of $k$ pieces.}{prove fully}
+
+\catalogue{Theorem 3.12}{For every $\varepsilon>0$, bin packing has a
+polynomial-time algorithm using at most
+$(1+\varepsilon)\OPT(I)+1$ bins; hence it has an APTAS.}{Remove small pieces,
+linearly group the large ones, solve the constant-type instance exactly, lift
+by Lemma~3.11, and insert small pieces using Lemma~3.10.}{prove fully}
+\end{itemize}
+
+\subsection*{Chapter 5: random sampling and randomized rounding}
+\begin{itemize}
+\catalogue{Theorem 5.1}{For weighted MAX-SAT with nonnegative clause weights,
+setting each variable true independently with probability $1/2$ is a randomized
+$1/2$-approximation.}{Use clause indicators: a nonempty clause is satisfied with
+probability at least $1/2$, so linearity of expectation gives
+$\E[\ALG]\geq\tfrac12\sum_jw_j\geq\tfrac12\OPT$.}{prove fully}
+
+\catalogue{Theorem 5.2}{For every constant $\varepsilon>0$, a
+$(7/8+\varepsilon)$-approximation for MAX-E3SAT would imply $P=NP$.}{This is
+the sharp PCP gap theorem; cross-reference Theorem~16.22 rather than duplicating
+its reduction.}{know proof architecture}
+
+\catalogue{Theorem 5.3}{For weighted MAX-CUT with nonnegative edge weights,
+putting every vertex independently on either side with probability $1/2$ is a
+randomized $1/2$-approximation.}{Each edge crosses with probability $1/2$;
+sum the edge indicators and compare with the total edge weight.}{prove fully}
+
+\catalogue{Theorem 5.5}{For a MAX-SAT instance with no negated unit clause,
+setting every variable true independently with probability $p>1/2$ is a
+randomized $\min\{p,1-p^2\}$-approximation.}{Lemma~5.4 gives the same lower
+bound for every clause; sum weighted clause indicators.}{prove fully}
+
+\catalogue{Theorem 5.7}{Weighted MAX-SAT has a randomized
+$\frac12(\sqrt5-1)$-approximation.}{Complement variables so positive unit
+clauses dominate; apply the biased assignment to all other clauses, use
+Lemma~5.6 for the missed negative-unit weight, and choose
+$p=1-p^2=(\sqrt5-1)/2$.}{prove fully}
+
+\catalogue{Theorem 5.10}{Independent rounding of the standard MAX-SAT LP,
+setting $x_i$ true with probability $y_i^*$, is a randomized
+$(1-1/e)$-approximation.}{For a length-$\ell$ clause, AM--GM and its LP
+constraint give satisfaction probability at least
+$1-(1-z_j^*/\ell)^\ell\geq(1-1/e)z_j^*$; sum over clauses.}{prove fully}
+
+\catalogue{Theorem 5.11}{Choosing the better of the LP-rounded assignment and
+the unbiased random assignment is a randomized $3/4$-approximation for
+MAX-SAT.}{Average the two expected clause contributions; for every integer
+$\ell\geq1$, half of $1-(1-1/\ell)^\ell$ plus half of $1-2^{-\ell}$ is at
+least $3/4$.}{prove fully}
+
+\catalogue{Theorem 5.12}{If
+$1-4^{-x}\leq f(x)\leq4^{x-1}$ on $[0,1]$, independently setting $x_i$ true
+with probability $f(y_i^*)$ is a randomized $3/4$-approximation for MAX-SAT.}
+{The product bound gives
+$\Pr[C_j\text{ false}]\leq4^{-z_j^*}$; concavity of
+$1-4^{-z}$ gives $1-4^{-z_j^*}\geq(3/4)z_j^*$.}{prove fully}
+
+\catalogue{Theorem 5.17}{Let $(x^*,y^*)$ solve the prize-collecting
+Steiner-tree LP, let $0<\gamma<1$, choose
+$\alpha\sim U[\gamma,1]$, and run the Steiner subroutine on
+$\{i:y_i^*\geq\alpha\}$. Then
+\[
+\E\!\left[\sum_{e\in T}c_e+\sum_{i\notin V(T)}\pi_i\right]
+\leq \frac{2\ln(1/\gamma)}{1-\gamma}\sum_ec_ex_e^*
+ \frac1{1-\gamma}\sum_i\pi_i(1-y_i^*).
+\]}
+{Combine the pointwise edge bound of Lemma~5.14 with threshold integration
+(Lemma~5.15) and the probability that a vertex misses the threshold
+(Lemma~5.16).}{prove fully}
+
+\catalogue{Corollary 5.18}{With $\gamma=e^{-1/2}$, the preceding algorithm is a
+$(1-e^{-1/2})^{-1}\approx2.54$ approximation for prize-collecting Steiner
+tree.}{Balance the two coefficients in Theorem~5.17:
+$2\ln(1/\gamma)/(1-\gamma)=1/(1-\gamma)$.}{prove fully}
+
+\catalogue{Theorem 5.19}{Algorithm~5.1 is a randomized $3$-approximation for
+metric uncapacitated facility location.}{Choose the next client minimizing
+$v_j^*+C_j^*$ and open $i\in N(j)$ with probability $x_{ij}^*$; disjoint
+neighbourhoods charge opening cost once, and the triangle inequality gives
+expected assignment cost at most $2v_\ell^*+C_\ell^*$.}{prove fully}
+
+\catalogue{Theorem 5.21}{For one nonpreemptive machine with integer processing
+times, weights, and release dates, the $\alpha$-point randomized rounding
+algorithm is a randomized $2$-approximation for
+$\sum_jw_jC_j$.}{Condition on $X_j=x$ and apply Lemma~5.20; averaging gives
+$\E\widehat C_j\leq2C_j^*$, and Lemma~5.22 identifies the relaxation optimum.}
+{prove fully}
+
+\catalogue{Theorem 5.23}{Let $X=\sum_iX_i$ for independent Bernoulli variables
+and let $L\leq\mu=\E X\leq U$. For $\delta>0$,
+\[
+\Prb[X\geq(1+\delta)U]
+<\left(\frac{e^\delta}{(1+\delta)^{1+\delta}}\right)^U,
+\]
+and for $0<\delta<1$,
+\[
+\Prb[X\leq(1-\delta)L]
+<\left(\frac{e^{-\delta}}{(1-\delta)^{1-\delta}}\right)^L.
+\]}
+{Apply Markov to $e^{tX}$, factor its moment generating function by
+independence, use $1+x\leq e^x$, and optimize $t$.}{prove fully}
+
+\catalogue{Theorem 5.24}{The two bounds of Theorem~5.23 remain valid when the
+independent variables satisfy $X_i\in\{0,a_i\}$ with $0<a_i\leq1$.}{Use
+convexity to bound
+$\E e^{tX_i}=1-p_i+p_ie^{ta_i}\leq
+\exp(a_ip_i(e^t-1))$, then repeat the exponential-moment proof.}{prove fully}
+
+\catalogue{Corollary 5.28}{Under Theorem~5.24's hypotheses, if
+$0\leq L\leq\E X$, then for every $\delta>0$,
+$\Prb[X\leq(1-\delta)L]<e^{-L\delta^2/2}$.}{Use Lemma~5.26 for
+$0<\delta<1$; at $\delta=1$ use Lemma~5.27, and for $\delta>1$ the event is
+empty.}{prove fully}
+
+\catalogue{Theorem 5.29}{For independent path rounding of the fractional
+integer-multicommodity-flow LP, if its optimum congestion
+$W^*\geq c\ln n$ for a constant $c$, then with high probability every edge has
+load at most $W^*+\sqrt{cW^*\ln n}$.}{Apply the Chernoff upper tail to the
+independent path indicators for one edge with
+$\delta=\sqrt{c\ln n/W^*}\leq1$, then union-bound over at most $n^2$ edges.}
+{prove fully}
+
+\catalogue{Corollary 5.30}{If $W^*\geq1$, independent path rounding has
+maximum congestion $O(\log n)\,W^*$ with high probability.}{Run the same
+Chernoff calculation with the upper benchmark
+$U=(c\ln n)W^*$ and $\delta=1$, then union-bound.}{prove fully}
+
+\catalogue{Theorem 5.31}{It is NP-hard to distinguish graphs that are
+$3$-colourable from graphs whose chromatic number is at least $5$.}{The text
+imports the colouring gap hardness and uses it only to calibrate later
+algorithms.}{know proof architecture}
+
+\catalogue{Theorem 5.32}{Assuming the stated variant of Unique Games, for every
+constant $k>3$ it is NP-hard to distinguish $3$-colourable graphs from graphs
+whose chromatic number is at least $k$.}{Treat the Unique-Games reduction as
+the imported gap-producing step.}{know proof architecture}
+
+\catalogue{Corollary 5.35}{Let $G$ be $\delta$-dense and include each vertex in
+$S$ independently with probability $3c\ln n/(\delta n)$. With probability at
+least $1-2n^{-(c-1)}$,
+$|S|\leq6c\ln n/\delta$ and every $v\notin S$ has a neighbour in $S$.}
+{Combine Lemmas~5.33--5.34 and union-bound over all vertices and the sample-size
+failure event.}{prove fully}
+
+\catalogue{Lemma 5.4}{If $p>1/2$ and a MAX-SAT instance has no negated unit
+clause, every clause is satisfied under independent $p$-biased assignment
+with probability at least $\min\{p,1-p^2\}$.}{A unit clause is positive;
+for length at least two, unsatisfaction has probability
+$p^a(1-p)^b\leq p^{a+b}\leq p^2$.}{prove fully}
+
+\catalogue{Lemma 5.6}{After complementing variables so the positive unit
+clause has at least the weight of the negative one, if $v_i$ is the negative
+unit-clause weight (zero when absent), then
+$\OPT\leq\sum_jw_j-\sum_iv_i$.}{Every assignment loses at least the smaller
+weight from each opposite unit-clause pair.}{prove fully}
+
+\catalogue{Fact 5.8}{For nonnegative $a_1,\dots,a_k$,
+$(\prod_i a_i)^{1/k}\leq k^{-1}\sum_i a_i$.}{Apply the
+arithmetic--geometric mean inequality in the clause-product calculation.}
+{prove fully}
+
+\catalogue{Fact 5.9}{If $f$ is concave on $[0,1]$, $f(0)=a$, and
+$f(1)=a+b$, then $f(x)\geq a+bx$ for $x\in[0,1]$.}{A concave graph lies
+above the chord joining its endpoints.}{prove fully}
+
+\catalogue{Lemma 5.14}{For a fixed threshold $\alpha>0$, the Steiner tree
+returned for terminals $\{i:y_i^*\geq\alpha\}$ satisfies
+$\sum_{e\in T}c_e\leq(2/\alpha)\sum_ec_ex_e^*$.}{Scale the LP edge variables
+by $1/\alpha$ to obtain a feasible Steiner relaxation and apply the
+factor-$2$ Steiner-tree algorithm.}{prove fully}
+
+\catalogue{Lemma 5.15}{If $\alpha\sim U[\gamma,1]$, then
+$\E[\sum_{e\in T}c_e]\leq
+\frac{2\ln(1/\gamma)}{1-\gamma}\sum_ec_ex_e^*$.}{Integrate the
+$2/\alpha$ bound of Lemma~5.14 over $[\gamma,1]$.}{prove fully}
+
+\catalogue{Lemma 5.16}{Under the same threshold experiment,
+$\E[\sum_{i\notin V(T)}\pi_i]\leq
+\frac1{1-\gamma}\sum_i\pi_i(1-y_i^*)$.}{Bound the probability that
+$y_i^*<\alpha$ separately for $y_i^*\geq\gamma$ and $y_i^*<\gamma$.}
+{prove fully}
+
+\catalogue{Lemma 5.20}{In the release-date scheduling rounding,
+$\E[\widehat C_j\mid X_j=x]\leq p_j+2x$.}{Bound idle time before job $j$ by
+$x-\tfrac12$ and expected earlier processing by $x+\tfrac12$ using the
+time-indexed capacity constraints.}{prove fully}
+
+\catalogue{Lemma 5.22}{The explicitly constructed integral solution
+$(y^*,C^*)$ is optimal for the integer relaxation (5.3).}{Use an interchange
+argument for the compact preemptive schedule; the text leaves the proof as
+Exercise~5.11.}{know proof architecture}
+
+\catalogue{Lemma 5.25 (Markov)}{For every nonnegative random variable $X$ and
+$a>0$, $\Prb[X\geq a]\leq\E X/a$.}{The expectation is at least
+$a\Prb[X\geq a]$.}{prove fully}
+
+\catalogue{Lemma 5.26}{For $0\leq\delta\leq1$,
+$[e^\delta/(1+\delta)^{1+\delta}]^U\leq e^{-U\delta^2/3}$; for
+$0\leq\delta<1$,
+$[e^{-\delta}/(1-\delta)^{1-\delta}]^L\leq e^{-L\delta^2/2}$.}
+{Take logarithms and compare derivatives/Taylor bounds on the stated
+intervals.}{prove fully}
+
+\catalogue{Lemma 5.27}{If the independent variables satisfy
+$X_i\in\{0,a_i\}$ with $0<a_i\leq1$, $X=\sum_iX_i$, and $L\leq\E X$, then
+$\Prb[X=0]<e^{-L}$.}{Independence gives $\prod_i(1-p_i)$; use
+$1-p_i\leq e^{-p_i}\leq e^{-a_ip_i}$ and sum the means.}{prove fully}
+
+\catalogue{Lemma 5.33}{With vertex-sampling probability
+$3c\ln n/(\delta n)$,
+$\Prb[|S|\geq6c\ln n/\delta]\leq n^{-c/\delta}$.}{Apply the Chernoff upper
+tail with $\E|S|=3c\ln n/\delta$ and $\delta=1$.}{prove fully}
+
+\catalogue{Lemma 5.34}{If $G$ is $\delta$-dense, then for each fixed
+$v\notin S$,
+$\Prb[N(v)\cap S=\varnothing]\leq n^{-3c}$.}{The expected sampled-neighbour
+count is at least $3c\ln n$; apply Lemma~5.27.}{prove fully}
+\end{itemize}
+
+\subsection*{Sections 6.1, 6.2, 6.5, and 13.2: semidefinite rounding}
+\begin{itemize}
+\catalogue{Definition 6.1}{A symmetric $X\in\R^{n\times n}$ is positive
+semidefinite, written $X\succeq0$, iff $y^TXy\geq0$ for every $y\in\R^n$.}
+{Use the quadratic-form definition when translating between matrices and Gram
+vectors.}{prove fully}
+
+\catalogue{Fact 6.2}{For symmetric $X$, the following are equivalent:
+$X\succeq0$; every eigenvalue is nonnegative; $X$ has a nonnegative orthogonal
+spectral decomposition; and $X=V^TV$ for some $V$. Hence the SDP and vector
+formulations have the same feasible objective values.}{Apply the spectral
+theorem and take square roots of the nonnegative eigenvalues; the columns of
+$V$ are the Gram vectors.}{prove fully}
+
+\catalogue{Lemma 6.3}{For weighted MAX-CUT, the quadratic program
+\[
+\max_{y_i\in\{-1,1\}}\frac12\sum_{(i,j)\in E}w_{ij}(1-y_iy_j)
+\]
+models the cut value exactly.}{Encode the two sides by signs: the summand is
+$w_{ij}$ exactly when the endpoints have opposite signs.}{prove fully}
+
+\catalogue{Fact 6.4}{If $r$ has independent standard-normal coordinates, then
+$r/\|r\|$ is uniform on the unit sphere.}{Rotational invariance of the Gaussian
+law makes every direction equiprobable.}{prove fully}
+
+\catalogue{Fact 6.5}{The projections of a standard Gaussian vector onto unit
+vectors $e_1,e_2$ are independent standard normals iff $e_1\perp e_2$.}
+{The pair is jointly Gaussian with covariance $e_1\cdot e_2$; jointly Gaussian
+coordinates are independent exactly at covariance zero.}{prove fully}
+
+\catalogue{Corollary 6.6}{If $r'$ is the projection of a standard Gaussian
+onto a two-dimensional plane, then $r'/\|r'\|$ is uniform on the unit circle
+in that plane.}{Apply Fact~6.4 inside the plane, using Fact~6.5 for orthogonal
+coordinates.}{prove fully}
+
+\catalogue{Lemma 6.7}{Random-hyperplane rounding separates vertices $i,j$ with
+probability $\pi^{-1}\arccos(v_i\cdot v_j)$.}{Project the random normal to the
+plane spanned by $v_i,v_j$; the separating directions occupy two sectors of
+total angle $2\arccos(v_i\cdot v_j)$.}{prove fully}
+
+\catalogue{Lemma 6.8}{For every $x\in[-1,1]$,
+\[
+\frac{\arccos x}{\pi}\geq0.878\,\frac{1-x}{2}.
+\]}
+{Minimize the ratio
+$[\arccos x/\pi]/[(1-x)/2]$ by one-variable calculus.}{prove fully}
+
+\catalogue{Theorem 6.9}{Solving the MAX-CUT vector relaxation and rounding by
+a random hyperplane is a $0.878$-approximation.}{Sum the separation
+probabilities from Lemma~6.7, apply Lemma~6.8 edgewise, and use that the vector
+relaxation upper-bounds $\OPT$.}{prove fully}
+
+\catalogue{Theorem 6.10}{If MAX-CUT has a constant
+$\alpha$-approximation with $\alpha>16/17$, then $P=NP$.}{The text imports
+Håstad's gap reduction; retain its exact threshold.}{know proof architecture}
+
+\catalogue{Theorem 6.11}{Assuming Unique Games, there is no constant
+$\alpha$-approximation for MAX-CUT with
+\[
+\alpha>\alpha_{\rm GW}:=
+\min_{-1\leq x\leq1}
+\frac{\arccos(x)/\pi}{(1-x)/2}\geq0.878
+\]
+unless $P=NP$.}{The imported Unique-Games reduction matches the integrality
+profile of random-hyperplane rounding.}{know proof architecture}
+
+\catalogue{Theorem 6.20}{Every $3$-colourable $n$-vertex graph can be coloured
+with at most $4\sqrt n$ colours in polynomial time.}{Repeatedly colour a
+vertex and its bipartite neighbourhood with three fresh colours while its
+degree is at least $\sqrt n$; greedily colour the remaining graph of maximum
+degree below $\sqrt n$.}{prove fully}
+
+\catalogue{Lemma 6.21}{For every $3$-colourable graph, the vector-colouring
+program (6.8) has a feasible solution with $\lambda\leq-1/2$.}{Map the three
+colour classes to the vertices of an equilateral triangle on the unit circle;
+different colours have inner product $\cos(2\pi/3)=-1/2$.}{prove fully}
+
+\catalogue{Corollary 6.22}{Every $3$-colourable graph has a feasible solution
+of (6.8) with $v_i\cdot v_j=-1/2$ on every edge.}{Use the explicit vectors in
+Lemma~6.21, not merely an optimum with a smaller $\lambda$.}{prove fully}
+
+\catalogue{Theorem 6.23}{For a $3$-colourable graph of maximum degree
+$\Delta$, using $t=2+\log_3\Delta$ independent random hyperplanes gives a
+semicolouring with $4\Delta^{\log_3 2}$ colours with probability at least
+$1/2$.}{An edge survives all $t$ cuts with probability at most $3^{-t}$;
+$m\leq n\Delta/2$ bounds the expected monochromatic edges by $n/18$, and
+Markov gives the success probability.}{prove fully}
+
+\catalogue{Theorem 6.24}{Balancing high-degree neighbourhood removal with
+Theorem~6.23 semicolours every $3$-colourable $n$-vertex graph using
+$O(n^{\log_6 2})=O(n^{0.387})$ colours with probability at least $1/2$.}
+{The two colour costs are $O(n/\sigma)$ and
+$O(\sigma^{\log_3 2})$; set $\sigma=n^{\log_6 3}$ so both equal
+$O(n^{\log_6 2})$.}{prove fully}
+
+\catalogue{Lemma 13.6}{For
+$S(\varepsilon)=\{i:v_i\cdot r\geq\varepsilon\}$ with standard Gaussian $r$,
+\[
+\Prb[i\in S(\varepsilon)]=\overline\Phi(\varepsilon),
+\qquad \E|S(\varepsilon)|=n\overline\Phi(\varepsilon).
+\]}{Each unit-vector projection is a standard normal; sum membership
+indicators.}{prove fully}
+
+\catalogue{Lemma 13.7}{If $G$ is $3$-colourable with maximum degree
+$\Delta$, then
+\[
+\Prb[i\notin S'(\varepsilon)\mid i\in S(\varepsilon)]
+\leq\Delta\,\overline\Phi(\sqrt3\,\varepsilon).
+\]}
+{For an edge, decompose $v_j=-v_i/2+\sqrt3\,u/2$ with
+$u\perp v_i$; simultaneous threshold exceedance forces
+$u\cdot r\geq\sqrt3\varepsilon$, then union-bound over neighbours.}
+{prove fully}
+
+\catalogue{Lemma 13.8}{For $x>0$, with standard-normal density $p$,
+\[
+\frac{x}{1+x^2}p(x)\leq\overline\Phi(x)\leq\frac1x p(x).
+\]}
+{Integrate the Gaussian tail by parts and compare with
+$p'(x)=-xp(x)$.}{prove fully}
+
+\catalogue{Theorem 13.9}{Algorithm~13.2 returns, from a $3$-colourable graph
+of maximum degree $\Delta$, an independent set of expected size
+\[
+\Omega\!\left(n\Delta^{-1/3}(\ln\Delta)^{-1/2}\right).
+\]}{Take $\varepsilon=\sqrt{(2/3)\ln\Delta}$; Lemmas~13.7--13.8 retain at
+least half the threshold set in expectation, and Lemma~13.6 supplies its
+size.}{prove fully}
+\end{itemize}
+
+\subsection*{Sections 7.1, 7.3, and 7.4: primal--dual algorithms}
+\begin{itemize}
+\catalogue{Theorem 7.1}{For weighted set cover with nonnegative set costs,
+Algorithm~7.1 is an $f$-approximation, where
+$f=\max_i|\{j:i\in S_j\}|$ is the maximum element frequency.}{Raise an
+uncovered element's dual until a set constraint becomes tight; every selected
+set is tight, and each dual variable is charged through at most $f$ selected
+sets.}{prove fully}
+
+\catalogue{Theorem 7.6}{For nonnegative edge costs, Algorithm~7.4 returns an
+exact shortest $s$--$t$ path.}{Grow the dual of the current $s$-component
+until a cut edge becomes tight; Lemma~7.5 makes the tight edges a tree, and
+each positive dual cut is crossed once by the final path, so primal and dual
+values agree.}{prove fully}
+
+\catalogue{Theorem 7.8}{For generalized Steiner tree (Steiner forest) with
+nonnegative edge costs and required pairs $(s_i,t_i)$, Algorithm~7.6 is a
+$2$-approximation.}{Grow all active-component moats uniformly, add tight
+edges, then reverse-delete; Lemma~7.7 bounds the primal increase by twice the
+dual increase.}{prove fully}
+
+\catalogue{Lemma 7.5}{At every point in Algorithm~7.4, the tight-edge set
+$F$ is a tree containing $s$.}{Each iteration adds exactly one edge leaving
+the current $s$-component, so it spans a new vertex without closing a cycle.}
+{prove fully}
+
+\catalogue{Lemma 7.7}{In every iteration of Algorithm~7.6, if $\mathcal C$ is
+the family of active components and $F'$ is the reverse-deleted forest, then
+\[
+\sum_{C\in\mathcal C}|\delta(C)\cap F'|\leq2|\mathcal C|.
+\]}
+{Contract current components in the forest and apply the degree-sum bound for
+a forest, using reverse deletion to remove inactive leaves that would spoil
+the charge.}{prove fully}
+\end{itemize}
+
+\subsection*{Sections 8.5 and 8.6: tree metrics and buy-at-bulk}
+\begin{itemize}
+\catalogue{Theorem 8.17}{For an $n$-point metric $(V,d)$ with
+$d_{uv}\geq1$ for $u\neq v$, a randomized polynomial-time algorithm outputs a
+tree metric $(V',T)$, $V\subseteq V'$, such that for all $u,v\in V$,
+\[
+d_{uv}\leq T_{uv},
+\qquad \E T_{uv}\leq O(\log n)d_{uv}.
+\]}
+{Build a hierarchical random partition from one random permutation and
+radius; bound the probability that $u,v$ split at each scale, and sum the
+resulting harmonic series.}{prove fully}
+
+\catalogue{Theorem 8.19}{If $(V',T)$ comes from a hierarchical cut
+decomposition and $V$ is its leaf set, then in polynomial time one obtains a
+tree metric $(V,T')$ satisfying
+$T_{uv}\leq T'_{uv}\leq4T_{uv}$ for all $u,v\in V$.}{Contract each internal
+Steiner node into a descendant leaf; level lengths show that contraction never
+shrinks a leaf distance and increases it by at most four.}{prove fully}
+
+\catalogue{Corollary 8.20}{Under Theorem~8.17's hypotheses, the randomized
+algorithm may output a tree metric directly on $V$ satisfying
+$d_{uv}\leq T'_{uv}$ and
+$\E T'_{uv}\leq O(\log n)d_{uv}$.}{Compose Theorems~8.17 and 8.19 and absorb
+the factor four into $O(\log n)$.}{prove fully}
+
+\catalogue{Theorem 8.23}{In the undirected buy-at-bulk problem, assume
+nonnegative edge lengths, source--sink demands, and a capacity cost $f$ with
+$f(0)=0$ that is nondecreasing and has economies of scale (hence is
+subadditive). Algorithm~8.6 is a randomized $O(\log n)$-approximation.}
+{Embed the shortest-path metric into a dominating random tree, solve the
+unique-path tree instance exactly, map paths back by Lemma~8.21, and compare
+with the translated optimum using Lemma~8.22 and expected stretch.}{prove fully}
+
+\catalogue{Lemma 8.18}{Every hierarchical-cut tree dominates the original
+metric; if the least common ancestor of $u,v$ is at level $i$, then
+$T_{uv}\leq2^{i+2}$.}{A level-$i$ cluster has diameter below $2^{i+1}$, while
+separation below $\lfloor\log_2d_{uv}\rfloor$ is impossible; telescope the
+tree-edge lengths.}{prove fully}
+
+\catalogue{Lemma 8.21}{If $c'_{xy}$ is the capacity on tree edge
+$(x,y)\in T'$, mapping each tree edge to a shortest $x$--$y$ path in $G$
+produces a feasible solution of cost at most
+\[
+\sum_{(x,y)\in T'}T'_{xy}f(c'_{xy}).
+\]}{Use $d_{xy}\leq T'_{xy}$ and subadditivity of $f$ when several mapped
+tree paths share an original edge.}{prove fully}
+
+\catalogue{Lemma 8.22}{Translate an optimal solution of $G$ to $T'$ by
+installing each $c_e^*$ along the unique tree path between the endpoints of
+$e$. Its tree cost is at least
+$\sum_{(x,y)\in T'}T'_{xy}f(c'_{xy})$.}{Deleting $(x,y)$ separates exactly
+the demands counted by $c'_{xy}$; every translated feasible solution needs
+at least that capacity, and monotonicity of $f$ completes the comparison.}
+{prove fully}
+\end{itemize}
+
+\subsection*{Section 10.2: planar maximum independent set}
+\begin{itemize}
+\catalogue{Theorem 10.9 (Theorem 1.4)}{For every constant
+$\varepsilon>0$, unweighted maximum clique has no
+$O(n^{\varepsilon-1})$ approximation unless $P=NP$; complementation transfers
+the same general-graph hardness to maximum independent set.}{The text imports
+the clique gap hardness and uses graph complementation for the transfer.}
+{know proof architecture}
+
+\catalogue{Theorem 10.10}{Maximum independent set on an $n$-vertex
+$k$-outerplanar graph is solvable in
+$O(2^{O(k)}n^2)$ time.}{Cross-reference the constructive treewidth proof in
+Theorem~10.16; do not duplicate it here.}{know proof architecture}
+
+\catalogue{Theorem 10.11}{For every fixed $\varepsilon>0$, Baker layering
+gives a $(1-\varepsilon)$-approximation for maximum independent set in planar
+graphs in time $O(2^{O(1/\varepsilon)}n^2)$.}{Partition planar layers modulo
+$k+1$, delete each residue in turn, solve the resulting $k$-outerplanar
+components exactly, and choose the best shift; one shift loses at most
+$1/(k+1)\leq\varepsilon$ of an optimum.}{prove fully}
+
+\catalogue{Theorem 10.12}{Given a tree decomposition with node set $V'$ and
+treewidth $t$, maximum independent set is computable in
+$O(2^{O(t)}|V'|)$ time.}{For every bag, tabulate the best solution in its
+subtree for each independent subset of the bag; combine child tables while
+subtracting duplicated bag vertices.}{prove fully}
+
+\catalogue{Theorem 10.16}{Maximum independent set on an $n$-vertex
+$k$-outerplanar graph is computable in $O(2^{O(k)}n^2)$ time.}{Use
+Lemmas~10.13--10.15 to construct in $O(n^2)$ a width-$O(k)$ decomposition of
+linear size, then invoke Theorem~10.12.}{prove fully}
+
+\catalogue{Lemma 10.13}{Every $k$-outerplanar graph $G$ has a
+$k$-outerplanar maximum-degree-$3$ graph $G'$ such that any tree decomposition
+of $G'$ yields one of $G$ with no larger treewidth.}{Split each high-degree
+vertex along the embedding, then replace all split copies by the original
+name in every bag.}{prove fully}
+
+\catalogue{Lemma 10.14}{Every $k$-outerplanar graph of maximum degree $3$ has
+a maximum spanning forest of maximum load at most $3k$.}{Induct on outer
+layers; after removing the exterior-face edges, the remaining graph is
+$(k-1)$-outerplanar, and restoring a maximal acyclic subset increases load by
+at most three.}{prove fully}
+
+\catalogue{Lemma 10.15}{If a maximum-degree-$3$ graph has a maximum spanning
+forest of maximum load at most $\ell$, then its treewidth is at most
+$\ell+1$.}{Begin with the forest decomposition; for every nonforest edge, add
+an endpoint along its fundamental-cycle path, so each bag gains at most the
+edge/vertex load.}{prove fully}
+\end{itemize}
+
+\subsection*{Sections 16.1 and 16.3: hardness of approximation}
+\begin{itemize}
+\catalogue{Theorem 16.1}{It is NP-complete to decide whether an unrelated
+parallel-machine instance has makespan at most $2$ when each job is allowed
+only on machines in $M_j$ and has processing time $p_j\in\{1,2\}$ there.
+Consequently, for every $\alpha<3/2$, an $\alpha$-approximation would imply
+$P=NP$.}{Reduce three-dimensional matching using element jobs and type-specific
+length-$2$ dummy jobs. Yes-instances have makespan $2$; no-instances have
+integral makespan at least $3$.}{prove fully}
+
+\catalogue{Theorem 16.2}{For every $\varepsilon>0$, directed edge-disjoint
+paths admits no $\Omega(m^{-1/2+\varepsilon})$ approximation unless $P=NP$,
+where $m$ is the number of arcs.}{Amplify the NP-complete two-pair instance
+to $k=|A|^{\lceil1/\varepsilon\rceil}$ pairs arranged through copies of the
+original graph; two routed amplified pairs force both original paths, while a
+yes-instance routes all $k$.}{prove fully}
+
+\catalogue{Theorem 16.18 (PCP theorem)}{There is a positive constant $k$ such
+that
+\[
+NP\subseteq PCP_{1,\,1/2}(O(\log n),k).
+\]}
+{Interpret the polynomially many random strings as constant-query local
+constraints; the PCP construction itself is imported.}{know proof architecture}
+
+\catalogue{Theorem 16.19}{For all constants $\varepsilon,\delta>0$,
+\[
+NP\subseteq PCP_{1-\varepsilon,\,1/2+\delta}(O(\log n),3),
+\]
+and the verifier uses only the $3$-bit odd/even predicates on distinct
+variables.}{Use the imported predicate-restricted PCP theorem as the source of
+the completeness/soundness gap.}{know proof architecture}
+
+\catalogue{Corollary 16.20}{If the odd/even constraint-satisfaction problem
+has an $\alpha$-approximation for any constant $\alpha>1/2$, then $P=NP$;
+the threshold is sharp because the all-zero or all-one assignment satisfies
+at least half the constraints.}{Convert each verifier random string into one
+constraint and compare completeness $1-\varepsilon$ with soundness
+$1/2+\delta$; choose $\varepsilon,\delta$ around the claimed $\alpha$.}
+{prove fully}
+
+\catalogue{Theorem 16.21}{If MAX-E3SAT has an $\alpha$-approximation for any
+constant $\alpha>13/14$, then $P=NP$.}{Replace every parity constraint by four
+E3SAT clauses: a satisfied constraint satisfies four clauses and an
+unsatisfied one three. This is an $L$-reduction with $a=7,b=1$, so
+$\alpha$ transfers to $7\alpha-6>1/2$.}{prove fully}
+
+\catalogue{Theorem 16.22 (Theorem 5.2)}{If MAX-E3SAT has an
+$\alpha$-approximation for any constant $\alpha>7/8$, then $P=NP$.}
+{Under the same four-clause gadget, the PCP gap
+$1-\varepsilon$ versus $1/2+\delta$ becomes
+$1-\varepsilon/4$ versus $7/8+\delta/4$; choose constants so an
+$\alpha>7/8$ algorithm distinguishes the cases. Theorem~5.2 cross-references
+this proof.}{prove fully}
+
+\catalogue{Theorem 16.23}{For every constant $\delta>0$,
+\[
+NP\subseteq PCP_{1,\,7/8+\delta}(O(\log n),3),
+\]
+where each predicate is the OR of three queried bits or literal negations.}
+{The direct perfect-completeness MAX-E3SAT PCP is imported; translate its
+random strings to clauses.}{know proof architecture}
+
+\catalogue{Theorem 16.24}{If MAX-2SAT has an $\alpha$-approximation for any
+constant $\alpha>21/22$, then $P=NP$.}{The twelve-clause parity gadget allows
+$11$ satisfied clauses when the parity constraint is true and at most $10$
+when false, sending the PCP gap to the $21/22$ threshold. The text leaves the
+gadget verification and the odd-parity analogue as exercises.}
+{know proof architecture}
+\end{itemize}
+
+\endgroup
+
+\section*{Constants and guarantees at a glance}
+\begingroup
+\small
+\begin{center}
+\begin{tabularx}{\textwidth}{@{}l>{\raggedright\arraybackslash}Xl@{}}
+\toprule
+Result & Hypothesis/algorithm & Exact guarantee or parameter\\
+\midrule
+3.5 & value scaling for knapsack & $(1-\varepsilon)$; $O(n^3/\varepsilon)$\\
+3.6--3.7 & identical-machine makespan & $1+1/k$; PTAS\\
+3.8, 3.12 & bin packing & hardness $<3/2$; APTAS
+$(1+\varepsilon)\OPT+1$\\
+5.1, 5.7, 5.10--5.12 & MAX-SAT rounding & $1/2$,
+$(\sqrt5-1)/2$, $1-1/e$, $3/4$, $3/4$\\
+5.18, 5.19, 5.21 & PCST, facility location, scheduling &
+$(1-e^{-1/2})^{-1}\approx2.54$, $3$, $2$\\
+5.23--5.30 & Chernoff/path rounding & exponents $U\delta^2/3$ and
+$L\delta^2/2$; congestion $W^*+\sqrt{cW^*\ln n}$\\
+5.31--5.35 & colouring gaps and dense sampling & $3$ versus $5$ colours;
+UGC: $3$ versus $k$; sample success $1-2n^{-(c-1)}$\\
+6.9--6.11 & MAX-CUT & $\alpha_{GW}\approx0.878$; hardness $16/17$;
+UGC threshold $\alpha_{GW}$\\
+6.20, 6.23--6.24 & 3-colourable graphs & $4\sqrt n$;
+$4\Delta^{\log_3 2}$ with probability $\geq1/2$;
+$O(n^{0.387})$ semicolours\\
+7.1, 7.6, 7.8 & primal--dual & frequency $f$; exact; factor $2$\\
+8.17--8.23 & FRT and buy-at-bulk & dominating expected $O(\log n)$ stretch;
+$O(\log n)$ approximation\\
+10.11 & planar independent set & $(1-\varepsilon)$; time
+$O(2^{O(1/\varepsilon)}n^2)$\\
+10.9--10.16 & clique hardness and bounded treewidth &
+$O(n^{\varepsilon-1})$ hardness; $O(2^{O(t)}|V'|)$ DP\\
+13.9 & independent set in 3-colourable graph &
+$\Omega(n\Delta^{-1/3}(\ln\Delta)^{-1/2})$ in expectation\\
+16.1--16.2 & direct gap reductions & unrelated makespan hardness
+$<3/2$; directed paths hardness $\Omega(m^{-1/2+\varepsilon})$\\
+16.18--16.24 & PCP/hardness & $PCP_{1,1/2}(O(\log n),k)$;
+$1/2$, $13/14$, $7/8$, $21/22$ thresholds\\
+\bottomrule
+\end{tabularx}
+\end{center}
+\endgroup
+
+\section{Language and proof template}
+
+For a minimization problem, a ratio-$\rho\geq1$ algorithm satisfies
+$\ALG(I)\leq\rho\OPT(I)$.  For a maximization problem it is often cleaner to
+use a guarantee $0<\alpha\leq1$ and write $\ALG(I)\geq\alpha\OPT(I)$.
+Do not silently switch between the conventions $\alpha$ and $1/\alpha$.
+
+A PTAS gives a $(1+\varepsilon)$-approximation for minimization, or a
+$(1-\varepsilon)$-approximation for maximization, in polynomial time for each
+fixed $\varepsilon>0$.  An FPTAS is polynomial in both the input length and
+$1/\varepsilon$.  An APTAS may have an additive constant, for example
+$\ALG\leq(1+\varepsilon)\OPT+1$.  A pseudo-polynomial algorithm is polynomial
+in numerical values rather than their binary encoding lengths.
+
+\begin{keybox}
+Every approximation proof has four logically separate parts: (i) the output is
+feasible; (ii) a lower/upper benchmark bounds $\OPT$; (iii) the algorithm is compared
+with that benchmark; (iv) the running time is polynomial in the required parameters.
+\end{keybox}
+
+For a relaxation, remember the direction:
+\[
+  \OPT_{\rm LP}\leq\OPT_{\rm int}\quad\text{for minimization},
+  \qquad
+  \OPT_{\rm LP}\geq\OPT_{\rm int}\quad\text{for maximization}.
+\]
+The integrality gap limits what can be proved by rounding that particular relaxation.
+
+\section{Chapter 3: rounding data and dynamic programming}
+
+\subsection{Knapsack: pseudo-polynomial DP and an FPTAS (Section 3.1)}
+
+Items have sizes $s_i\in\mathbb Z_{>0}$, values $v_i\in\mathbb Z_{>0}$, and
+capacity $B$.  A pseudo-polynomial DP stores nondominated pairs
+$(\text{size},\text{value})$, or equivalently
+\[
+ D[i,z]=\min\{\text{size of a subset of }[i]\text{ of total value }z\}.
+\]
+The recurrence is
+\[
+ D[i,z]=\min\bigl(D[i-1,z],\ D[i-1,z-v_i]+s_i\bigr).
+\]
+Its running time is polynomial in $n$ and $\sum_i v_i$, hence not necessarily
+polynomial in the bit length.
+
+For the FPTAS, let $M=\max_i v_i$ among items that fit, set
+\[
+  \mu=\frac{\varepsilon M}{n},
+  \qquad v_i'=\left\lfloor\frac{v_i}{\mu}\right\rfloor,
+\]
+and solve the rounded instance exactly by the DP.  If $S$ is returned and $O$ is
+optimal, then
+\begin{align*}
+ \sum_{i\in S}v_i
+ &\geq \mu\sum_{i\in S}v_i'
+ \geq \mu\sum_{i\in O}v_i'
+ \geq \sum_{i\in O}v_i-|O|\mu\\
+ &\geq \OPT-\varepsilon M
+ \geq(1-\varepsilon)\OPT,
+\end{align*}
+because $M\leq\OPT$.  Moreover
+$\sum_i v_i'=O(n^2/\varepsilon)$, giving polynomial time in $n$ and
+$1/\varepsilon$.
+
+\textbf{Oral trap.}  Rounding the sizes downward can violate capacity.  Rounding the
+values downward preserves feasibility and only loses objective value.
+
+\subsection{Identical-machine makespan: a PTAS (Section 3.2)}
+
+For $P||C_{\max}$, useful lower bounds are
+\[
+  \OPT\geq\max_jp_j,
+  \qquad \OPT\geq\frac1m\sum_jp_j.
+\]
+For a guessed target $T$, classify jobs as large or small relative to
+$\varepsilon T$.  There are at most $m/\varepsilon$ large jobs in any schedule
+of makespan $T$.  Round their processing times to a constant number of sizes,
+enumerate or dynamically program over feasible machine configurations, and place the
+small jobs greedily on least-loaded machines.
+
+If the rounded large jobs fit within $T+O(\varepsilon T)$, then immediately before a
+small job is placed every machine has load at most the average load; the final overflow
+is at most the size of one small job, at most $\varepsilon T$.  With constants chosen
+beforehand this yields makespan at most $(1+\varepsilon)\OPT$.  Binary search or
+enumeration over candidate values of $T$ removes the assumption that $\OPT$ is known.
+
+\textbf{Why only a PTAS?}  The number of configurations is polynomial for fixed
+$\varepsilon$, but its exponent may depend on $1/\varepsilon$.
+
+\subsection{Bin packing: an APTAS (Section 3.3)}
+
+Normalize bin capacity to one.  Separate small items from large items.  Sort the large
+items and apply \emph{linear grouping}: partition them into groups of equal cardinality,
+set aside the first (largest) group, and round every size in each later group up to the
+largest size of that group.  Only constantly many rounded sizes remain, so a dynamic
+program can optimize the rounded configurations.
+
+The rounded solution is feasible for the original large items because sizes were
+rounded up.  The discarded first group costs only $O(\varepsilon\OPT)+O(1)$ extra bins.
+Insert small items greedily; if a new bin is opened, all previous bins have load close
+to one.  The resulting guarantee is of the form
+\[
+  \ALG(I)\leq(1+\varepsilon)\OPT(I)+1.
+\]
+The additive one is why the result is an asymptotic PTAS rather than an ordinary PTAS.
+
+\section{Chapter 5: randomized rounding of linear programs}
+
+\subsection{Baseline random assignments}
+
+For MAX-CUT, independently put each vertex on either side with probability $1/2$.
+Every edge is cut with probability $1/2$, so
+$\E[w(\delta(S))]=\tfrac12w(E)\geq\tfrac12\OPT$.
+
+For a clause with $k$ distinct, noncomplementary literals under a uniform random
+assignment,
+\[
+  \Prb[\text{clause satisfied}]=1-2^{-k}.
+\]
+Thus uniform random assignment gives a $7/8$ guarantee for MAX-E3SAT.  For clauses of
+different signs and lengths, biased coins may improve the worst clause probability.
+
+\subsection{Conditional expectation}
+
+If $X$ is the objective and a random bit $b$ is the next choice, then
+\[
+ \E[X\mid\text{past}]
+ =p\E[X\mid\text{past},b=1]+(1-p)\E[X\mid\text{past},b=0].
+\]
+At least one branch preserves the current conditional expectation.  Fix that branch
+and continue.  This derandomizes the algorithm provided the conditional expectations
+can be computed efficiently.
+
+\subsection{Independent LP rounding and concentration}
+
+Given a fractional solution $x_i\in[0,1]$, choose item $i$ independently with
+probability $x_i$ (or a scaled probability $\min\{1,\lambda x_i\}$).  Linearity gives
+the expected objective.  Chernoff bounds control a sum of independent rounded
+variables: if $X=\sum_iX_i$ and $\mu=\E X$, then
+\[
+ \Prb[X\geq(1+\delta)\mu]
+ \leq\left(\frac{e^\delta}{(1+\delta)^{1+\delta}}\right)^\mu
+ \leq\exp\!\left(-\frac{\delta^2\mu}{2+\delta}\right).
+\]
+To prove simultaneous feasibility, the exponent must dominate the logarithm of the
+number of constraints.  If independent rounding does not preserve a hard constraint,
+use alteration, dependent rounding, or a problem-specific nonlinear map.
+
+\subsection{Chapter-5 application pattern}
+
+The later applications in the chapter repeatedly use the same accounting scheme:
+\begin{enumerate}
+\item write an LP whose optimum bounds $\OPT$ in the correct direction;
+\item interpret $x$ as probabilities, possibly after scaling;
+\item prove expected cost/value by linearity;
+\item repair uncovered or overloaded constraints and charge the repair to the LP;
+\item derandomize with conditional expectation or pessimistic estimators when needed.
+\end{enumerate}
+The technique, not merely the final constant, is the examinable invariant.
+
+\section{SDP rounding and 3-colouring}
+
+\subsection{Semidefinite programs (Section 6.1)}
+
+A symmetric matrix $X$ is positive semidefinite, written $X\succeq0$, iff
+$y^TXy\geq0$ for every $y$.  Equivalently, $X=V^TV$ and
+$X_{ij}=v_i\cdot v_j$ for vectors $v_i$.  Thus an SDP can be viewed as a linear
+optimization problem over a Gram matrix, or as a vector program.  The relaxation step
+replaces products $x_ix_j$ of signs by inner products $v_i\cdot v_j$ of unit vectors.
+
+\subsection{MAX-CUT and random hyperplanes (Section 6.2)}
+
+With signs $x_i\in\{-1,1\}$, an edge $ij$ is cut by
+$\tfrac12(1-x_ix_j)$.  Relax to unit vectors:
+\[
+ \max\ \frac12\sum_{ij\in E}w_{ij}(1-v_i\cdot v_j),
+ \qquad \|v_i\|=1.
+\]
+Choose a random Gaussian vector $r$ and set $x_i=\operatorname{sign}(v_i\cdot r)$.
+If the angle between $v_i,v_j$ is $\theta_{ij}$, then
+\[
+ \Prb[ij\text{ cut}]=\frac{\theta_{ij}}{\pi},
+ \qquad v_i\cdot v_j=\cos\theta_{ij}.
+\]
+For every $\theta\in[0,\pi]$,
+\[
+ \frac{\theta}{\pi}\geq
+ \alpha_{GW}\frac{1-\cos\theta}{2},
+ \qquad
+ \alpha_{GW}:=\min_{\theta\in[0,\pi]}
+ \frac{2\theta}{\pi(1-\cos\theta)}\approx0.87856.
+\]
+Summing edgewise gives $\E[\ALG]\geq\alpha_{GW}\OPT_{\rm SDP}
+\geq\alpha_{GW}\OPT$.
+
+\subsection{Colouring a 3-colourable graph (Section 6.5)}
+
+\textbf{Combinatorial baseline.}  While a vertex has degree at least $\sqrt n$, give
+it one new colour and 2-colour its neighbourhood with two more new colours; the
+neighbourhood is bipartite because the graph is 3-colourable.  Remove these vertices.
+This occurs at most $\sqrt n$ times.  Greedily colour the remaining graph of maximum
+degree below $\sqrt n$.  Total: at most $4\sqrt n$ colours.
+
+For the SDP method solve
+\[
+ \min\lambda\quad\text{s.t. }v_i\cdot v_j\leq\lambda\ (ij\in E),
+ \quad \|v_i\|=1.
+\]
+A proper 3-colouring gives three unit vectors at mutual angle $2\pi/3$, hence
+$\lambda\leq-1/2$.  Choose
+$t=2+\log_3\Delta$ independent random hyperplanes and colour a vertex by its
+$t$-bit sign pattern.  Adjacent vertices share a pattern with probability at most
+$(1/3)^t\leq1/(9\Delta)$.  Since $m\leq n\Delta/2$, Markov's inequality shows that
+with probability at least $1/2$ at most $n/4$ edges are monochromatic.  Deleting one
+endpoint from each such edge leaves at least $n/2$ correctly coloured vertices.
+This is a semicolouring with
+\[
+  2^t=4\Delta^{\log_3 2}
+\]
+colours.  Repeating on the uncoloured half costs an extra factor $O(\log n)$.
+Balancing the treatment of high-degree neighbourhoods with this semicolouring yields
+\[
+  \widetilde O\!\left(n^{\frac{\log_3 2}{1+\log_3 2}}\right)
+  =\widetilde O(n^{0.387})
+\]
+colours.
+
+\subsection{Large independent sets from the SDP (Section 13.2)}
+
+Use the feasible vector system
+\[
+  v_i\cdot v_j=-\frac12\quad(ij\in E),
+  \qquad \|v_i\|=1.
+\]
+Draw $r\sim N(0,I)$, let
+\[
+ \eta=\sqrt{\frac23\ln\Delta},\qquad
+ S=\{i:v_i\cdot r\geq\eta\},
+\]
+and keep only vertices of $S$ with no neighbour in $S$, obtaining an independent set
+$S'$.  If $ij\in E$ and both projections exceed $\eta$, orthogonal decomposition of
+$v_j$ relative to $v_i$ implies an independent normal coordinate exceeds
+$\sqrt3\eta$.  Hence
+\[
+ \Prb[j\in S\mid i\in S]\leq\overline\Phi(\sqrt3\eta),
+ \qquad
+ \Prb[i\notin S'\mid i\in S]\leq
+ \Delta\overline\Phi(\sqrt3\eta)\leq\frac12.
+\]
+Using the Gaussian tail estimates
+\[
+ \frac{x}{1+x^2}\phi(x)\leq\overline\Phi(x)
+ \leq\frac1x\phi(x),
+\]
+one obtains
+\[
+ \E|S'|=\Omega\!\left(n\Delta^{-1/3}(\ln\Delta)^{-1/2}\right).
+\]
+Repeated removal therefore colours with
+$O(\Delta^{1/3}\sqrt{\ln\Delta}\log n)$ colours; combining regimes gives the
+$\widetilde O(n^{1/4})$ bound discussed in the section/exercise.
+
+\section{The primal--dual method}
+
+\subsection{Set cover review (Section 7.1)}
+
+For sets $S_j$ of weight $w_j$, the relaxation and dual are
+\[
+ \begin{array}{ll}
+ \min & \sum_jw_jx_j\\
+ \text{s.t.}&\sum_{j:e_i\in S_j}x_j\geq1\quad(i),\quad x_j\geq0,
+ \end{array}
+ \qquad
+ \begin{array}{ll}
+ \max & \sum_i y_i\\
+ \text{s.t.}&\sum_{i:e_i\in S_j}y_i\leq w_j\quad(j),\quad y_i\geq0.
+ \end{array}
+\]
+Raise a dual variable for an uncovered element until some set becomes tight, and take
+that set.  If every element occurs in at most $f$ sets, then
+\[
+ \sum_{j\in I}w_j
+ =\sum_{j\in I}\sum_{i\in S_j}y_i
+ \leq f\sum_i y_i
+ \leq f\OPT.
+\]
+The factor comes from the number of times each $y_i$ is charged, not from weak duality
+alone.
+
+\subsection{Shortest $s$--$t$ path (Section 7.3)}
+
+The cut relaxation is
+\[
+ \min\sum_ec_ex_e
+ \quad\text{s.t. }\sum_{e\in\delta(S)}x_e\geq1
+ \quad(s\in S,t\notin S),\quad x_e\geq0.
+\]
+Its dual packs $s$--$t$ cuts:
+\[
+ \max\sum_Sy_S
+ \quad\text{s.t. }\sum_{S:e\in\delta(S)}y_S\leq c_e,quad y_S\geq0.
+\]
+Grow the dual variable of the current component containing $s$ until an edge constraint
+becomes tight, add the edge, and continue.  Tightness implies that the length assigned
+to every reached vertex equals its shortest-path distance.  When $t$ is reached, the
+tight predecessor edges recover an optimum path.  This is the exact primal--dual
+prototype behind Dijkstra's algorithm.
+
+\subsection{Generalized Steiner tree/Steiner forest (Section 7.4)}
+
+Given pairs $(s_i,t_i)$, choose a minimum-cost forest connecting every pair.  A set
+$S\subset V$ is active if it separates at least one still-unconnected demand pair.
+The cut LP and dual are
+\[
+ \min\sum_ec_ex_e,quad
+ \sum_{e\in\delta(S)}x_e\geq1\ (S\text{ separates a pair});
+\]
+\[
+ \max\sum_Sy_S,quad
+ \sum_{S:e\in\delta(S)}y_S\leq c_e.
+\]
+Start with singleton components and raise the dual variables of all active components
+uniformly.  When an edge becomes tight, add it and merge its components.  Once all
+pairs are connected, process added edges in reverse and delete every redundant edge.
+For the pruned forest $F'$ and the active components $\mathcal C$ in any iteration,
+\[
+  \sum_{C\in\mathcal C}|\delta(C)\cap F'|\leq2|\mathcal C|.
+\]
+Integrating this inequality over all dual-growth intervals gives
+\[
+ c(F')\leq2\sum_Sy_S\leq2\OPT.
+\]
+The reverse-delete step is essential for the degree/charging inequality.
+
+\section{Tree metric embeddings and buy-at-bulk}
+
+\subsection{FRT embedding (Section 8.5)}
+
+For a finite metric $(V,d)$, an FRT-type random hierarchical decomposition chooses a
+random permutation of $V$ and a random scale shift, then partitions at geometrically
+decreasing radii.  The cluster hierarchy defines a tree metric $d_T$.
+
+The two required properties are
+\[
+ d_T(u,v)\geq d(u,v)\quad\text{for all }u,v,
+ \qquad
+ \E[d_T(u,v)]\leq O(\log n)d(u,v).
+\]
+Noncontraction is built into the tree-edge lengths: once $u$ and $v$ separate at scale
+$i$, their tree path has length at least their original distance.  For expected stretch,
+charge the first scale that separates them.  At scale $i$, a potential centre $w$ can
+separate the pair only when the random radius falls in an interval of length at most
+$d(u,v)$.  Among the centres close enough to matter, $w$ is the first in the random
+permutation with probability equal to the reciprocal of its distance rank.  Summing
+these probabilities produces $H_n=\sum_{j=1}^n1/j=O(\log n)$.  Multiplying the
+separation probability at scale $i$ by the $O(2^i)$ tree distance charged at that scale,
+and then summing over scales, yields
+\[
+  \E[d_T(u,v)]\leq O(H_n)d(u,v)=O(\log n)d(u,v).
+\]
+
+\textbf{Transfer rule.}  If a problem is solved exactly or within factor $\rho$ on a
+tree and its cost is a nonnegative linear combination of pair distances, sampling the
+tree and mapping back often gives expected factor $O(\rho\log n)$.
+
+\subsection{Buy-at-bulk network design (Section 8.6)}
+
+The input is a graph with lengths $\ell_e$, demand pairs $(s_i,t_i)$ with demands
+$d_i$, and a nondecreasing concave cost function $f$ with $f(0)=0$.  Choose paths
+$P_i$ and let $c_e=\sum_{i:e\in P_i}d_i$; minimize
+\[
+  \sum_{e}\ell_e f(c_e).
+\]
+On a tree the path for each pair is unique, so the optimum is immediate.  Sample a
+dominating FRT tree, route on its unique paths, and replace every tree edge by a
+shortest path in the original graph.  Domination makes the tree a valid upper model;
+expected stretch contributes $O(\log n)$; concavity/subadditivity ensures that merging
+mapped routes on an original edge does not increase the charged cost.  Therefore the
+randomized algorithm is an $O(\log n)$-approximation.
+
+\section{Planar maximum independent set PTAS (Section 10.2)}
+
+Maximum independent set is extremely hard to approximate in general graphs, but planar
+structure permits a PTAS.  Use a planar embedding and partition vertices into layers.
+For an integer $k$, and each residue $r\in\{0,\ldots,k-1\}$, delete every layer whose
+index is $r\pmod k$.  Each remaining component is $(k-1)$-outerplanar and has treewidth
+$O(k)$, so weighted maximum independent set can be solved exactly by dynamic
+programming for fixed $k$.
+
+Let $O$ be an optimum independent set.  Across the $k$ choices of residue, every vertex
+of $O$ is deleted exactly once.  Hence some residue deletes weight at most
+$w(O)/k$.  Running all $k$ cases and taking the best gives
+\[
+  \ALG\geq\left(1-\frac1k\right)\OPT.
+\]
+Choose $k\geq1/\varepsilon$ for a $(1-\varepsilon)$-approximation.  Planarity is used
+to turn deletion of one layer class into bounded treewidth; the averaging argument
+alone is not enough.
+
+\section{Hardness of approximation}
+
+\subsection{Direct gap reductions (Section 16.1)}
+
+A gap reduction maps an NP-complete instance $x$ to an optimization instance $I_x$ so
+that
+\[
+ x\in L\Rightarrow\OPT(I_x)\leq a,\qquad
+ x\notin L\Rightarrow\OPT(I_x)\geq b
+\]
+for minimization (reverse the inequalities for maximization).  Any ratio strictly
+better than $b/a$ distinguishes the cases.
+
+The section's main example reduces 3-dimensional matching to makespan scheduling on
+unrelated parallel machines.  The construction creates element jobs, triple machines,
+and dummy jobs so that a perfect 3-dimensional matching yields a schedule of length
+two, whereas every schedule for a NO instance has length at least three.  Consequently,
+unless $P=NP$, there is no $(3/2-\varepsilon)$-approximation for any fixed
+$\varepsilon>0$.  The proof must establish both directions of the gap; mere
+NP-hardness of computing $\OPT$ gives no approximation lower bound.
+
+\subsection{PCP reductions (Section 16.3)}
+
+$L\in\mathrm{PCP}_{c,s}(r(n),q(n))$ means that a randomized polynomial-time verifier
+uses at most $r(n)$ random bits, reads at most $q(n)$ locations of a proof $\pi$, and
+satisfies
+\[
+ x\in L\Rightarrow\exists\pi:\Pr[V^\pi(x)=1]\geq c,qquad
+ x\notin L\Rightarrow\forall\pi:\Pr[V^\pi(x)=1]\leq s.
+\]
+The PCP theorem gives
+\[
+  \mathsf{NP}=\mathrm{PCP}(O(\log n),O(1))
+\]
+with a constant completeness--soundness gap.
+
+To obtain an optimization instance, create one constant-arity constraint for every
+verifier random string; its variables are the proof locations queried on that string.
+If the verifier has perfect completeness, a YES instance satisfies all constraints.
+For a NO instance, every assignment satisfies at most an $s$ fraction.  Thus a PCP is
+exactly a source of a robust gap rather than merely an NP witness verifier.
+
+The refined three-query construction in the section yields MAX-E3SAT hardness:
+for every constant $\delta>0$ it is NP-hard to distinguish a satisfiable instance from
+one in which at most a $(7/8+\delta)$ fraction of clauses can be satisfied.  Hence, for
+any constant $\alpha>7/8$, an $\alpha$-approximation for MAX-E3SAT would imply
+$P=NP$.  This matches the $7/8$ random-assignment algorithm up to an arbitrarily small
+additive constant.
+
+\section*{Primary reference}
+D.~P.~Williamson and D.~B.~Shmoys,
+\emph{The Design of Approximation Algorithms}, Cambridge University Press, 2011,
+electronic web edition.
+
+\end{document}
