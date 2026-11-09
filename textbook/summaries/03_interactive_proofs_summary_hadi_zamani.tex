@@ -1,0 +1,706 @@
+% Updated 30 August 2026
+\documentclass[10pt]{article}
+\usepackage[margin=0.62in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{enumitem,booktabs,tabularx,array,multicol,xcolor}
+\usepackage[bookmarks=false]{hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue!45!black,urlcolor=blue!45!black}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+\setlist{leftmargin=*,itemsep=1pt,topsep=2pt}
+\newcommand{\F}{\mathbb F}
+\newcommand{\Prb}{\mathbb P}
+\newcommand{\E}{\mathbb E}
+\newcommand{\IP}{\mathsf{IP}}
+\newcommand{\MIP}{\mathsf{MIP}}
+\newcommand{\PSPACE}{\mathsf{PSPACE}}
+\newcommand{\NEXP}{\mathsf{NEXP}}
+\newcommand{\PH}{\mathsf{PH}}
+\newcommand{\AM}{\mathsf{AM}}
+\newcommand{\NP}{\mathsf{NP}}
+\newcommand{\coNP}{\mathsf{coNP}}
+\newtheorem*{theorem}{Theorem}
+\newtheorem*{lemma}{Lemma}
+\newenvironment{keybox}{\begin{quote}\small\itshape}{\end{quote}}
+
+\begin{document}
+\begin{center}
+{\LARGE\bfseries Interactive Proof Systems\par}
+\vspace{1mm}
+{Hadi Zamani \qquad Examiner: Michal Kouck\'y\par}
+{\small 30 August 2026}
+\end{center}
+
+\section*{Assigned articles}
+\begin{itemize}
+\item \emph{Algebraic Methods for Interactive Proof Systems} (LFKN)
+\item \emph{IP = PSPACE} (Shamir), with \emph{IP = PSPACE: Simplified Proof} (Shen)
+\item \emph{Non-Deterministic Exponential Time Has Two-Prover Interactive Protocols} (BFL)
+\item \emph{Proofs that Yield Nothing but Their Validity or All Languages in NP
+Have Zero-Knowledge Proof Systems} (GMW)
+\end{itemize}
+
+\subsection*{Article map: main theorems and techniques}
+\begingroup
+\scriptsize
+\setlength{\tabcolsep}{3.5pt}
+\renewcommand{\arraystretch}{1.08}
+\begin{center}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.18\textwidth}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Assigned article / note} & \textbf{Main theorem or result} &
+\textbf{Characteristic techniques}\\
+\midrule
+LFKN (1992) & Algebraic protocols verify permanent/$\#\mathsf P$ claims and imply
+$\PH\subseteq\IP$. & Arithmetization; low-degree self-reducibility; sum-check and
+many-values-to-one random reduction; Schwartz--Zippel soundness.\\
+Shamir (1992) & $\IP=\PSPACE$: quantified Boolean formulas have interactive
+proofs, while protocol game trees are evaluable in polynomial space. & TQBF
+arithmetization; simple-QBF preprocessing and dummy variables for degree control;
+fresh random low-degree checks; depth-first exact game-tree evaluation.\\
+Shen (1992), companion note & Gives a simplified proof of
+$\PSPACE\subseteq\IP$. & Explicit multilinearization operators $R_i$; local
+interpolation identities; controlled individual degree instead of simple-QBF syntax.\\
+BFL (1991) & $\MIP=\NEXP$. & Arithmetize an exponential tableau; low-degree
+extension and multilinearity tests; cross-check noncommunicating provers; LFKN-style
+global constraint verification.\\
+GMW (1991) & Assuming suitable commitments, every language in $\NP$ has a
+zero-knowledge proof; 3-colouring is the canonical protocol. & Hiding/binding
+commitments; random colour permutation; random-edge challenge; rewinding simulation;
+sequential repetition.\\
+\bottomrule
+\end{tabularx}
+\end{center}
+\endgroup
+
+\section*{Theorem inventory}
+\begingroup
+\small
+
+\subsection*{Lund--Fortnow--Karloff--Nisan (LFKN)}
+\begin{itemize}
+\item \textbf{Theorem 1.} Every language in $\mathsf P^{\#\mathsf P}$ has an
+interactive proof system.
+\item \textbf{Corollary 2.} By Toda's theorem,
+$\PH\subseteq\IP$; in particular, $\coNP\subseteq\IP$.
+\item \textbf{Lemma 3.} An interactive protocol for verifying the permanent of
+a $0$--$1$ matrix suffices to give interactive proofs for every language in
+$\mathsf P^{\#\mathsf P}$.
+\item \textbf{Lemma 4.} If the claimed polynomial along a random matrix line is
+not the true permanent polynomial, a uniformly random field point catches the
+discrepancy except with probability at most $r/|\F|$.
+\item \textbf{Corollary 5.} If cryptographic one-way functions exist, every
+language in $\PH$ has a zero-knowledge interactive proof.
+\item \textbf{Corollary 6.} If every language in $\IP$ had a bounded-round
+interactive proof, then the polynomial hierarchy would collapse.
+\item \textbf{Corollary 7.} The permanent has a probabilistic polynomial-time
+program checker that either certifies the program's answer on the given matrix
+or finds evidence that the program fails somewhere.
+\item \textbf{Corollary 8.} If $\#\mathsf P$ has polynomial-size circuits, then
+$\mathsf P^{\#\mathsf P}\subseteq\mathsf{MA}$.
+\end{itemize}
+
+\subsection*{Shamir: \emph{IP = PSPACE}}
+\begin{itemize}
+\item \textbf{Theorem 1.} Every QBF of size $n$ can be transformed into an
+equivalent simple QBF of size polynomial in $n$.
+\item \textbf{Theorem 2.} A closed QBF is true if and only if the value of its
+arithmetization is nonzero.
+\item \textbf{Theorem 3.} The integer value of the arithmetization of a closed
+size-$n$ QBF is at most doubly exponential, $2^{2^{O(n)}}$.
+\item \textbf{Theorem 4.} If the arithmetized value is nonzero, there is a prime
+of polynomial bit length modulo which it remains nonzero.
+\item \textbf{Theorem 5.} For a simple QBF, every univariate polynomial queried
+in the protocol has degree at most linear in the formula size; dummy variables
+can reduce the relevant degree to a constant.
+\item \textbf{Theorem 6.} The QBF protocol has perfect completeness, while on a
+false QBF every cheating prover is accepted only with negligible probability.
+\item \textbf{Theorem 7.} Every $\PSPACE$ language is accepted even by Shamir's
+weak verifier model.
+\item \textbf{Conclusion.} Theorems 1--6 prove
+$\PSPACE\subseteq\IP$; together with the previously known
+$\IP\subseteq\PSPACE$, they give $\IP=\PSPACE$.
+\end{itemize}
+
+\subsection*{Shen: simplified proof}
+\begin{itemize}
+\item \textbf{Main theorem.} $\PSPACE\subseteq\IP$.  Shen replaces Shamir's
+simple-QBF preprocessing by explicit multilinearization operators $R_i$ and
+checks the resulting local polynomial identities at fresh random points.
+\end{itemize}
+
+\subsection*{Babai--Fortnow--Lund (BFL)}
+\begin{itemize}
+\item \textbf{Theorem 1.1.} $\MIP=\NEXP$; two-prover interactive proofs have
+exactly nondeterministic exponential-time power.
+\item \textbf{Theorem 2.3 (Fortnow--Rompel--Sipser).} Probabilistic oracle
+machines and multiprover interactive protocols recognize the same languages.
+\item \textbf{Theorem 2.4 (Ben-Or--Goldwasser--Kilian--Wigderson).} Any
+multiprover protocol can be simulated with two noncommunicating provers.
+\item \textbf{Theorem 4.6.} The multilinearity tester accepts a genuinely
+multilinear, bounded integer-valued oracle with certainty and rejects an oracle
+far from multilinear with high probability.
+\item \textbf{Corollary 4.10.} Every language in $\mathsf{EXP}$ has a
+multiprover interactive proof with $\mathsf{EXP}$-complexity provers.
+\item \textbf{Theorem 5.13.} If only an $\varepsilon$ fraction of the axis-parallel
+lines are wrong, the oracle is globally
+$\varepsilon_0$-close to a multilinear function, with
+$\varepsilon_0=3n^2(\varepsilon+\delta+1/N)$ under the stated parameters.
+\item \textbf{Corollary 6.3.} Every $\mathsf{EXP}$-complete language has a
+function-restricted interactive proof and therefore a program checker.
+\item \textbf{Theorem 6.4.} Every $\PSPACE$-complete and
+$\mathsf{EXP}$-complete language has a self-testing/self-correcting pair.
+\item \textbf{Corollary 6.7.} There are $\PSPACE$-complete and
+$\mathsf{EXP}$-complete functions with self-testing/self-correcting pairs in
+the Blum--Luby--Rubinfeld model.
+\item \textbf{Theorem 6.8 (Meyer--Karp--Lipton).} For
+$\mathcal C\in\{\mathsf{EXP},\PSPACE,\mathsf P^{\#\mathsf P}\}$,
+$\mathcal C\subseteq\mathsf P/\mathsf{poly}$ implies
+$\mathcal C=\Sigma_2^{\mathsf P}$.
+\item \textbf{Corollary 6.9.} If a language has a multiprover proof with
+provers of complexity $\mathcal C$, and $\mathcal C$ has polynomial-size
+circuits, then the language lies in $\mathsf{MA}$.
+\item \textbf{Corollary 6.10.} If all of $\mathsf{EXP}$ has polynomial-size
+circuits, then
+$\mathsf{EXP}=\Sigma_2^{\mathsf P}=\Pi_2^{\mathsf P}=\mathsf{MA}$; analogously
+for $\PSPACE$ and $\mathsf P^{\#\mathsf P}$.
+\end{itemize}
+
+\subsection*{Goldreich--Micali--Wigderson (GMW)}
+\begin{itemize}
+\item \textbf{Theorem 1.} Protocol 1 is a two-message interactive proof for
+Graph Nonisomorphism.
+\item \textbf{Corollary 1.} Relative to a random oracle, Graph Isomorphism lies
+in $\NP\cap\coNP$; nonuniformly, Graph Nonisomorphism lies in
+$\NP/\mathsf{poly}$.
+\item \textbf{Corollary 2.} If Graph Isomorphism were NP-complete, the
+polynomial hierarchy would collapse to its second level.
+\item \textbf{Theorem 2.} Protocol 2 is a perfect zero-knowledge interactive
+proof for Graph Isomorphism.
+\item \textbf{Theorem 3.} The verifier-tested modification, Protocol 3, is a
+perfect zero-knowledge interactive proof for Graph Nonisomorphism.
+\item \textbf{Proposition 4.} Assuming a nonuniformly secure encryption
+function, Protocol 4 is a computational zero-knowledge proof for Graph
+$3$-Colourability.
+\item \textbf{Lemma 4.0.} Polynomially many encryptions of any two message
+sequences are computationally indistinguishable to polynomial-size circuit
+families; this is the hybrid lemma used by the simulator.
+\item \textbf{Theorem 5.} If nonuniformly secure encryption exists, every
+language in $\NP$ has a zero-knowledge interactive proof.
+\item \textbf{Theorem 6.} The preceding theorem can use a probabilistic
+polynomial-time prover supplied with an NP witness as auxiliary input.
+\item \textbf{Simulation claims 2.1--2.2, 3.1--3.2, and 4.1--4.2.} In each
+protocol the constructed simulator runs in expected polynomial time and its
+output is respectively identical to, or computationally indistinguishable from,
+the cheating verifier's real view.
+\end{itemize}
+
+\endgroup
+
+\section{Definitions, quantifiers, and amplification}
+
+An interactive proof for $L$ is a probabilistic polynomial-time verifier $V$
+interacting for polynomially many rounds with an unbounded prover.  With the
+standard constants,
+\[
+ x\in L\Longrightarrow \exists P\quad
+   \Prb[(P,V)(x)\text{ accepts}]\geq\tfrac23,
+\]
+\[
+ x\notin L\Longrightarrow \forall P^*\quad
+   \Prb[(P^*,V)(x)\text{ accepts}]\leq\tfrac13.
+\]
+The order $\exists P$ in completeness and $\forall P^*$ in soundness is
+essential.  A proof has soundness against computationally unbounded provers;
+an \emph{argument} need only resist polynomial-time cheating provers.
+
+Sequential repetition followed by majority reduces both errors exponentially;
+fresh verifier randomness is required.  Public-coin protocols expose each random
+challenge.  Private coins do not increase the power of polynomial-round
+interactive proofs (Goldwasser--Sipser), although the conversion is not the
+content of the four main articles.  For a fixed number $k\geq2$ of public-coin
+Arthur--Merlin rounds, the standard round-collapse gives $\AM(k)=\AM(2)$.
+This is an internal collapse of that protocol hierarchy, not a collapse of the
+polynomial hierarchy.
+
+\section{The algebraic engine of LFKN}
+
+\subsection{Arithmetization and polynomial identity testing}
+
+Over a field $\F$, arithmetize Boolean operations by
+\[
+ \neg x\mapsto1-x,\qquad x\wedge y\mapsto xy,
+ \qquad x\vee y\mapsto x+y-xy.
+\]
+These agree with Boolean logic on $\{0,1\}$; outside that cube they are simply
+polynomials.  For $f:\{0,1\}^m\to\F$, its unique multilinear extension is
+\[
+ \widetilde f(z)=\sum_{a\in\{0,1\}^m} f(a)
+ \prod_{i=1}^m\bigl(a_i z_i+(1-a_i)(1-z_i)\bigr).
+\]
+
+\begin{lemma}[Schwartz--Zippel]
+If $0\neq P\in\F[x_1,\ldots,x_m]$ has total degree at most $d$ and
+$r$ is uniform in $S^m\subseteq\F^m$, then
+\[
+ \Prb[P(r)=0]\leq d/|S|.
+\]
+\end{lemma}
+Proof by induction on $m$: expand in $x_m$; with probability at most
+$(d-k)/|S|$ its leading coefficient vanishes, and otherwise the resulting
+univariate polynomial has at most $k$ roots.  The lemma is the source of
+soundness: two distinct low-degree polynomials rarely agree at a fresh point.
+
+\subsection{Sum-check: statement, protocol, and soundness}
+
+The prover claims
+\[
+ H=\sum_{b\in\{0,1\}^m}g(b),
+\]
+where the individual degree of $g$ is at most $d$ and the verifier can evaluate
+$g$ at one field point efficiently.  The protocol is:
+\begin{enumerate}
+\item The prover sends
+$q_1(X)=\sum_{b_2,\ldots,b_m}g(X,b_2,\ldots,b_m)$.
+Check $\deg q_1\leq d$ and $q_1(0)+q_1(1)=H$; choose uniform $r_1\in\F$.
+\item In round $i$, receive $q_i$, check $\deg q_i\leq d$ and
+\[
+ q_i(0)+q_i(1)=q_{i-1}(r_{i-1}),
+\]
+then choose fresh uniform $r_i\in\F$.
+\item Check $q_m(r_m)=g(r_1,\ldots,r_m)$ directly.
+\end{enumerate}
+An honest prover passes with probability one.  At the first dishonest round,
+the sent univariate and the correct one are distinct.  They agree at the fresh
+$r_i$ with probability at most $d/|\F|$.  A union bound gives soundness error
+at most $md/|\F|$.  The verifier reads $O(md)$ field elements rather than
+$2^m$ summands.
+
+\subsection{LFKN and the permanent}
+
+For $A\in\F^{n\times n}$,
+\[
+ \operatorname{per}(A)=\sum_{\pi\in S_n}\prod_{i=1}^n A_{i,\pi(i)}
+ =\sum_{j=1}^n A_{1j}\operatorname{per}(A_{1j}),
+\]
+where $A_{1j}$ deletes row $1$ and column $j$.  Downward self-reducibility is
+easy, but expanding the entire tree is exponential.  LFKN places related
+subinstances on a low-degree algebraic curve.  A claimed polynomial containing
+their permanent values is checked at the required points; the verifier then
+chooses a fresh random point and reduces many old claims to one new claim on a
+smaller instance.  Low degree plus Schwartz--Zippel prevents the prover from
+changing the polynomial after seeing the point.
+
+Because the permanent is $\#\mathsf P$-complete and Toda's theorem gives
+$\PH\subseteq\mathsf P^{\#\mathsf P}$, the LFKN protocol yields
+\[
+ \PH\subseteq\IP.
+\]
+The conceptual payload is more reusable than this particular application:
+arithmetize, maintain a low-degree claim, reduce many values to one random
+value, and finish at an explicitly computable base case.
+
+\section{$\IP=\PSPACE$: both inclusions in full outline}
+
+\subsection{$\IP\subseteq\PSPACE$: exact game-tree evaluation}
+
+Normalize the protocol so that nodes alternate between a prover message and a
+block of verifier coin tosses.  For a transcript prefix $h$, define its value by
+\[
+ \operatorname{Val}(h)=
+ \begin{cases}
+  0\text{ or }1, &h\text{ is a leaf},\\
+  \max_m\operatorname{Val}(hm), &h\text{ is a prover node},\\
+  2^{-r}\sum_{z\in\{0,1\}^r}\operatorname{Val}(hz),
+      &h\text{ is an }r\text{-coin verifier node}.
+ \end{cases}
+\]
+There are exponentially many children, but every message has polynomial length
+and the depth is polynomial.  A deterministic machine enumerates the children
+with a polynomial-bit counter and evaluates them depth first, reusing memory.
+The recursion stack stores only polynomially many polynomial-size transcripts.
+Values are exact rationals with denominator at most $2^R$, where the total
+number $R$ of verifier coins is polynomial, so their numerators and denominators
+also use polynomially many bits.  Comparing the root value with the completeness
+threshold therefore uses polynomial space.  This proves $\IP\subseteq\PSPACE$;
+finiteness of the tree alone is not a sufficient space analysis.
+
+\subsection{Why TQBF is $\PSPACE$-complete}
+
+Membership is by depth-first recursive evaluation of the quantified formula,
+storing one assignment and one recursion path.  For hardness, let $M$ use
+$s(n)$ space.  A configuration has $O(s(n))$ bits, and if $M$ accepts then it
+does so within $2^{O(s(n))}$ steps after standard normalization.
+
+Let $R_i(C,D)$ mean that $D$ is reachable from $C$ within $2^i$ steps.
+The na\"ive recurrence duplicates $R_i$; the following quantified selector keeps
+one copy:
+\[
+\begin{split}
+R_{i+1}(C,D):={}&\exists M\ \forall b\ \exists U,V\;[
+ (b=0\Rightarrow(U=C\wedge V=M))\\[-1mm]
+&\hspace{36mm}\wedge
+ (b=1\Rightarrow(U=M\wedge V=D))
+ \wedge R_i(U,V)].
+\end{split}
+\]
+Here $M,U,V$ are configuration-sized bit vectors, and $R_0$ checks equality or
+one legal transition.  The universal bit chooses which half of the path must be
+verified; because $U,V$ are quantified after $b$, they may depend on that choice.
+Crucially, the displayed formula contains only one syntactic copy of $R_i(U,V)$, so
+\[
+ |R_{i+1}|=|R_i|+O(s(n)),
+\]
+instead of the doubling caused by writing both halves explicitly.  With
+$i=O(s(n))$, the QBF has polynomial size and is true exactly when an accepting
+configuration is reachable.
+
+\subsection{$\PSPACE\subseteq\IP$: quantified arithmetization}
+
+It suffices to give an interactive proof for
+\[
+ \Phi=Q_1x_1\cdots Q_nx_n\,\varphi(x_1,\ldots,x_n).
+\]
+Let $P$ be the arithmetization of $\varphi$.  Quantifiers become algebraic
+operators
+\[
+ A_iP=P|_{x_i=0}\,P|_{x_i=1},\qquad
+ E_iP=P|_{x_i=0}+P|_{x_i=1}-P|_{x_i=0}P|_{x_i=1}.
+\]
+On Boolean inputs, $A_i$ represents $\forall x_i$ and $E_i$ represents
+$\exists x_i$.  Thus $\Phi$ is true iff the resulting scalar is $1$.
+
+The obstacle is degree: products introduced by $A_i,E_i$ can double degrees in
+variables not yet eliminated.  Over the Boolean cube one may replace a polynomial
+by its degree-one representative in variable $x_i$:
+\[
+ R_iP=P|_{x_i=0}+x_i(P|_{x_i=1}-P|_{x_i=0})
+      \equiv P\pmod{x_i^2-x_i}.
+\]
+Insert the required $R_i$ operators so that every intermediate individual degree
+is polynomially bounded.  The truth of $\Phi$ is now an explicitly ordered,
+polynomial-length sequence of local operators $A_i,E_i,R_i$ applied to $P$.
+
+The verifier starts from the claim that this operator expression equals $1$.
+At an $A_i$ or $E_i$ step, the prover sends the relevant low-degree univariate
+$p(X)$.  The verifier checks the claimed degree and the endpoint identity
+\[
+ v=p(0)p(1)\quad(A_i),\qquad
+ v=p(0)+p(1)-p(0)p(1)\quad(E_i).
+\]
+At an $R_i$ step it checks the analogous interpolation identity
+$v=p(0)+a(p(1)-p(0))$ at the current field coordinate $a$.
+It then chooses a fresh uniform field element $r$, replaces the current claim by
+$p(r)$, and proceeds to the shorter operator expression.  At the end it evaluates
+the explicit formula polynomial $P$ itself at the accumulated field point.
+
+The invariant is that the verifier holds a claimed value of the remaining operator
+expression after all earlier random coordinates have been fixed.  If this claim is
+false, any polynomial satisfying the endpoint identity but supporting the false value
+must differ from the honest low-degree polynomial.  Their difference is nonzero, so a
+fresh random evaluation preserves the lie with probability at most $d/|\F|$.  This is
+why the prover must send its polynomial before seeing the next challenge.
+
+If all claims are honest, every identity holds.  At the first false univariate
+claim, Schwartz--Zippel lets it survive the fresh challenge with probability at
+most $d/|\F|$.  If there are $T=\operatorname{poly}(|\Phi|)$ checks and degree
+$d=\operatorname{poly}(|\Phi|)$, choose a polynomial-size field with
+$|\F|>3Td$; the total error is below $1/3$.  Field elements and arithmetic have
+polynomial bit complexity.  Hence $\PSPACE\subseteq\IP$.
+
+\subsection{Shamir versus Shen}
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}lXX@{}}
+\toprule
+& \textbf{Degree control} & \textbf{Proof organization}\\
+\midrule
+Shamir & preprocesses to a \emph{simple QBF}, using dummy variables and
+constraints to keep the arithmetized degrees polynomial & syntactic preparation
+first, then the low-degree protocol\\
+Shen & uses explicit degree-reduction operators $R_i$ instead of simple QBFs &
+operator sequence and local interpolation checks make the bookkeeping shorter\\
+\bottomrule
+\end{tabularx}
+\end{center}
+Both are algebraic, nonrelativizing proofs of the same containment.
+
+\paragraph{The degree-reduction calculation to reproduce orally.}
+For a polynomial $q$ and a coordinate $x_i$, Shen uses
+\[
+ (R_iq)(x_1,\ldots,x_n)
+ =(1-x_i)q(x_1,\ldots,0,\ldots,x_n)
+   +x_iq(x_1,\ldots,1,\ldots,x_n).
+\]
+Thus $R_iq$ agrees with $q$ whenever $x_i\in\{0,1\}$, but has individual
+degree at most one in $x_i$.  After an arithmetized quantifier step raises a
+variable's degree, inserting $R_i$ restores the Boolean values while preventing
+degree growth from accumulating.  At a field point whose $i$th coordinate is
+$a$, the verifier checks the local identity
+\[
+ (R_iq)(\ldots,a,\ldots)
+ =q(\ldots,0,\ldots)+a\bigl(q(\ldots,1,\ldots)-q(\ldots,0,\ldots)\bigr).
+\]
+This is the concrete reason Shen can work directly with the original QBF rather
+than first converting it into Shamir's simple-QBF normal form.
+
+\subsection{Relativization and nearby class questions}
+
+For every oracle $O$, the game-tree argument still gives
+$\IP^O\subseteq\PSPACE^O$.  Equality does \emph{not} hold for every oracle:
+there is an oracle $B$ for which
+$\coNP^B\nsubseteq\IP^B$, while always $\coNP^B\subseteq\PSPACE^B$; hence
+$\IP^B\neq\PSPACE^B$.  In fact, random oracles separate the two with probability
+one.  Equality can hold relative to an oracle: if $A$ is a $\PSPACE$-complete
+language, then
+\[
+ \PSPACE=\mathsf P^A\subseteq\IP^A\subseteq\PSPACE^A=\PSPACE.
+\]
+Thus the theorem has contradictory relativizations, a standard sign that its
+arithmetization is genuinely nonrelativizing.
+
+\section{BFL: two provers and $\MIP=\NEXP$}
+
+In classical $\MIP$, two or more all-powerful provers agree on a strategy before
+the protocol but cannot communicate after receiving their questions.  Their
+answers must therefore be marginals of fixed global strategy functions.  This
+noncommunication is the extra resource: with one prover, every claimed value can
+be adapted to the whole transcript; a second prover can be asked a correlated
+question that tests consistency with one global object.
+
+\subsection{$\MIP\subseteq\NEXP$}
+
+Fix the input.  A deterministic strategy for each prover is a table mapping its
+polynomial-length local transcripts to polynomial-length answers.  There are at
+most $2^{\operatorname{poly}(n)}$ entries.  A nondeterministic exponential-time
+machine guesses all tables, enumerates all polynomial-length verifier random
+strings, simulates the protocol, and counts acceptance exactly.  If randomized
+provers helped, fixing their private coins would leave some deterministic strategy
+with at least the same acceptance probability.  Hence $\MIP\subseteq\NEXP$.
+
+\subsection{$\NEXP\subseteq\MIP$: proof architecture}
+
+An $\NEXP$ computation has an exponentially long tableau or witness, while every
+location still has a polynomial-length address.  The lower-bound proof has four
+separate stages.
+\begin{enumerate}
+\item Encode the accepting computation by a Boolean function on
+      $m=\operatorname{poly}(n)$ address bits and extend it to the unique
+      multilinear polynomial over a sufficiently large finite field.
+\item Arithmetize the local transition constraints.  A false tableau makes the
+      resulting constraint polynomial nonzero; an LFKN-style reduction turns the
+      claim that its global sum is zero into claims about values at random points.
+\item Replace trusted oracle access by two noncommunicating provers.  Correlated
+      questions compare their answers, while the multilinearity test checks that
+      the alleged value table behaves like one multilinear function rather than
+      unrelated answers chosen separately at each query.
+\item For soundness, first condition on passing the multilinearity and consistency
+      tests.  The answers are then close to evaluations of a single multilinear
+      polynomial.  If no accepting tableau exists, the arithmetized constraint is
+      nonzero, so the random algebraic check catches the lie with constant
+      probability.  Standard repetition reduces the remaining error.
+\end{enumerate}
+The essential role of the second prover is therefore not extra computation: it is
+the enforcement of one globally consistent function behind locally requested
+values.  This yields
+\[
+ \boxed{\MIP=\NEXP.}
+\]
+
+\subsection{Multilinearity test: the original BFL proof}
+
+BFL work over the integer interval $I=\{0,\ldots,N-1\}$ and an oracle
+$A:I^n\to\mathbb Q$, not with the later finite-field three-point test.  A line
+is an axis-parallel copy of $I$.  It is \emph{correct} when the restriction of
+$A$ is linear, and it is $\delta$-wrong when that restriction is not
+$\delta$-close to any linear function.
+
+\paragraph{The sampled-line test (Propositions 5.4--5.6).}
+On a chosen line $\ell$, \textsc{Test}$_0$ samples $m_1+2$ points.  The first
+two determine a linear function $h$; if $\ell$ is $\delta$-wrong, the remaining
+samples all miss a disagreement with probability at most
+$(1-\delta)^{m_1}<e^{-\delta m_1}$.  The full test samples $m_2$ lines in each
+coordinate direction.  If more than an $\varepsilon$ fraction of the lines in
+some direction are wrong, then the probability that no sampled line exposes
+this is at most
+\[
+ e^{-\varepsilon m_2}+e^{-\delta m_1}.
+\]
+Thus, with $m_2=t/\varepsilon$ and $m_1=t/\delta$, acceptance lets the verifier
+infer, with confidence at least $1-2e^{-t}$, that every direction contains
+less than an $\varepsilon$ fraction of wrong lines.
+
+\paragraph{Self-improvement (Lemma 5.10).}
+Assume the wrong-line bound and suppose a multilinear $g$ already
+$\Delta$-approximates $A$, where $\Delta\leq1/2$.  BFL partition $I^n$ into
+bad points $B=\{A\neq g\}$, points on wrong lines, misplaced points on
+approximately linear lines, and exceptional intersections where two distinct
+linear functions agree.  For
+$S=B\setminus(W\cup M)$, the expansion lemma gives
+\[
+ \left(1+\frac1{2n}\right)\mu(S)
+ \leq \mu(\overline S)
+ < \mu(S)+n(\varepsilon+\delta)+\frac nN.
+\]
+Consequently the same $g$ is actually $\varepsilon'$-close to $A$, with
+\[
+ \varepsilon'=3n^2\!\left(\varepsilon+\delta+\frac1N\right).
+\]
+This is why approximation error does not deteriorate at every inductive level.
+
+\paragraph{Pasting hyperplanes (Lemma 5.11).}
+Write a point as $(x,y)\in I\times I^{n-1}$.  Approximate linearity on most
+$x$-lines produces functions $f_1,f_2$ for which
+$xf_1(y)+f_2(y)$ is close to $A(x,y)$.  If a fraction at least
+$\varphi=1/(10n)$ of the hyperplanes $x=\xi$ are already
+$\beta$-approximately multilinear, with $\beta=1/10$, choose two good values
+$\xi_1\neq\xi_2$.  Their multilinear approximants $g_1,g_2$ determine
+\[
+ \widetilde f_1(y)=\frac{g_1(y)-g_2(y)}{\xi_1-\xi_2},
+ \qquad
+ \widetilde f_2(y)=\frac{\xi_2g_1(y)-\xi_1g_2(y)}{\xi_2-\xi_1}.
+\]
+Hence $x\widetilde f_1(y)+\widetilde f_2(y)$ pastes the good hyperplanes into
+one multilinear approximant; Lemma 5.10 then improves its error to
+$\varepsilon'$.
+
+\paragraph{Induction on aligned subspaces (Lemmas 5.12--5.14).}
+BFL organize all aligned subspaces in a depth-$(n-1)$ tree: leaves are lines,
+the root is $I^n$, and children are hyperplanes.  Correct lines are red.  A
+node is red when almost all leaves below it are red and at least a
+$\varphi$ fraction of its children are red.  The tree-colouring lemma pushes
+redness to the root.  Inductively, red children are $\beta$-approximately
+multilinear, and the Pasting Lemma makes their parent so as well.
+
+The result is BFL Theorem 5.13: if each direction has less than an
+$\varepsilon$ fraction of wrong lines, then $A$ is
+$\varepsilon'$-approximately multilinear, where
+\[
+ \varepsilon'=3n^2\!\left(\varepsilon+\delta+\frac1N\right),
+ \quad
+ N\geq40n^2,
+ \quad
+ \delta\leq\frac1{400n^2},
+ \quad
+ \varepsilon\leq\frac1{800n^3}.
+\]
+Theorem 4.6 follows by choosing the parameters so that
+$\varepsilon'\leq n^{-c}$.  This four-step argument---sample lines,
+self-improve, paste, and colour the subspace tree---is the proof given in the
+original paper.
+
+\begin{keybox}
+$\MIP=\NEXP$ implies that every $\mathsf{EXPTIME}$ language has a multiprover
+interactive proof because $\mathsf{EXPTIME}\subseteq\NEXP$.  It does not prove
+$\mathsf{EXPTIME}\not\subseteq\PSPACE$: whether
+$\PSPACE=\mathsf{EXPTIME}$ is open.  Also, BFL is a classical theorem; allowing
+entangled provers defines the very different class $\mathsf{MIP}^*$.
+\end{keybox}
+
+\section{GMW: zero knowledge}
+
+For a verifier $V^*$, its view contains its input and auxiliary input, random
+tape, and received messages.  A protocol is zero knowledge if for every
+probabilistic polynomial-time $V^*$ there is an expected polynomial-time
+simulator $S$ that uses no witness and produces
+\[
+ S(x)\ \begin{cases}
+  =\operatorname{View}_{V^*}^P(x) &\text{perfect ZK},\\
+  \approx_s\operatorname{View}_{V^*}^P(x)&\text{statistical ZK},\\
+  \approx_c\operatorname{View}_{V^*}^P(x)&\text{computational ZK}.
+ \end{cases}
+\]
+The definition quantifies over malicious verifiers, not only the honest one.
+Simulation says that anything feasibly learned from the interaction could have
+been generated from the statement alone.
+
+\subsection{Warm-up: graph isomorphism}
+
+For isomorphic $G_0,G_1$, the prover sends a random relabeling $H$ of one graph.
+The verifier sends a challenge $b\in\{0,1\}$, and the prover opens an isomorphism
+$G_b\cong H$.  A cheating prover able to answer both challenges gives an
+isomorphism $G_0\cong G_1$.  A simulator guesses $b$, constructs $H$ from $G_b$,
+runs $V^*$, and rewinds unless its challenge equals the guess.  Each attempt
+succeeds with probability $1/2$, and conditioned on success the transcript has
+the correct distribution.  Rewinding is the central simulation technique.
+
+\subsection{The GMW protocol for 3-colouring}
+
+Let $c:V\to\{1,2,3\}$ be a proper colouring and let the commitment scheme be
+hiding and binding.
+\begin{enumerate}
+\item The prover chooses a random permutation $\pi$ of the three colours and
+commits separately to every value $\pi(c(v))$.
+\item The verifier chooses a uniformly random edge $uv$.
+\item The prover opens only the two endpoint commitments; the verifier checks
+that the openings are valid and the colours differ.
+\end{enumerate}
+Perfect completeness is immediate.  If the graph is not 3-colourable, every
+fixed committed assignment has a monochromatic edge; binding prevents changing
+it after the challenge.  A round therefore rejects with probability at least
+$1/|E|$, and sequential repetition gives constant or negligible soundness error.
+
+For a malicious verifier $V^*$ with arbitrary auxiliary input, the simulator
+uses the following rewinding experiment.
+\begin{enumerate}
+\item Guess an edge $e=uv$ uniformly from $E$ and choose an ordered pair of
+distinct colours uniformly from the six possibilities.
+\item Commit to those colours at $u,v$ and commit to arbitrary dummy colours at
+all other vertices; run $V^*$ on these commitments with a fixed sampled random
+tape.
+\item If $V^*$ asks for an edge different from $e$, discard the attempt and
+restart.  Otherwise open the two commitments and output the complete view.
+\end{enumerate}
+For the honest verifier, the guessed edge matches with probability exactly
+$1/|E|$.  For a malicious $V^*$, its challenge may depend on the commitment
+string, so exact uniformity must not be assumed.  Instead, computational hiding
+makes the challenge distribution computationally insensitive to which edge was
+prepared.  The success probability is therefore inverse-polynomial, up to a
+negligible term, and rewinding has expected polynomial running time (with the
+standard cutoff if one wants a strict polynomial-time simulator).  Conditioned
+on success, the opened ordered pair is uniform over the six distinct colour
+pairs, exactly as for a uniformly permuted proper colouring.  The unopened
+commitments need not encode a global colouring; a hybrid argument using
+computational hiding replaces their dummy messages one at a time by the real
+committed colours.  Thus the simulated and real views are computationally
+indistinguishable.  Binding, separately, prevents a cheating prover from
+adapting endpoint colours after seeing the edge.
+Via reductions to 3-colouring, GMW obtains zero-knowledge proofs for all of
+$\NP$ from the stated commitment/encryption assumption.
+
+\textbf{Do not conflate properties.}  Binding supports soundness; hiding supports
+zero knowledge.  Zero knowledge does not mean that the verifier learns nothing
+at all---it learns that the statement is true.  Sequential composition is the
+safe default under standard hypotheses; arbitrary parallel repetition need not
+preserve zero knowledge.
+
+\section*{Oral-exam checklist}
+\begin{enumerate}
+\item State completeness and soundness with the correct quantifier order.
+\item Prove sum-check soundness by identifying the \emph{first} false polynomial.
+\item For $\IP\subseteq\PSPACE$, discuss counters, recursion depth, and rational bit length.
+\item Prove TQBF hardness with the universal selector that prevents formula duplication.
+\item In $\PSPACE\subseteq\IP$, identify degree explosion and explain exactly how it is controlled.
+\item Contrast Shamir's simple QBF with Shen's explicit $R_i$ operators.
+\item Explain why noncommunication, not merely two answers, empowers $\MIP$.
+\item Separate proof/argument, soundness/ZK, classical $\MIP$/$\mathsf{MIP}^*$, and
+unrelativized/relativized claims.
+\end{enumerate}
+
+\section*{Primary references}
+\begin{enumerate}
+\item C.~Lund, L.~Fortnow, H.~Karloff, and N.~Nisan,
+Algebraic Methods for Interactive Proof Systems, \emph{J.~ACM} 39 (1992), 859--868.
+\item A.~Shamir, IP = PSPACE, \emph{J.~ACM} 39 (1992), 869--877.
+\item A.~Shen, IP = PSPACE: Simplified Proof, \emph{J.~ACM} 39 (1992), 878--880.
+\item L.~Babai, L.~Fortnow, and C.~Lund,
+Non-Deterministic Exponential Time Has Two-Prover Interactive Protocols,
+\emph{Computational Complexity} 1 (1991), 3--40.
+\item O.~Goldreich, S.~Micali, and A.~Wigderson,
+Proofs that Yield Nothing but Their Validity or All Languages in NP Have
+Zero-Knowledge Proof Systems, \emph{J.~ACM} 38 (1991), 691--729.
+\end{enumerate}
+
+\end{document}
