@@ -2,11 +2,23 @@
 
 **GitHub Pages URL:** https://hadi1373z.github.io/doctoral-exam/
 
+## Continuous lecture course
+
+The main [lecture course](https://hadi1373z.github.io/doctoral-exam/#learn) now organizes all **50 assigned topics into 17 ordered chapter sequences**. Each topic is a continuous, freely navigable lecture: motivation and prerequisites, precise definitions and theorem, a complete worked example, board reasoning, visual inferences with explanations, changed assumptions, supporting video and practice, and a retrieval task leading into the next lecture. The 202 proof pictures and 100 examiner extensions are integrated into this reading path. Checkpoints remain optional while reading; the separate checkpoint view retains its original staged checks.
+
+Fifteen lectures have additional board derivations with semantic MathML equations: all ten LFKN/Shamir/BFL/GMW topics plus knapsack, Four Functions, Azuma, random coding, and Shearer. Deep input theorems and omitted source lemmas are identified explicitly. These lectures develop the main mechanisms; they do not replace the complete assigned books and papers.
+
+The margin, mobile section selector, next-lecture links, chapter prerequisites, and subject search support a connected study session. Reading position, personal lecture notes, and manual section markers save in the existing progress backup. Reading all eight sections never awards a guided pass or cold-exam credit. Original answers, proof drafts, and examination evidence are retained. Textbook chapters link directly to the matching lectures, and all four original LaTeX drafts remain byte-identical.
+
+Video controls are visible in every lecture’s Explore & practice section. A verified exact-topic mapping is used when available; otherwise related subject background is clearly labeled. External players retain their original source links and do not autoplay.
+
+Teaching sequence and additional derivations are portable in [data/lectures.json](data/lectures.json). Run `node src/verify-lectures.cjs .` alongside the existing checks to verify coverage, resume/import, mathematical rendering, integrated problems, and separation from examination evidence.
+
 **New textbook reader:** https://hadi1373z.github.io/doctoral-exam/textbook/
 
 ## Textbook first — four complete exam drafts
 
-The [mathematical textbook](textbook/index.html) is now the first reading option in the homepage navigation and hero. It provides section-by-section reading with native MathML, chapter search, outline navigation, proof-oriented introductions and worked examples. The reader links back to the existing interactive lessons and examinations without modifying their progress records.
+The [mathematical textbook](textbook/index.html) remains a primary reading option in the homepage navigation and course hero. It provides section-by-section reading with native MathML, chapter search, outline navigation, proof-oriented introductions and worked examples. Seventeen chapter companions connect its full text to the matching continuous lectures.
 
 The **four original working drafts** are included unchanged as editable LaTeX sources: [Research statement](textbook/summaries/01_research_statement_hadi_zamani.tex), [Approximation algorithms](textbook/summaries/02_approximation_algorithms_summary_hadi_zamani.tex), [Interactive proof systems](textbook/summaries/03_interactive_proofs_summary_hadi_zamani.tex) and [Probabilistic method](textbook/summaries/04_probabilistic_method_summary_hadi_zamani.tex). The browser reader also presents the full source text as accessible mathematical HTML. See the [textbook README](textbook/README.md) for details.
 
@@ -24,7 +36,7 @@ The design is fully offline and uses system fonts. All existing lessons, source 
 
 ## Guided learning course
 
-The default experience is now [Learn step by step](https://hadi1373z.github.io/doctoral-exam/#learn/probability): **50 authored lessons, 300 reading stages and 300 formative checkpoints**, covering every assigned study unit. Each lesson teaches intuition, notation, a worked example, a proof mechanism, two changed cases, and a retrieval recap. The prose is original teaching material based on the assigned sources; detailed feedback explains each choice. Deep source theorems used as inputs are identified explicitly.
+The separate checkpoint view retains **50 authored lessons, 300 reading stages and 300 formative checkpoints**, covering every assigned study unit. Open it from the Checkpoint view button in a continuous lecture. Each lesson teaches intuition, notation, a worked example, a proof mechanism, two changed cases, and a retrieval recap. The prose is original teaching material based on the assigned sources; detailed feedback explains each choice. Deep source theorems used as inputs are identified explicitly.
 
 Worked calculations and proof implications reveal one step at a time. Pure-numeric example checks use free entry with fractions, decimals or scientific notation; other checks use specific choices and explanatory feedback. An incorrect response keeps the next stage locked. The two changed cases must both pass before the recap. A lesson is complete after its six checks and the recap declaration; a reflection is optional and is never judged correct based on length.
 

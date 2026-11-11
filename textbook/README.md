@@ -20,5 +20,6 @@ These four original files are included **byte-for-byte**, including their origin
 - Reading markers are local and **do not** count as oral-exam mastery evidence.
 - Source text is navigable by section; long-form theorem inventories and proofs are maintained.
 - Interactive lessons, question bank, visual proofs and expertise map remain in the root application.
+- Seventeen chapter companions connect the full text to the [continuous lecture course](../#learn), with worked examples, visual proof inferences and examiner extensions. The four original source drafts remain unchanged.
 
 For PDF handouts, use **Print** in the reader or compile the original `.tex` files with LaTeX. The main site is a static GitHub Pages deployment.
