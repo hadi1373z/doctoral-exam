@@ -27,5 +27,7 @@ const boards=run('LECTURE_BOARDS'),math=run('LECTURE_BOARD_MATH');assert.equal(O
 function permanent(a){if(!a.length)return 1;return a[0].reduce((sum,v,j)=>sum+v*permanent(a.slice(1).map(r=>r.filter((_,k)=>k!==j))),0);}
 for(let n=1;n<=5;n++){const a=Array.from({length:n},(_,i)=>Array.from({length:n},(_,j)=>(i*3+j*5+2)%7-2));let sum=0;for(let mask=0;mask<2**n;mask++){let product=1,count=0;for(let j=0;j<n;j++)if(mask&(1<<j))count++;for(let i=0;i<n;i++)product*=a[i].reduce((s,v,j)=>s+((mask&(1<<j))?v:0),0);sum+=(-1)**count*product;}assert.ok((-1)**n*sum===permanent(a));}
 const textbook=fs.readFileSync(path.join(root,'textbook','index.html'),'utf8');assert.ok(textbook.includes('lecture-companion'),'Textbook must connect to lectures');
-for(const filename of ['01_research_statement_hadi_zamani.tex','02_approximation_algorithms_summary_hadi_zamani.tex','03_interactive_proofs_summary_hadi_zamani.tex','04_probabilistic_method_summary_hadi_zamani.tex'])assert.ok(fs.statSync(path.join(root,'textbook','summaries',filename)).size>10000);
+for(const filename of ['02_approximation_algorithms_summary_hadi_zamani.tex','03_interactive_proofs_summary_hadi_zamani.tex','04_probabilistic_method_summary_hadi_zamani.tex'])assert.ok(fs.statSync(path.join(root,'textbook','summaries',filename)).size>10000);
+assert.ok(!fs.existsSync(path.join(root,'textbook','summaries','01_research_statement_hadi_zamani.tex')));
+assert.ok(!/research statement|data-book="research"|href="#research/i.test(textbook));
 console.log('Lecture course verified: 50 assigned topics, 17 ordered chapters, 400 open reading sections, 100 integrated examiner extensions, 10 expanded paper derivations; resume/import and examination evidence preserved.');

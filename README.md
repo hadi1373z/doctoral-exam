@@ -8,7 +8,7 @@ The main [lecture course](https://hadi1373z.github.io/doctoral-exam/#learn) now 
 
 Fifteen lectures have additional board derivations with semantic MathML equations: all ten LFKN/Shamir/BFL/GMW topics plus knapsack, Four Functions, Azuma, random coding, and Shearer. Deep input theorems and omitted source lemmas are identified explicitly. These lectures develop the main mechanisms; they do not replace the complete assigned books and papers.
 
-The margin, mobile section selector, next-lecture links, chapter prerequisites, and subject search support a connected study session. Reading position, personal lecture notes, and manual section markers save in the existing progress backup. Reading all eight sections never awards a guided pass or cold-exam credit. Original answers, proof drafts, and examination evidence are retained. Textbook chapters link directly to the matching lectures, and all four original LaTeX drafts remain byte-identical.
+The margin, mobile section selector, next-lecture links, chapter prerequisites, and subject search support a connected study session. Reading position, personal lecture notes, and manual section markers save in the existing progress backup. Reading all eight sections never awards a guided pass or cold-exam credit. Original answers, proof drafts, and examination evidence are retained. Textbook chapters link directly to the matching lectures, and all three original LaTeX drafts remain byte-identical.
 
 Video controls are visible in every lecture’s Explore & practice section. A verified exact-topic mapping is used when available; otherwise related subject background is clearly labeled. External players retain their original source links and do not autoplay.
 
@@ -16,11 +16,11 @@ Teaching sequence and additional derivations are portable in [data/lectures.json
 
 **New textbook reader:** https://hadi1373z.github.io/doctoral-exam/textbook/
 
-## Textbook first — four complete exam drafts
+## Textbook first — three complete exam drafts
 
 The [mathematical textbook](textbook/index.html) remains a primary reading option in the homepage navigation and course hero. It provides section-by-section reading with native MathML, chapter search, outline navigation, proof-oriented introductions and worked examples. Seventeen chapter companions connect its full text to the matching continuous lectures.
 
-The **four original working drafts** are included unchanged as editable LaTeX sources: [Research statement](textbook/summaries/01_research_statement_hadi_zamani.tex), [Approximation algorithms](textbook/summaries/02_approximation_algorithms_summary_hadi_zamani.tex), [Interactive proof systems](textbook/summaries/03_interactive_proofs_summary_hadi_zamani.tex) and [Probabilistic method](textbook/summaries/04_probabilistic_method_summary_hadi_zamani.tex). The browser reader also presents the full source text as accessible mathematical HTML. See the [textbook README](textbook/README.md) for details.
+The **three original working drafts** are included unchanged as editable LaTeX sources: [Approximation algorithms](textbook/summaries/02_approximation_algorithms_summary_hadi_zamani.tex), [Interactive proof systems](textbook/summaries/03_interactive_proofs_summary_hadi_zamani.tex) and [Probabilistic method](textbook/summaries/04_probabilistic_method_summary_hadi_zamani.tex). The browser reader also presents the full source text as accessible mathematical HTML. See the [textbook README](textbook/README.md) for details.
 
 
 
