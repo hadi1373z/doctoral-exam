@@ -6,7 +6,7 @@ vm.createContext(sandbox);
 for(const m of html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi))vm.runInContext(m[1],sandbox);
 vm.runInContext(`globalThis.api={LESSONS,CORE_UNITS,CORE_SOURCES,QUESTIONS,PROOFS,progress,LAB_ITEMS,SAT_CLAUSES,PATH_EDGES,knapsackLab,conditionalSAT,satValue,correlationLab,codeLab,tenureWeight,tenureNext,projectionLab,graphEdges,triangleCount,shortestGraph,hardQualifies,subjectStats,latestHard,VS,VISUAL_LABS,visualModel,normalizeAdvanced,setProgress:p=>{progress=normalizeAdvanced({...blankProgress(),...p})}}`,sandbox);
 const a=sandbox.api;
-assert.equal(a.CORE_UNITS.length,50);assert.equal(a.LESSONS.length,83);assert.equal(a.QUESTIONS.length,68);assert.equal(a.PROOFS.length,13);
+assert.equal(a.CORE_UNITS.length,50);assert.equal(a.LESSONS.length,83);assert.equal(a.QUESTIONS.length,218);assert.equal(a.QUESTIONS.filter(q=>/^q\d+$/.test(q.id)).length,68);assert.equal(a.PROOFS.length,13);
 assert.equal(new Set(a.LESSONS.map(x=>x.id)).size,83);
 assert.equal(a.progress.completed[0],'scheduling');assert.equal(a.progress.notes.scheduling,'Keep these notes');assert.equal(a.progress.quiz[0].id,'old-record');assert.equal(a.progress.challenges.length,0);
 for(const u of a.CORE_UNITS){assert.ok(a.CORE_SOURCES[u.source]);assert.equal(u.proof.length,4,u.id);assert.equal(u.followups.length,2,u.id);assert.ok(u.answer.length>=3);assert.ok(u.task.length>120);assert.ok(u.results.length>0);}

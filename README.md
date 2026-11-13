@@ -2,6 +2,16 @@
 
 **GitHub Pages URL:** https://hadi1373z.github.io/doctoral-exam/
 
+## Foundation quizzes with explanations and reading references
+
+[Foundation quizzes](https://hadi1373z.github.io/doctoral-exam/#foundation) now contain **218 explained questions**: three new questions for every one of the 50 assigned topics, plus all 68 original background checks. The original question IDs and answer histories are retained. Small calculations, changed hypotheses, and proof decisions complement the concept checks; selected legacy prompts were clarified where more than one listed bound was mathematically valid.
+
+After submitting an answer in guided practice, read a reasoning paragraph, three worked steps, a rationale for each of the four choices, a transferable takeaway, and a follow-up to attempt without the choices. Display equations compile to offline MathML. Each question links to a relevant lecture section and textbook chapter or, for supplementary material, its background reference lesson. Primary source and section references accompany assigned-topic links. Related material is labeled explicitly.
+
+Filter by subject, topic, assigned/background scope, question type, latest mistakes, or questions marked for review. Sessions spread questions across topics before repeating a topic. Quiz position, answers, optional explanation notes and review markers save in the existing progress backup; leaving for a lecture preserves the quiz. Timed mode withholds explanations until the session ends and keeps its clock running while away. Results supply a study route for missed topics and a retry option. None of this practice supplies cold-exam evidence.
+
+Every assigned lecture's Explore & practice section links to its own Foundation quiz. The complete study bank is portable in [data/foundation-questions.json](data/foundation-questions.json). Verify with `node src/verify-foundations.cjs .`.
+
 ## Continuous lecture course
 
 The main [lecture course](https://hadi1373z.github.io/doctoral-exam/#learn) now organizes all **50 assigned topics into 17 ordered chapter sequences**. Each topic is a continuous, freely navigable lecture: motivation and prerequisites, precise definitions and theorem, a complete worked example, board reasoning, visual inferences with explanations, changed assumptions, supporting video and practice, and a retrieval task leading into the next lecture. The 202 proof pictures and 100 examiner extensions are integrated into this reading path. Checkpoints remain optional while reading; the separate checkpoint view retains its original staged checks.
@@ -94,7 +104,7 @@ The study library marks confirmed units **Assigned** in green and optional backg
 - **50 training challenges** with the earlier written-proof questions, two follow-ups, source-linked proof outlines and a 20-point training self-review.
 - **83 lessons:** 50 assigned-source units plus the original 33 foundation/background lessons.
 - **17 mathematical playgrounds:** 13 new SVG experiments plus the original four numerical labs.
-- The original **68 concept questions**, **13 proof-order exercises**, and timed oral simulator.
+- **218 explained Foundation questions**, including all original 68 checks, plus **13 proof-order exercises** and the timed oral simulator.
 - Three-subject committee draws, local drafts, inspection of locked saved work, progress export/import, and an HTML examiner packet containing exact questions, responses, calculations, timings, criterion reviews and repair reflections.
 
 The new visual experiments cover knapsack scaling, conditional expectation, hyperplane rounding, shortest-path dual potentials, tree stretch, correlation inequalities, Doob martingales, Hamming balls, the Tenure Game, entropy, Shearer projections, graph-property testing, and algebraic identity checks.
