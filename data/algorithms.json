@@ -1,0 +1,709 @@
+{
+  "schema": "approximation-algorithm-catalog-v1",
+  "source": {
+    "title": "Williamson–Shmoys · The Design of Approximation Algorithms",
+    "url": "https://www.designofapproxalgs.com/book.pdf"
+  },
+  "problems": [
+    {
+      "id": "knapsack",
+      "title": "0–1 Knapsack",
+      "family": "Packing",
+      "scope": "assigned",
+      "sections": "§3.1",
+      "units": [
+        "core-knapsack"
+      ],
+      "input": "Items with nonnegative profits pᵢ, positive weights wᵢ, and a capacity W.",
+      "goal": "Choose each item at most once, maximizing profit while respecting the capacity.",
+      "objective": "\\max_{S\\subseteq[n]}\\sum_{i\\in S}p_i\\quad\\text{subject to}\\quad\\sum_{i\\in S}w_i\\le W.",
+      "algorithms": [
+        {
+          "name": "Profit scaling and profit-indexed dynamic programming",
+          "technique": "Dynamic programming",
+          "label": "FPTAS",
+          "guarantee": "For any 0<ε<1, return a feasible set worth at least (1−ε)OPT. The running time is polynomial jointly in input length and 1/ε.",
+          "tex": "p(S)\\ge(1-\\varepsilon)\\operatorname{OPT}.",
+          "steps": [
+            "Remove items heavier than W. If no feasible positive-profit item remains, return the empty set. Otherwise let P be the largest remaining profit.",
+            "Set K=εP/n and round each profit down to floor(pᵢ/K). Keep the original weights.",
+            "For each total scaled profit, compute the minimum attainable original weight. Return a feasible state with maximum scaled profit.",
+            "Compare the rounded value of an optimum with the returned value. At most nK≤εOPT is lost; the total scaled-profit range is at most n²/ε."
+          ],
+          "proof": "Feasibility stays exact because weights are unchanged. The approximation loss is charged to a computable lower bound P≤OPT.",
+          "pitfall": "A DP polynomial in the numerical capacity W is only pseudo-polynomial when W is binary encoded."
+        }
+      ]
+    },
+    {
+      "id": "makespan",
+      "title": "Identical-machine makespan scheduling",
+      "family": "Scheduling",
+      "scope": "assigned",
+      "sections": "§3.2",
+      "units": [
+        "core-scheduling-scheme"
+      ],
+      "input": "Processing times pⱼ and m identical parallel machines; every job must be assigned to one machine.",
+      "goal": "Minimize the largest machine load, also called the makespan.",
+      "objective": "\\min_{M_1\\sqcup\\cdots\\sqcup M_m=[n]}\\ \\max_{i\\in[m]}\\sum_{j\\in M_i}p_j.",
+      "algorithms": [
+        {
+          "name": "Large-job configurations and size rounding",
+          "technique": "Dynamic programming",
+          "label": "PTAS",
+          "guarantee": "For each fixed ε>0, obtain makespan at most (1+ε)OPT in polynomial time. The dependence on 1/ε need not be polynomial.",
+          "tex": "C_{\\max}\\le(1+\\varepsilon)\\operatorname{OPT}.",
+          "steps": [
+            "For a candidate makespan T and accuracy integer k, call a job long when pⱼ>T/k.",
+            "Round long jobs downward to multiples of T/k². Enumerate machine configurations of rounded types; each T-load configuration contains at most k long jobs.",
+            "Use dynamic programming on type counts to find a rounded placement. Restore original long-job sizes, adding at most T/k per machine.",
+            "Insert short jobs on a least-loaded machine. If a short job finishes last, its start is at most the original total processing volume divided by m, hence at most T when T is a valid optimum guess. Search candidate bounds and choose the internal accuracy to obtain the stated PTAS."
+          ],
+          "proof": "Long-job restoration and the final short-job bound are two separate cases. Each leads to a T+T/k load bound before the accuracy bookkeeping.",
+          "pitfall": "Do not charge the long-job rounding error a second time in the short-job case."
+        },
+        {
+          "name": "List scheduling and LPT",
+          "technique": "Greedy",
+          "label": "Additional algorithms",
+          "additional": true,
+          "section": "§2.3 · additional background",
+          "guarantee": "List scheduling gives factor 2−1/m. Sorting jobs by decreasing processing time first (LPT) improves this to 4/3−1/(3m).",
+          "tex": "C_{\\rm LS}\\le(2-1/m)\\operatorname{OPT},\\qquad C_{\\rm LPT}\\le(4/3-1/(3m))\\operatorname{OPT}.",
+          "steps": [
+            "List scheduling processes the jobs in a chosen order, always assigning the next job to a least-loaded machine.",
+            "LPT uses the same placement rule after sorting jobs by nonincreasing size.",
+            "Analyze the last finishing job using the average-workload lower bound and a lower bound from large jobs."
+          ],
+          "proof": "The approximation factor depends on the ordering and the lower bound used for the last job.",
+          "pitfall": "These background algorithms solve the same makespan problem; they are not the approximation scheme of §3.2."
+        }
+      ]
+    },
+    {
+      "id": "bin-packing",
+      "title": "Bin packing",
+      "family": "Packing",
+      "scope": "assigned",
+      "sections": "§3.3",
+      "units": [
+        "core-bin-scheme"
+      ],
+      "input": "Item sizes sᵢ in (0,1], with an unlimited supply of unit-capacity bins.",
+      "goal": "Pack every item and minimize the number of bins.",
+      "objective": "\\min k\\quad\\text{such that}\\quad[n]=B_1\\sqcup\\cdots\\sqcup B_k,\\qquad\\sum_{i\\in B_j}s_i\\le1.",
+      "algorithms": [
+        {
+          "name": "Linear grouping of large items, then small-item insertion",
+          "technique": "Dynamic programming",
+          "label": "Asymptotic PTAS",
+          "guarantee": "After choosing the internal accuracy appropriately, the output uses at most (1+ε)OPT+1 bins. The additive term is part of the guarantee.",
+          "tex": "\\operatorname{ALG}\\le(1+\\varepsilon)\\operatorname{OPT}+1.",
+          "steps": [
+            "Separate large and small items and sort the large items by size.",
+            "Partition large items into groups, treating the largest group separately and rounding sizes within later groups upward.",
+            "Solve the resulting constant-type large-item packing problem by configuration enumeration and dynamic programming.",
+            "Insert small items into available space. When another bin is needed, previously used bins are sufficiently full to bound their number by total item volume."
+          ],
+          "proof": "A rounded group can be compared with the larger items in the preceding group. The largest group and the last small-item bin remain visible in the cost accounting.",
+          "pitfall": "An asymptotic guarantee does not imply an absolute (1+ε)-approximation on instances with very few bins."
+        }
+      ]
+    },
+    {
+      "id": "max-sat",
+      "title": "Weighted MAX-SAT",
+      "family": "Satisfiability",
+      "scope": "assigned",
+      "sections": "§§5.1–5.6",
+      "units": [
+        "core-sat-random",
+        "core-sat-lp"
+      ],
+      "input": "Boolean clauses C with nonnegative weights w꜀. Within a clause, normalize repeated or complementary literals as needed.",
+      "goal": "Find a truth assignment maximizing the weight of satisfied clauses.",
+      "objective": "\\max_{x\\in\\{0,1\\}^n}\\sum_C w_C\\,\\mathbf1[C(x)\\text{ is true}].",
+      "algorithms": [
+        {
+          "name": "Random assignments and conditional expectation",
+          "technique": "Randomized rounding",
+          "label": "1/2 baseline; clause-sensitive bounds",
+          "guarantee": "A fair assignment satisfies a non-tautological k-literal clause on distinct variables with probability 1−2⁻ᵏ, giving a 1/2 approximation for general nonempty clauses. Conditional expectation can make the guarantee deterministic.",
+          "tex": "\\Pr[C\\text{ satisfied}]=1-2^{-k},\\qquad\\mathbb E[\\operatorname{value}]\\ge\\tfrac12\\operatorname{OPT}.",
+          "steps": [
+            "Give variables independent fair truth values and calculate each clause’s failure probability.",
+            "Use linearity of expectation to sum weighted clause contributions; clauses need not be independent.",
+            "For derandomization, fix one variable at a time to a value whose conditional expected total is at least the current expectation."
+          ],
+          "proof": "One of the two conditional expectations is at least their weighted average. The clause expectations are computable after each partial assignment.",
+          "pitfall": "For biased assignments, positive and negative literals have different failure factors."
+        },
+        {
+          "name": "LP rounding, best-of-two, and nonlinear marginals",
+          "technique": "LP rounding",
+          "label": "3/4 approximation",
+          "guarantee": "LP-marginal rounding alone gives 1−1/e. Combining its clause-wise guarantee with the fair assignment yields 3/4; §5.6 provides another 3/4 analysis via transformed marginals.",
+          "tex": "\\mathbb E[\\operatorname{value}]\\ge\\tfrac34\\operatorname{OPT}.",
+          "steps": [
+            "Solve the MAX-SAT LP with fractional truth variables and fractional satisfied-clause values.",
+            "Independently round truth values using the LP marginals. Bound each clause’s failure product by AM–GM.",
+            "Also compute a fair-assignment solution and take the better of the two. Compare their average clause contribution with the LP clause value.",
+            "For nonlinear rounding, verify the required bounds on the marginal transformation before transferring the clause analysis."
+          ],
+          "proof": "The LP is an upper bound for a maximization optimum. The two rounding methods complement each other across clause lengths.",
+          "pitfall": "The factor 3/4 is a satisfied-value fraction; its direction is different from a minimization approximation factor."
+        }
+      ]
+    },
+    {
+      "id": "max-cut",
+      "title": "Weighted MAX-CUT",
+      "family": "Cuts and coloring",
+      "scope": "assigned",
+      "sections": "§5.1; §§6.1–6.2",
+      "units": [
+        "core-sdp-cut"
+      ],
+      "input": "An undirected graph with nonnegative edge weights wᵤᵥ.",
+      "goal": "Partition vertices into two sides to maximize crossing-edge weight.",
+      "objective": "\\max_{S\\subseteq V}\\sum_{uv\\in\\delta(S)}w_{uv}.",
+      "algorithms": [
+        {
+          "name": "Independent random partition",
+          "technique": "Randomized rounding",
+          "label": "1/2 approximation",
+          "guarantee": "Each edge crosses with probability 1/2, so expected cut weight is half of total edge weight and at least half of OPT.",
+          "tex": "\\mathbb E[w(\\delta(S))]=\\tfrac12\\sum_e w_e\\ge\\tfrac12\\operatorname{OPT}.",
+          "steps": [
+            "Put each vertex independently on either side with probability 1/2.",
+            "For each edge, calculate the probability that its endpoints receive opposite sides.",
+            "Sum the weighted contributions; conditional expectation can derandomize this baseline."
+          ],
+          "proof": "Every cut uses at most the total nonnegative edge weight.",
+          "pitfall": "A graph may have a maximum cut containing far less than all its edges."
+        },
+        {
+          "name": "Goemans–Williamson SDP and hyperplane rounding",
+          "technique": "SDP rounding",
+          "label": "Approximately 0.87856",
+          "guarantee": "With the SDP solution precision accounted for, obtain an expected approximation ratio approximately 0.87856.",
+          "tex": "\\alpha_{\\rm GW}=\\min_{0<\\theta\\le\\pi}\\frac{2\\theta}{\\pi(1-\\cos\\theta)}\\approx0.87856.",
+          "steps": [
+            "Relax binary side labels to unit vectors, represented by a positive semidefinite Gram matrix.",
+            "Choose a random hyperplane through the origin and use the sign of each vector’s projection as its side.",
+            "An edge of vector angle θ is cut with probability θ/π. Compare this with its SDP contribution (1−cos θ)/2 and sum over edges."
+          ],
+          "proof": "Rotational symmetry gives an exact two-dimensional separation probability; the worst angle determines the ratio.",
+          "pitfall": "The edge-wise comparison uses nonnegative weights."
+        }
+      ]
+    },
+    {
+      "id": "prize-collecting-steiner",
+      "title": "Rooted prize-collecting Steiner tree",
+      "family": "Network design",
+      "scope": "assigned",
+      "sections": "§5.7",
+      "units": [
+        "core-pcst"
+      ],
+      "input": "A graph with nonnegative edge costs, a root r, and a nonnegative penalty πᵥ for each vertex.",
+      "goal": "Choose a tree containing r, paying for its edges and for every excluded vertex.",
+      "objective": "\\min_{T\\ni r}\\left(\\sum_{e\\in E(T)}c_e+\\sum_{v\\notin V(T)}\\pi_v\\right).",
+      "algorithms": [
+        {
+          "name": "Random threshold rounding",
+          "technique": "LP rounding",
+          "label": "Expected factor approximately 2.542",
+          "guarantee": "The threshold distribution balances the expected connection cost and the expected omitted-vertex penalty, giving factor 1/(1−e⁻¹ᐟ²).",
+          "tex": "\\mathbb E[\\operatorname{cost}]\\le\\frac{1}{1-e^{-1/2}}\\operatorname{OPT}.",
+          "steps": [
+            "Solve the cut-based LP with fractional edge variables and fractional vertex-inclusion variables.",
+            "Sample a threshold α uniformly from [e⁻¹ᐟ²,1] and retain vertices whose inclusion value is at least α.",
+            "Connect retained vertices using the tree-rounding guarantee that bounds connection cost by 2/α times the fractional edge cost.",
+            "Integrate that connection bound and the exclusion probabilities over α. The lower endpoint makes the two coefficients equal."
+          ],
+          "proof": "The integral of 1/α controls connection cost, while a vertex’s exclusion probability controls its penalty.",
+          "pitfall": "Substituting the mean threshold into 1/α does not compute its expectation."
+        }
+      ]
+    },
+    {
+      "id": "facility-location",
+      "title": "Metric uncapacitated facility location",
+      "family": "Network design",
+      "scope": "assigned",
+      "sections": "§5.8",
+      "units": [
+        "core-facility"
+      ],
+      "input": "Potential facilities with opening costs, clients, and connection costs induced by a metric.",
+      "goal": "Open facilities and assign every client to one of them, minimizing opening plus assignment cost. Facilities have no capacity limit.",
+      "objective": "\\min_{F'\\subseteq F,\\ a:D\\to F'}\\left(\\sum_{i\\in F'}f_i+\\sum_{j\\in D}c_{a(j),j}\\right).",
+      "algorithms": [
+        {
+          "name": "Cluster clients before randomized facility selection",
+          "technique": "LP rounding",
+          "label": "Expected factor 3",
+          "guarantee": "The assigned clustering-and-rounding algorithm is a randomized 3-approximation under the metric assumption.",
+          "tex": "\\mathbb E[\\operatorname{cost}]\\le3\\operatorname{OPT}.",
+          "steps": [
+            "Solve the facility-location LP, obtaining fractional openings and client assignments.",
+            "Choose client representatives and disjoint representative neighborhoods using fractional connection information.",
+            "Make coordinated opening choices within the representative neighborhoods so required clusters receive an open facility.",
+            "Assign remaining clients through their representative’s open facility, bounding the detour by metric inequalities."
+          ],
+          "proof": "Controlled opening marginals bound facility cost; triangle inequalities bound rerouting cost.",
+          "pitfall": "Independent facility openings alone can leave an entire client support closed."
+        }
+      ]
+    },
+    {
+      "id": "release-date-scheduling",
+      "title": "Single-machine weighted completion time with release dates",
+      "family": "Scheduling",
+      "scope": "assigned",
+      "sections": "§5.9",
+      "units": [
+        "core-release"
+      ],
+      "input": "Jobs with processing times pⱼ>0, release dates rⱼ≥0, and weights wⱼ≥0.",
+      "goal": "Schedule jobs nonpreemptively on one machine, start each no earlier than its release date, and minimize weighted completion time.",
+      "objective": "\\min\\sum_j w_jC_j\\quad\\text{with}\\quad S_j\\ge r_j\\quad\\text{and nonoverlapping job intervals}.",
+      "algorithms": [
+        {
+          "name": "Randomized α-point ordering",
+          "technique": "LP rounding",
+          "label": "Expected factor 2",
+          "guarantee": "The resulting feasible nonpreemptive schedule has expected weighted completion cost at most twice OPT.",
+          "tex": "\\mathbb E\\!\\left[\\sum_jw_jC_j\\right]\\le2\\operatorname{OPT}.",
+          "steps": [
+            "Compute a fractional/preemptive scheduling relaxation that lower-bounds the nonpreemptive objective.",
+            "Choose an independent uniform αⱼ in [0,1] for each job; use the time by which αⱼ of its fractional processing is complete as its ordering point.",
+            "Order jobs by these points and process them nonpreemptively, waiting when needed to respect release dates.",
+            "Condition on one job’s point, bound earlier workload and release-date delay using fractional prefix capacities, then average and sum with weights."
+          ],
+          "proof": "The fractional schedule’s capacity constraints bound expected work placed before a job.",
+          "pitfall": "A raw time-indexed formulation with a binary-encoded huge horizon is not automatically a polynomial implementation."
+        }
+      ]
+    },
+    {
+      "id": "integer-routing",
+      "title": "Minimum-congestion integer multicommodity routing",
+      "family": "Routing",
+      "scope": "assigned",
+      "sections": "§§5.10–5.11",
+      "units": [
+        "core-flow"
+      ],
+      "input": "An undirected graph and source–sink pairs (sᵢ,tᵢ), each requiring one path.",
+      "goal": "Choose a simple path for every pair, minimizing the maximum number of selected paths sharing an edge.",
+      "objective": "\\min_{P_i:s_i\\leadsto t_i}\\ \\max_{e\\in E}\\sum_i\\mathbf1[e\\in P_i].",
+      "algorithms": [
+        {
+          "name": "Independent path rounding and Chernoff analysis",
+          "technique": "Randomized rounding",
+          "label": "High-probability congestion bounds",
+          "guarantee": "For LP value W*≥c ln n, congestion is at most W*+√(cW* ln n) with high probability for a suitable constant c. The general bound is O(log n)·max{W*,1}; Exercise 5.13 sharpens the logarithmic factor.",
+          "tex": "W_{\\rm out}\\le W^*+\\sqrt{cW^*\\ln n}\\quad\\text{when }W^*\\ge c\\ln n.",
+          "steps": [
+            "Relax each pair’s path choice to a probability distribution, minimizing fractional maximum edge load W*.",
+            "Independently choose exactly one path for each pair from that pair’s distribution.",
+            "For a fixed edge, express load as a sum of independent indicators over pairs and apply a Chernoff bound.",
+            "Union-bound the edge failures. For a nontrivial instance, max{W*,1} is also a lower bound on the integral optimum."
+          ],
+          "proof": "Independence is across different pairs for one fixed edge. Loads on different edges need not be independent.",
+          "pitfall": "The additive square-root bound needs the stated large-W* condition; it is not unconditional."
+        }
+      ]
+    },
+    {
+      "id": "dense-three-coloring",
+      "title": "Proper 3-coloring of dense 3-colorable graphs",
+      "family": "Cuts and coloring",
+      "scope": "assigned",
+      "sections": "§5.12",
+      "units": [
+        "core-dense-color"
+      ],
+      "input": "A graph promised to be 3-colorable, with every vertex having at least δn neighbors for a fixed δ>0.",
+      "goal": "Find a proper coloring using at most three colors.",
+      "objective": "\\text{Find }c:V\\to\\{1,2,3\\}\\quad\\text{such that}\\quad c(u)\\ne c(v)\\ \\text{for every }uv\\in E.",
+      "algorithms": [
+        {
+          "name": "Sample, enumerate, and solve a 2-SAT extension",
+          "technique": "Random sampling",
+          "label": "Exact 3-coloring with high probability",
+          "guarantee": "For fixed δ, the randomized algorithm runs in polynomial time and finds a proper 3-coloring with high probability.",
+          "steps": [
+            "Sample O(log n/δ) vertices so that, with high probability, every vertex outside the sample has a sampled neighbor.",
+            "Enumerate the sample’s possible 3-colorings. Its logarithmic size makes this polynomial for fixed δ.",
+            "A sampled neighbor excludes one color at an outside vertex, leaving at most two choices.",
+            "Encode the remaining edge restrictions as 2-SAT. The enumeration containing a restriction of a genuine coloring has a satisfying extension."
+          ],
+          "proof": "The minimum-degree assumption makes a small random sample dominate all remaining vertices.",
+          "pitfall": "A constant total edge density does not by itself imply the required minimum-degree promise."
+        }
+      ]
+    },
+    {
+      "id": "three-colorable-coloring",
+      "title": "Coloring general 3-colorable graphs with few colors",
+      "family": "Cuts and coloring",
+      "scope": "assigned",
+      "sections": "§6.5; §13.2",
+      "units": [
+        "core-color-sdp",
+        "core-gaussian-color"
+      ],
+      "input": "A graph promised to be 3-colorable, without a minimum-degree assumption.",
+      "goal": "Produce a proper coloring whose number of colors is provably controlled as a function of n or maximum degree Δ.",
+      "objective": "\\text{Find a proper }k\\text{-coloring, with }k\\text{ bounded despite only the promise }\\chi(G)\\le3.",
+      "algorithms": [
+        {
+          "name": "Vector coloring, hyperplane semicoloring, and degree balancing",
+          "technique": "SDP rounding",
+          "label": "Õ(n^0.38685) colors",
+          "guarantee": "The §6.5 analysis yields Õ(n^(log₆2)) colors; log₆2≈0.38685. Õ suppresses logarithmic factors.",
+          "tex": "k=\\widetilde O\\!\\left(n^{\\log_6 2}\\right).",
+          "steps": [
+            "Solve a unit-vector feasibility relaxation with adjacent vectors having inner product at most −1/2.",
+            "Use several random hyperplanes and label each vertex by its sequence of projection signs.",
+            "Control monochromatic edges. Removing their endpoints leaves a constant fraction of vertices properly colored, and repeat on the rest.",
+            "Combine low-degree semicoloring with high-degree neighborhood removal and balance the two color costs."
+          ],
+          "proof": "An edge’s angle is at least 2π/3, so one plane fails to separate it with probability at most 1/3.",
+          "pitfall": "A semicoloring with few bad edges needs a deletion/recursion argument to become a full proper coloring."
+        },
+        {
+          "name": "Repeated Gaussian independent-set extraction",
+          "technique": "SDP rounding",
+          "label": "Degree-sensitive coloring; Õ(n^1/4) extension",
+          "guarantee": "The §13.2 extractor gives O(Δ^(1/3)√lnΔ·ln n) colors after repetition, with bounded-degree cases handled greedily. Exercise 13.1 supplies the degree-balancing Õ(n^(1/4)) refinement.",
+          "tex": "k=O\\!\\left(\\Delta^{1/3}\\sqrt{\\ln\\Delta}\\,\\ln n\\right)\\quad\\text{for the degree-sensitive bound}.",
+          "steps": [
+            "Find a large independent set using the Gaussian-threshold algorithm in the separate independent-set entry.",
+            "Repeat the extractor enough times to obtain a suitably large set with high probability.",
+            "Give that set one new color, delete it, and repeat on the remaining graph.",
+            "Handle small maximum degree greedily; use the high/low-degree balancing exercise for the n^(1/4) refinement."
+          ],
+          "proof": "Removing a fixed fraction γ of the remaining vertices at each successful stage needs O((ln n)/γ) colors.",
+          "pitfall": "The promise of 3-colorability does not mean these general-graph algorithms output three colors."
+        }
+      ]
+    },
+    {
+      "id": "three-colorable-independent-set",
+      "title": "Large independent set in a 3-colorable graph",
+      "family": "Independent sets",
+      "scope": "assigned",
+      "sections": "§13.2",
+      "units": [
+        "core-gaussian-color"
+      ],
+      "input": "A promised 3-colorable graph with n vertices and maximum degree Δ.",
+      "goal": "Extract many pairwise nonadjacent vertices, supplying one color class for the coloring algorithm.",
+      "objective": "\\text{Find a large }I\\subseteq V\\quad\\text{such that}\\quad uv\\notin E\\text{ for all distinct }u,v\\in I.",
+      "algorithms": [
+        {
+          "name": "Gaussian thresholding and deletion of conflicts",
+          "technique": "SDP rounding",
+          "label": "Large expected independent set",
+          "guarantee": "For sufficiently large Δ, the expected set size is Ω(n·Δ^(−1/3)/√lnΔ). Constant-degree cases have elementary greedy alternatives.",
+          "tex": "\\mathbb E|I|=\\Omega\\!\\left(\\frac{n}{\\Delta^{1/3}\\sqrt{\\ln\\Delta}}\\right).",
+          "steps": [
+            "Obtain unit vectors with adjacent inner products at most −1/2.",
+            "Draw a standard Gaussian direction and retain vertices whose projection exceeds a chosen threshold.",
+            "Discard retained vertices that have a retained neighbor, leaving an independent set.",
+            "Use Gaussian marginal and joint-tail bounds to choose the threshold and lower-bound the expected surviving size."
+          ],
+          "proof": "Negative correlation on an edge makes adjacent co-selection much rarer than single-vertex selection.",
+          "pitfall": "The selected threshold set can contain edges; the conflict-removal step is essential."
+        }
+      ]
+    },
+    {
+      "id": "set-cover",
+      "title": "Weighted Set Cover",
+      "family": "Covering",
+      "scope": "assigned",
+      "sections": "§7.1",
+      "units": [
+        "core-dual-cover"
+      ],
+      "input": "A finite universe U, a coverable collection of subsets S, and nonnegative set costs cₛ.",
+      "goal": "Choose sets whose union is U with minimum total cost.",
+      "objective": "\\min_{\\mathcal C\\subseteq\\mathcal S}\\sum_{S\\in\\mathcal C}c_S\\quad\\text{subject to}\\quad\\bigcup_{S\\in\\mathcal C}S=U.",
+      "algorithms": [
+        {
+          "name": "Primal–dual tight-set selection",
+          "technique": "Primal–dual",
+          "label": "Factor f",
+          "guarantee": "The output costs at most f·OPT, where f is the maximum number of input sets containing any one element.",
+          "tex": "\\operatorname{cost}(\\mathcal C)\\le f\\operatorname{OPT},\\qquad f=\\max_{u\\in U}|\\{S:u\\in S\\}|.",
+          "steps": [
+            "Start with zero element dual variables and no chosen sets.",
+            "Raise dual variables for uncovered elements while preserving every set’s dual inequality.",
+            "When a set becomes tight, select it and mark its elements covered. Continue until all elements are covered.",
+            "Write each chosen set’s cost as its tight dual sum. Charge each element at most f times and apply weak duality."
+          ],
+          "proof": "The frequency bound limits repeated charging of one dual variable.",
+          "pitfall": "Frequency per element and cardinality per set are different parameters."
+        },
+        {
+          "name": "Greedy cost per newly covered element",
+          "technique": "Greedy",
+          "label": "Additional algorithm",
+          "additional": true,
+          "section": "§1.6 · additional background",
+          "guarantee": "For n=|U|, greedy weighted Set Cover has an Hₙ≤1+ln n approximation guarantee.",
+          "tex": "\\operatorname{ALG}\\le H_{|U|}\\operatorname{OPT}.",
+          "steps": [
+            "At each step, choose a set minimizing its cost divided by the number of uncovered elements it would cover.",
+            "Charge its cost equally to those newly covered elements.",
+            "Compare the charges within an optimal set and sum the resulting harmonic bound."
+          ],
+          "proof": "The denominator must count newly covered elements at the current step.",
+          "pitfall": "Greedy’s logarithmic guarantee and the primal–dual frequency guarantee come from different analyses."
+        }
+      ]
+    },
+    {
+      "id": "shortest-path",
+      "title": "Shortest s–t path",
+      "family": "Routing",
+      "scope": "assigned",
+      "sections": "§7.3",
+      "units": [
+        "core-dual-path"
+      ],
+      "input": "An undirected graph with nonnegative edge costs and designated vertices s and t.",
+      "goal": "Find a minimum-total-cost path joining s to t.",
+      "objective": "\\min_{P:s\\leadsto t}\\sum_{e\\in P}c_e.",
+      "algorithms": [
+        {
+          "name": "Primal–dual cut growth and reverse deletion",
+          "technique": "Primal–dual",
+          "label": "Exact algorithm",
+          "guarantee": "The surviving path has cost equal to a feasible dual value, proving optimality.",
+          "tex": "\\operatorname{cost}(P)=\\sum_S y_S=\\operatorname{OPT}.",
+          "steps": [
+            "Maintain the region reachable from s using selected tight edges.",
+            "Increase the dual variable of the current s-side cut until another crossing edge becomes tight; add the edge and update reachability.",
+            "Stop once t is connected. Delete redundant selected edges in reverse order while preserving an s–t connection.",
+            "Use the nested cuts and final path to show each positive dual variable is charged exactly once."
+          ],
+          "proof": "Primal feasibility and an equal-cost feasible dual certify an exact optimum.",
+          "pitfall": "Tight edges alone can include branches; cleanup is part of the correctness and cost proof."
+        }
+      ]
+    },
+    {
+      "id": "steiner-forest",
+      "title": "Generalized Steiner tree / Steiner forest",
+      "family": "Network design",
+      "scope": "assigned",
+      "sections": "§7.4",
+      "units": [
+        "core-steiner"
+      ],
+      "input": "A graph with nonnegative edge costs and prescribed pairs (sᵢ,tᵢ).",
+      "goal": "Buy minimum-total-cost edges connecting every prescribed pair; different pairs may lie in separate components.",
+      "objective": "\\min_{F\\subseteq E}\\sum_{e\\in F}c_e\\quad\\text{subject to }s_i,t_i\\text{ connected in }(V,F)\\text{ for every }i.",
+      "algorithms": [
+        {
+          "name": "Simultaneous moat growth followed by pruning",
+          "technique": "Primal–dual",
+          "label": "Factor 2",
+          "guarantee": "The pruned forest costs at most twice OPT.",
+          "tex": "\\operatorname{cost}(F)\\le2\\sum_S y_S\\le2\\operatorname{OPT}.",
+          "steps": [
+            "Start with separate vertex components and mark a component active when it separates a still-disconnected required pair.",
+            "Grow active component duals together until an edge becomes tight, then add it and merge the affected components.",
+            "Continue until every required pair is connected. Prune edges that are unnecessary for the pair requirements.",
+            "Contract the current components in the pruned forest and use the aggregate forest degree bound to charge each period of growth."
+          ],
+          "proof": "The factor two comes from an aggregate forest inequality, not a degree-two bound on every active component.",
+          "pitfall": "Requiring every terminal to lie in one component changes the problem."
+        }
+      ]
+    },
+    {
+      "id": "tree-metric-embedding",
+      "title": "Probabilistic approximation by tree metrics",
+      "family": "Metric constructions",
+      "scope": "assigned",
+      "sections": "§8.5",
+      "units": [
+        "core-tree-metrics"
+      ],
+      "bookAnchor": "approx-frt-embedding-section-8.5",
+      "input": "A finite metric d on n points, with positive distances rescaled when needed.",
+      "goal": "Construct a distribution of dominating tree metrics with logarithmic expected pairwise stretch.",
+      "objective": "d(u,v)\\le d_T(u,v)\\quad\\text{for every sample},\\qquad\\mathbb E[d_T(u,v)]\\le O(\\log n)\\,d(u,v).",
+      "algorithms": [
+        {
+          "name": "Random hierarchical metric decomposition",
+          "technique": "Metric embedding",
+          "label": "Expected O(log n) stretch",
+          "guarantee": "Every sampled tree dominates original distances; each fixed pair has expected stretch O(log n).",
+          "steps": [
+            "Choose the random ordering and scale shift for a hierarchy of metric clusters.",
+            "Build nested partitions from coarse to fine scales using the randomized ball-growing rule.",
+            "Represent cluster inclusion by a tree, choosing edge lengths according to scale so original distances are not underestimated.",
+            "Bound the probability that a fixed pair is separated at each level and sum its expected tree-distance contribution."
+          ],
+          "proof": "Random separation probabilities control each pair’s expected distortion even though some sampled pairs can be highly stretched.",
+          "pitfall": "This is a metric construction guarantee, not a claim that one tree simultaneously has logarithmic worst-case stretch for all pairs."
+        }
+      ]
+    },
+    {
+      "id": "buy-at-bulk",
+      "title": "Buy-at-bulk network design",
+      "family": "Network design",
+      "scope": "assigned",
+      "sections": "§8.6",
+      "units": [
+        "core-tree-metrics"
+      ],
+      "bookAnchor": "approx-buy-at-bulk-network-design-section-8.6",
+      "input": "Edge lengths ℓₑ, terminal-pair demands dᵢ, and a common nondecreasing capacity cost f with f(0)=0 and f(u)/u nonincreasing for positive u (economies of scale).",
+      "goal": "Choose a route for each demand and enough edge capacity, minimizing total installation cost.",
+      "objective": "\\min_{P_i,\\,u_e}\\sum_e\\ell_e f(u_e)\\quad\\text{subject to}\\quad u_e\\ge\\sum_{i:e\\in P_i}d_i.",
+      "algorithms": [
+        {
+          "name": "Route on a random tree and transfer to the graph",
+          "technique": "Metric embedding",
+          "label": "Expected O(log n) approximation",
+          "guarantee": "The construction gives an expected O(log n) approximation under the stated economies-of-scale assumptions.",
+          "tex": "\\mathbb E[\\operatorname{cost}]\\le O(\\log n)\\operatorname{OPT}.",
+          "steps": [
+            "Take the graph’s shortest-path metric and sample a dominating tree metric. Convert to a tree on the original vertices using the source’s constant-distortion transformation.",
+            "Route each demand on its unique tree path, buying the sum of the demands using each tree edge.",
+            "Replace tree edges by corresponding shortest paths in the original graph and merge capacities where routes share graph edges.",
+            "Compare with a fixed optimum: expected metric stretch bounds transferred length, and subadditivity of f bounds merged-capacity cost."
+          ],
+          "proof": "Economies of scale imply subadditivity. Pairwise expected stretch is enough after summing the fixed optimum’s cost.",
+          "pitfall": "Replacing the general capacity cost by a linear function treats only a special case and removes the bulk-discount behavior."
+        }
+      ]
+    },
+    {
+      "id": "planar-independent-set",
+      "title": "Maximum independent set in planar graphs",
+      "family": "Independent sets",
+      "scope": "assigned",
+      "sections": "§10.2",
+      "units": [
+        "core-planar-mis"
+      ],
+      "input": "A planar graph G and desired accuracy ε>0.",
+      "goal": "Find a maximum-cardinality set of pairwise nonadjacent vertices approximately.",
+      "objective": "\\max_{I\\subseteq V}|I|\\quad\\text{subject to}\\quad E(G[I])=\\varnothing.",
+      "algorithms": [
+        {
+          "name": "Baker’s layer deletion and bounded-treewidth DP",
+          "technique": "Dynamic programming",
+          "label": "PTAS",
+          "guarantee": "For any fixed 0<ε<1, return an independent set of size at least (1−ε)OPT in polynomial time.",
+          "tex": "|I|\\ge(1-\\varepsilon)\\operatorname{OPT}.",
+          "steps": [
+            "Assign outer-face layers and choose an integer k of order 1/ε.",
+            "For each residue class modulo k, delete that class of layers.",
+            "The remaining bounded-outerplanarity pieces have treewidth O(k). Solve independent set exactly by bag-state dynamic programming.",
+            "Return the best result over residues. Some deletion removes at most a 1/k fraction of a fixed optimal independent set."
+          ],
+          "proof": "Averaging limits the lost optimum; bounded treewidth supplies the exact subroutine on what remains.",
+          "pitfall": "The treewidth bound depends on the layered planar structure; arbitrary vertex deletion does not provide it."
+        }
+      ]
+    },
+    {
+      "id": "metric-tsp",
+      "title": "Metric traveling salesman problem",
+      "family": "Tours",
+      "scope": "additional",
+      "sections": "§2.4 · additional background",
+      "units": [],
+      "background": "metric-tsp",
+      "input": "A complete undirected graph with nonnegative symmetric edge costs satisfying the triangle inequality.",
+      "goal": "Find a minimum-cost tour visiting every vertex exactly once.",
+      "objective": "\\min_{\\text{Hamiltonian cycles }C}\\sum_{e\\in C}c_e.",
+      "algorithms": [
+        {
+          "name": "Christofides’ algorithm",
+          "technique": "Tree and matching",
+          "label": "Factor 3/2",
+          "guarantee": "The tour costs at most 3OPT/2 for metric symmetric TSP.",
+          "tex": "\\operatorname{cost}(C)\\le\\tfrac32\\operatorname{OPT}.",
+          "steps": [
+            "Compute a minimum spanning tree and its even-sized set of odd-degree vertices.",
+            "Find a minimum-cost perfect matching on those odd-degree vertices and add it to the tree.",
+            "Take an Euler tour of the resulting connected even-degree multigraph, then shortcut repeated vertices."
+          ],
+          "proof": "The MST costs at most OPT, the matching at most OPT/2, and metric shortcutting does not increase length.",
+          "pitfall": "The guarantee relies on symmetry and the triangle inequality."
+        }
+      ]
+    },
+    {
+      "id": "euclidean-tsp",
+      "title": "Euclidean traveling salesman problem",
+      "family": "Tours",
+      "scope": "additional",
+      "sections": "§10.1 · additional background",
+      "units": [],
+      "background": "embeddings-ptas",
+      "input": "A set of points in the Euclidean plane.",
+      "goal": "Find a shortest Euclidean tour through all points.",
+      "objective": "\\min_{\\text{tours }C}\\sum_{uv\\in C}\\lVert u-v\\rVert_2.",
+      "algorithms": [
+        {
+          "name": "Geometric dissection, portals, and dynamic programming",
+          "technique": "Dynamic programming",
+          "label": "PTAS",
+          "guarantee": "For each fixed accuracy ε, obtain a (1+ε)-approximation for the planar Euclidean instance in polynomial time.",
+          "tex": "\\operatorname{length}(C)\\le(1+\\varepsilon)\\operatorname{OPT}.",
+          "steps": [
+            "Use a shifted geometric dissection and a bounded set of permitted boundary portals.",
+            "Modify an optimum so crossings are restricted to portals and satisfy a bounded crossing pattern, accounting for the added length.",
+            "Run dynamic programming over the boundary states and return the best represented tour."
+          ],
+          "proof": "Geometry bounds the expected or selected extra length charged to boundaries and portals.",
+          "pitfall": "This is additional §10.1 material. The assigned §10.2 problem is planar independent set."
+        }
+      ]
+    },
+    {
+      "id": "vertex-cover",
+      "title": "Weighted Vertex Cover",
+      "family": "Covering",
+      "scope": "additional",
+      "sections": "§§1.2–1.3 · additional background",
+      "units": [],
+      "background": "vertex-cover",
+      "input": "An undirected graph and nonnegative vertex costs wᵥ.",
+      "goal": "Choose a minimum-weight set containing at least one endpoint of every edge.",
+      "objective": "\\min_{C\\subseteq V}\\sum_{v\\in C}w_v\\quad\\text{subject to}\\quad C\\cap\\{u,v\\}\\ne\\varnothing\\text{ for every }uv\\in E.",
+      "algorithms": [
+        {
+          "name": "Threshold rounding of the covering LP",
+          "technique": "LP rounding",
+          "label": "Factor 2",
+          "guarantee": "Selecting all vertices with LP value at least 1/2 gives a feasible cover of cost at most twice OPT.",
+          "tex": "\\operatorname{cost}(C)\\le2\\operatorname{LP}\\le2\\operatorname{OPT}.",
+          "steps": [
+            "Solve the LP minimizing weighted vertex values subject to xᵤ+xᵥ≥1 on every edge.",
+            "Select every vertex whose fractional value is at least 1/2, including equality.",
+            "Each edge has a selected endpoint, and the selected indicator is at most twice the fractional value for every vertex."
+          ],
+          "proof": "Feasibility and the objective bound follow from two pointwise inequalities.",
+          "pitfall": "Using a strict threshold greater than 1/2 can leave an edge with two half-valued endpoints uncovered."
+        }
+      ]
+    }
+  ]
+}

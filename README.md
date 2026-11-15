@@ -2,6 +2,14 @@
 
 **GitHub Pages URL:** https://hadi1373z.github.io/doctoral-exam/
 
+## Problems and algorithms
+
+The [Problems & Algorithms catalogue](https://hadi1373z.github.io/doctoral-exam/#algorithms) collects **18 assigned algorithmic tasks** and **three additional background problems** from the approximation course. Search by problem or method, filter by technique, and compare objectives and guarantees. Additional problems and methods carry amber labels.
+
+Each problem has a precise input and objective, a typeset mathematical statement, algorithm steps, the guarantee with its assumptions, a proof idea, and a common mistake. Further-study links lead to the matching lecture, proof explanation, visual proof and examiner follow-ups, Foundation quiz, textbook section, and the Williamson–Shmoys primary source. Hardness sections and supporting tools are linked separately. Browsing this reference earns no examination credit.
+
+The portable catalogue is in [data/algorithms.json](data/algorithms.json). Verify coverage, links, mathematical rendering, filters, and read-only progress behavior with `node src/verify-algorithm-catalog.cjs .`.
+
 ## Foundation quizzes with explanations and reading references
 
 [Foundation quizzes](https://hadi1373z.github.io/doctoral-exam/#foundation) now contain **218 explained questions**: three new questions for every one of the 50 assigned topics, plus all 68 original background checks. The original question IDs and answer histories are retained. Small calculations, changed hypotheses, and proof decisions complement the concept checks; selected legacy prompts were clarified where more than one listed bound was mathematically valid.
