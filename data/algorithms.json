@@ -19,6 +19,27 @@
       "objective": "\\max_{S\\subseteq[n]}\\sum_{i\\in S}p_i\\quad\\text{subject to}\\quad\\sum_{i\\in S}w_i\\le W.",
       "algorithms": [
         {
+          "id": "knapsack-exact",
+          "name": "Exact Pareto-frontier dynamic programming",
+          "section": "§3.1 · Algorithm 3.1; Theorem 3.1",
+          "sourceSections": [
+            "3.1"
+          ],
+          "reference": "Algorithm 3.1; Theorem 3.1",
+          "technique": "Dynamic programming",
+          "label": "Exact; pseudo-polynomial",
+          "guarantee": "For integer weights and profits, returns an optimum in O(n·min{W,V}) arithmetic operations, where V is total profit. This is not polynomial in binary input length.",
+          "steps": [
+            "Start with the feasible state (weight,profit)=(0,0). Discard items heavier than the capacity.",
+            "For each item, merge the old state list with the list obtained by adding that item once to every old state; discard overweight states.",
+            "Sort by weight, retain the best profit at each weight, and remove every pair dominated by a no-heavier pair of at least equal profit.",
+            "Keep predecessor choices for reconstruction and return the surviving state of greatest profit after all items."
+          ],
+          "proof": "Every feasible partial solution is dominated by a retained state. Future item additions preserve dominance. Integer coordinates bound the frontier by min{W+1,V+1}.",
+          "pitfall": "Use the previous item layer when adding an item; updating it in place can accidentally allow the same item repeatedly.",
+          "role": "Main section"
+        },
+        {
           "name": "Profit scaling and profit-indexed dynamic programming",
           "technique": "Dynamic programming",
           "label": "FPTAS",
@@ -31,7 +52,14 @@
             "Compare the rounded value of an optimum with the returned value. At most nK≤εOPT is lost; the total scaled-profit range is at most n²/ε."
           ],
           "proof": "Feasibility stays exact because weights are unchanged. The approximation loss is charged to a computable lower bound P≤OPT.",
-          "pitfall": "A DP polynomial in the numerical capacity W is only pseudo-polynomial when W is binary encoded."
+          "pitfall": "A DP polynomial in the numerical capacity W is only pseudo-polynomial when W is binary encoded.",
+          "id": "knapsack-fptas",
+          "section": "§3.1 · Algorithm 3.2; Theorem 3.5",
+          "sourceSections": [
+            "3.1"
+          ],
+          "reference": "Algorithm 3.2; Theorem 3.5",
+          "role": "Main section"
         }
       ]
     },
@@ -49,6 +77,26 @@
       "objective": "\\min_{M_1\\sqcup\\cdots\\sqcup M_m=[n]}\\ \\max_{i\\in[m]}\\sum_{j\\in M_i}p_j.",
       "algorithms": [
         {
+          "id": "makespan-fixed-m",
+          "name": "Enumerate all long-job assignments, then list-schedule",
+          "section": "§3.2 · Theorem 3.6",
+          "sourceSections": [
+            "3.2"
+          ],
+          "reference": "Theorem 3.6",
+          "technique": "Enumeration",
+          "label": "PTAS for fixed m",
+          "guarantee": "For fixed machine count m, the source’s Aₖ construction returns makespan at most (1+1/k)OPT. It enumerates at most m^(km) long-job placements.",
+          "steps": [
+            "Let P=Σpⱼ and call a job long if pⱼ>P/(km). There are at most km such jobs.",
+            "Enumerate every assignment of the long jobs to the m machines and retain one of minimum long-job makespan.",
+            "Insert all short jobs on least-loaded machines. Set k≥1/ε for a (1+ε) guarantee with fixed m."
+          ],
+          "proof": "A placement agreeing with an optimum on long jobs is enumerated. If a short job determines the final makespan, its start is at most P/m and its length at most P/(km).",
+          "pitfall": "m^(km) is polynomial only when m and the accuracy parameter k are fixed.",
+          "role": "Main section"
+        },
+        {
           "name": "Large-job configurations and size rounding",
           "technique": "Dynamic programming",
           "label": "PTAS",
@@ -61,14 +109,62 @@
             "Insert short jobs on a least-loaded machine. If a short job finishes last, its start is at most the original total processing volume divided by m, hence at most T when T is a valid optimum guess. Search candidate bounds and choose the internal accuracy to obtain the stated PTAS."
           ],
           "proof": "Long-job restoration and the final short-job bound are two separate cases. Each leads to a T+T/k load bound before the accuracy bookkeeping.",
-          "pitfall": "Do not charge the long-job rounding error a second time in the short-job case."
+          "pitfall": "Do not charge the long-job rounding error a second time in the short-job case.",
+          "id": "makespan-variable-m",
+          "section": "§3.2 · Theorem 3.7",
+          "sourceSections": [
+            "3.2"
+          ],
+          "reference": "Theorem 3.7",
+          "role": "Main section"
+        },
+        {
+          "id": "makespan-config-dp",
+          "name": "Rounded-type feasibility dynamic programming",
+          "section": "§3.2 · Subroutine for Theorem 3.7",
+          "sourceSections": [
+            "3.2"
+          ],
+          "reference": "Subroutine for Theorem 3.7",
+          "technique": "Dynamic programming",
+          "label": "Exact rounded-instance solver",
+          "guarantee": "For fixed k, the count-vector DP finds the minimum number of machines for the rounded long jobs with makespan bound T in n^O(k²) time.",
+          "steps": [
+            "After rounding, index the at most k² types by sizes iT/k². Let aᵢ be the number of remaining jobs of type i.",
+            "Enumerate nonzero configurations c with Σᵢcᵢ·iT/k²≤T and cᵢ≤aᵢ. A bin contains only boundedly many long jobs.",
+            "Use DP(0)=0 and DP(a)=1+min꜀DP(a−c). Store a minimizing configuration for reconstruction.",
+            "The rounded instance is feasible on m machines exactly when DP(full counts)≤m."
+          ],
+          "proof": "Every machine in an optimum supplies one enumerated configuration; induction on remaining jobs proves the recurrence.",
+          "pitfall": "Feasibility of rounded jobs at T is not feasibility of the original jobs at T.",
+          "role": "Supporting subroutine"
+        },
+        {
+          "id": "makespan-bisection",
+          "name": "Bisection with an approximate-feasibility oracle",
+          "section": "§3.2 · Theorem 3.7",
+          "sourceSections": [
+            "3.2"
+          ],
+          "reference": "Theorem 3.7",
+          "technique": "Enumeration",
+          "label": "Polynomial search for the PTAS bound",
+          "guarantee": "For integer processing times, bisection around the rounded-type procedure finds an approximate schedule without enumerating every numerical makespan.",
+          "steps": [
+            "Initialize L=max{ceil(Σp/m),max p} and U=ceil(Σp/m)+max p, retaining a schedule from a successful call at U.",
+            "While L<U, test T=floor((L+U)/2) using the rounded-long-job procedure, restoring sizes and inserting short jobs on success.",
+            "On failure set L=T+1; on success set U=T and retain the actual approximate schedule. Return that retained schedule when L=U."
+          ],
+          "proof": "Failure certifies that the original optimum exceeds T, while success returns cost at most (1+ε)T. Only the final actual schedule’s cost is reported.",
+          "pitfall": "Success is not a certificate that the original instance has makespan at most T.",
+          "role": "Supporting subroutine"
         },
         {
           "name": "List scheduling and LPT",
           "technique": "Greedy",
           "label": "Additional algorithms",
           "additional": true,
-          "section": "§2.3 · additional background",
+          "section": "§2.3 · Background comparison",
           "guarantee": "List scheduling gives factor 2−1/m. Sorting jobs by decreasing processing time first (LPT) improves this to 4/3−1/(3m).",
           "tex": "C_{\\rm LS}\\le(2-1/m)\\operatorname{OPT},\\qquad C_{\\rm LPT}\\le(4/3-1/(3m))\\operatorname{OPT}.",
           "steps": [
@@ -77,7 +173,13 @@
             "Analyze the last finishing job using the average-workload lower bound and a lower bound from large jobs."
           ],
           "proof": "The approximation factor depends on the ordering and the lower bound used for the last job.",
-          "pitfall": "These background algorithms solve the same makespan problem; they are not the approximation scheme of §3.2."
+          "pitfall": "These background algorithms solve the same makespan problem; they are not the approximation scheme of §3.2.",
+          "id": "makespan-list-lpt",
+          "sourceSections": [
+            "2.3"
+          ],
+          "reference": "Background comparison",
+          "role": "Additional background"
         }
       ]
     },
@@ -95,6 +197,86 @@
       "objective": "\\min k\\quad\\text{such that}\\quad[n]=B_1\\sqcup\\cdots\\sqcup B_k,\\qquad\\sum_{i\\in B_j}s_i\\le1.",
       "algorithms": [
         {
+          "id": "bin-first-fit",
+          "name": "First-Fit insertion",
+          "section": "§3.3 · Preceding Lemma 3.10",
+          "sourceSections": [
+            "3.3"
+          ],
+          "reference": "Preceding Lemma 3.10",
+          "technique": "Greedy",
+          "label": "At most 2OPT+1 bins",
+          "guarantee": "The elementary analysis in this section gives at most 2OPT+1 bins for arbitrary item order; the same insertion rule extends a packing by small pieces.",
+          "steps": [
+            "Process items in the supplied order, keeping bins in the order in which they were opened.",
+            "Put each item in the first existing bin with enough space; open a new bin only if no existing bin can hold it.",
+            "For the elementary proof, pair consecutive bins: their combined load exceeds one whenever the second bin was necessary."
+          ],
+          "proof": "Total item volume lower-bounds OPT. Pairing used bins bounds their number while leaving the possible final bin explicit.",
+          "pitfall": "Do not identify this elementary bound with the sharper First-Fit-Decreasing result.",
+          "role": "Main section"
+        },
+        {
+          "id": "bin-ffd",
+          "name": "First-Fit-Decreasing",
+          "section": "§3.3 · Result cited before Lemma 3.10",
+          "sourceSections": [
+            "3.3"
+          ],
+          "reference": "Result cited before Lemma 3.10",
+          "technique": "Greedy",
+          "label": "Cited bound: (11/9)OPT+4",
+          "guarantee": "The assigned text cites the asymptotic bound FFD≤(11/9)OPT+4 and explicitly does not prove it in this section.",
+          "steps": [
+            "Sort all items by nonincreasing size before beginning the packing.",
+            "Insert each sorted item into the first previously opened bin with sufficient room.",
+            "Open another bin only if all previous bins are too full; retain the source’s additive constant when quoting its bound."
+          ],
+          "proof": "Sorting changes the structure of partially filled bins. The sharper analysis is an imported result, not the elementary paired-bin proof.",
+          "pitfall": "Do not claim that the source proves the 11/9 bound here, or silently remove its additive constant.",
+          "role": "Referenced algorithm"
+        },
+        {
+          "id": "bin-config-dp",
+          "name": "Exact configuration DP for a bounded set of large types",
+          "section": "§3.3 · Subroutine from §3.2; before Lemma 3.10",
+          "sourceSections": [
+            "3.3"
+          ],
+          "reference": "Subroutine from §3.2; before Lemma 3.10",
+          "technique": "Dynamic programming",
+          "label": "Exact on constant-type instances",
+          "guarantee": "If there are a fixed number of distinct item sizes, each bounded away from zero, the minimum-bin packing can be computed in polynomial time.",
+          "steps": [
+            "Enumerate every feasible single-bin vector of type counts; the lower size bound limits the number of items in a bin.",
+            "Use a state for the number of remaining items of each type and set F(0,…,0)=0.",
+            "For every state, try a feasible bin configuration and take one plus the best value for the remaining counts; store choices to reconstruct bins."
+          ],
+          "proof": "Any optimal packing has a first bin among the enumerated configurations; induction on total item count gives the recurrence.",
+          "pitfall": "The number of types and the maximum items per bin must be bounded for the claimed polynomial running time.",
+          "role": "Supporting subroutine"
+        },
+        {
+          "id": "bin-small-insertion",
+          "name": "Extend a large-item packing with small items",
+          "section": "§3.3 · Lemma 3.10",
+          "sourceSections": [
+            "3.3"
+          ],
+          "reference": "Lemma 3.10",
+          "technique": "Greedy",
+          "label": "max{ℓ,SIZE/(1−γ)+1} bins",
+          "guarantee": "Starting from ℓ bins holding all items larger than γ, First-Fit inserts the remaining items of size at most γ with the stated additive-bin bound.",
+          "steps": [
+            "Keep the supplied packing of large items and process small items in any order.",
+            "Insert each in the first bin that fits it, opening a new bin only when required.",
+            "If a new bin opens, every previous bin except the eventual last one has load above 1−γ; charge them to total original volume."
+          ],
+          "proof": "Either no bin is added, or fullness of all but the last bin bounds their count by SIZE/(1−γ).",
+          "pitfall": "Using the volume of only the small items loses the existing large-item load from the accounting.",
+          "role": "Supporting subroutine"
+        },
+        {
           "name": "Linear grouping of large items, then small-item insertion",
           "technique": "Dynamic programming",
           "label": "Asymptotic PTAS",
@@ -107,7 +289,14 @@
             "Insert small items into available space. When another bin is needed, previously used bins are sufficiently full to bound their number by total item volume."
           ],
           "proof": "A rounded group can be compared with the larger items in the preceding group. The largest group and the last small-item bin remain visible in the cost accounting.",
-          "pitfall": "An asymptotic guarantee does not imply an absolute (1+ε)-approximation on instances with very few bins."
+          "pitfall": "An asymptotic guarantee does not imply an absolute (1+ε)-approximation on instances with very few bins.",
+          "id": "bin-linear-grouping",
+          "section": "§3.3 · Theorem 3.12",
+          "sourceSections": [
+            "3.3"
+          ],
+          "reference": "Theorem 3.12",
+          "role": "Main section"
         }
       ]
     },
@@ -126,33 +315,126 @@
       "objective": "\\max_{x\\in\\{0,1\\}^n}\\sum_C w_C\\,\\mathbf1[C(x)\\text{ is true}].",
       "algorithms": [
         {
-          "name": "Random assignments and conditional expectation",
-          "technique": "Randomized rounding",
-          "label": "1/2 baseline; clause-sensitive bounds",
-          "guarantee": "A fair assignment satisfies a non-tautological k-literal clause on distinct variables with probability 1−2⁻ᵏ, giving a 1/2 approximation for general nonempty clauses. Conditional expectation can make the guarantee deterministic.",
-          "tex": "\\Pr[C\\text{ satisfied}]=1-2^{-k},\\qquad\\mathbb E[\\operatorname{value}]\\ge\\tfrac12\\operatorname{OPT}.",
-          "steps": [
-            "Give variables independent fair truth values and calculate each clause’s failure probability.",
-            "Use linearity of expectation to sum weighted clause contributions; clauses need not be independent.",
-            "For derandomization, fix one variable at a time to a value whose conditional expected total is at least the current expectation."
+          "id": "sat-fair",
+          "name": "Independent fair truth assignment",
+          "section": "§5.1 · Theorem 5.1",
+          "sourceSections": [
+            "5.1"
           ],
-          "proof": "One of the two conditional expectations is at least their weighted average. The clause expectations are computable after each partial assignment.",
-          "pitfall": "For biased assignments, positive and negative literals have different failure factors."
+          "reference": "Theorem 5.1",
+          "technique": "Random sampling",
+          "label": "1/2; 1−2^(−k) for clause length ≥k",
+          "guarantee": "A normalized clause of length ℓ is satisfied with probability 1−2^(−ℓ). Thus general nonempty MAX-SAT has expected ratio 1/2, and exact-length-three clauses give 7/8.",
+          "steps": [
+            "Merge duplicate clauses by adding weights, remove repeated literals, and account for tautologies separately.",
+            "Set each remaining variable independently to true with probability one half.",
+            "Sum each clause’s satisfaction probability times its weight; compare with total clause weight as an upper bound on OPT."
+          ],
+          "proof": "Independence is needed within a clause. Linearity of expectation sums clause contributions without requiring different clauses to be independent.",
+          "pitfall": "The 7/8 claim needs three distinct, noncomplementary literals in each relevant clause.",
+          "role": "Main section"
         },
         {
-          "name": "LP rounding, best-of-two, and nonlinear marginals",
+          "id": "sat-conditional",
+          "name": "Conditional-expectation derandomization",
+          "section": "§5.2 · Method of conditional expectations",
+          "sourceSections": [
+            "5.2"
+          ],
+          "reference": "Method of conditional expectations",
+          "technique": "Derandomization",
+          "label": "Deterministic preservation of expectation",
+          "guarantee": "When conditional clause expectations can be computed, the final assignment is at least the expected value of the starting independent distribution; this derandomizes the fair, biased and LP-based methods.",
+          "steps": [
+            "Maintain a partial assignment and the expected weighted satisfaction under independent choices for the unset variables.",
+            "Compute this expectation after fixing the next variable to each possible truth value.",
+            "Choose the value with the larger conditional expectation and repeat until all variables are fixed."
+          ],
+          "proof": "The current expectation is a weighted average of the two conditional expectations. The final expectation is the actual deterministic value.",
+          "pitfall": "An existence proof is not an efficient derandomization unless both conditional expectations are computable.",
+          "role": "Main section"
+        },
+        {
+          "id": "sat-biased",
+          "name": "Biased coins with unit-clause normalization",
+          "section": "§5.3 · Theorems 5.5 and 5.7",
+          "sourceSections": [
+            "5.3"
+          ],
+          "reference": "Theorems 5.5 and 5.7",
+          "technique": "Random sampling",
+          "label": "(√5−1)/2 ≈ 0.618",
+          "guarantee": "After orienting each variable so its positive unit-clause weight is at least its negative unit-clause weight, independent true probability p=(√5−1)/2 gives expected value at least p·OPT.",
+          "steps": [
+            "For each variable compare the total weights of its positive and negative unit clauses; complement all occurrences if needed to make the positive one heavier.",
+            "Set every normalized variable true independently with probability p=(√5−1)/2, which solves p=1−p².",
+            "Use the benchmark B=total clause weight minus the smaller unit-clause weight for each variable. Then OPT≤B and the expected value is at least pB.",
+            "Undo the variable complementation to return an assignment to the original instance; conditional expectation gives a deterministic version."
+          ],
+          "proof": "Every nonnegative unit clause succeeds with probability p, while every longer clause succeeds with probability at least 1−p². Conflicting unit clauses require the improved upper bound B.",
+          "pitfall": "Using one biased coin without normalizing conflicting unit clauses does not justify the 0.618 guarantee.",
+          "role": "Main section"
+        },
+        {
+          "id": "sat-lp",
+          "name": "Independent LP-marginal rounding",
+          "section": "§5.4 · Theorem 5.10",
+          "sourceSections": [
+            "5.4"
+          ],
+          "reference": "Theorem 5.10",
+          "technique": "LP rounding",
+          "label": "1−1/e approximation",
+          "guarantee": "Rounding each truth variable independently with its optimal LP value gives expected satisfaction at least (1−1/e) times the LP optimum, hence at least that fraction of OPT.",
+          "steps": [
+            "Use 0≤yᵢ,z꜀≤1 and impose z꜀≤Σpositive yᵢ+Σnegative(1−yᵢ), maximizing Σw꜀z꜀.",
+            "Solve this relaxation and set variable i true independently with probability yᵢ.",
+            "Bound a length-ℓ clause’s failure product by AM–GM, then use concavity to obtain satisfaction at least [1−(1−1/ℓ)^ℓ]z꜀."
+          ],
+          "proof": "The clause-dependent coefficient is at least 1−1/e. The LP optimum is an upper bound for this maximization problem.",
+          "pitfall": "Independent rounding can leave clauses unsatisfied even when z꜀=1; fractional satisfaction is not literal feasibility.",
+          "role": "Main section"
+        },
+        {
+          "id": "sat-best-two",
+          "name": "Choose the better of fair and LP rounding",
+          "section": "§5.5 · Theorem 5.11",
+          "sourceSections": [
+            "5.5"
+          ],
+          "reference": "Theorem 5.11",
           "technique": "LP rounding",
           "label": "3/4 approximation",
-          "guarantee": "LP-marginal rounding alone gives 1−1/e. Combining its clause-wise guarantee with the fair assignment yields 3/4; §5.6 provides another 3/4 analysis via transformed marginals.",
-          "tex": "\\mathbb E[\\operatorname{value}]\\ge\\tfrac34\\operatorname{OPT}.",
+          "guarantee": "The expected value of the better of the two complete assignments is at least 3OPT/4. Both distributions can also be derandomized first.",
           "steps": [
-            "Solve the MAX-SAT LP with fractional truth variables and fractional satisfied-clause values.",
-            "Independently round truth values using the LP marginals. Bound each clause’s failure product by AM–GM.",
-            "Also compute a fair-assignment solution and take the better of the two. Compare their average clause contribution with the LP clause value.",
-            "For nonlinear rounding, verify the required bounds on the marginal transformation before transferring the clause analysis."
+            "Construct one fair-assignment solution and one independent LP-marginal-rounding solution.",
+            "Evaluate their actual total satisfied weights and keep the assignment of greater value.",
+            "For each clause length ℓ, average the two lower bounds 1−2^(−ℓ) and 1−(1−1/ℓ)^ℓ; their mean is at least 3/4."
           ],
-          "proof": "The LP is an upper bound for a maximization optimum. The two rounding methods complement each other across clause lengths.",
-          "pitfall": "The factor 3/4 is a satisfied-value fraction; its direction is different from a minimization approximation factor."
+          "proof": "max{W₁,W₂}≥(W₁+W₂)/2 pointwise. The improvement comes from complementary clause-length behavior.",
+          "pitfall": "Taking the average of just the global 1/2 and 1−1/e guarantees does not prove 3/4.",
+          "role": "Main section"
+        },
+        {
+          "id": "sat-nonlinear",
+          "name": "Nonlinear transformed-marginal rounding",
+          "section": "§5.6 · Theorem 5.12",
+          "sourceSections": [
+            "5.6"
+          ],
+          "reference": "Theorem 5.12",
+          "technique": "LP rounding",
+          "label": "3/4 approximation",
+          "guarantee": "Choose a computable f with 1−4^(−x)≤f(x)≤4^(x−1) for 0≤x≤1. Setting variable i true independently with probability f(yᵢ) gives expected value at least 3OPT/4.",
+          "steps": [
+            "Solve the same MAX-SAT LP as for marginal rounding.",
+            "For an explicit valid transformation use f(x)=1−4^(−x); the inequality 4^x+4^(1−x)≥4 verifies the required upper envelope.",
+            "Independently set variable i true with probability f(yᵢ). The failure product of a clause is at most 4^(−z꜀).",
+            "Use concavity of 1−4^(−z) on [0,1] to lower-bound satisfaction by 3z꜀/4, then sum weighted clauses."
+          ],
+          "proof": "The lower envelope bounds positive-literal failure and the upper envelope bounds negative-literal failure. Both signs must be controlled.",
+          "pitfall": "A transformation that only satisfies the lower bound need not handle negative literals correctly.",
+          "role": "Main section"
         }
       ]
     },
@@ -170,6 +452,26 @@
       "objective": "\\max_{S\\subseteq V}\\sum_{uv\\in\\delta(S)}w_{uv}.",
       "algorithms": [
         {
+          "id": "sdp-gram-vectors",
+          "name": "Convert a positive semidefinite Gram matrix to vectors",
+          "section": "§6.1 · Fact 6.2; numerical precision discussion",
+          "sourceSections": [
+            "6.1"
+          ],
+          "reference": "Fact 6.2; numerical precision discussion",
+          "technique": "Linear algebra",
+          "label": "Equivalent vector representation",
+          "guarantee": "A positive semidefinite matrix X factors as VᵀV, giving vectors with inner products Xᵢⱼ. Numerical SDP solutions require an explicit precision tolerance.",
+          "steps": [
+            "Express the relaxation using a symmetric matrix X with X≽0, diagonal-one constraints, and the required edge objective or constraints.",
+            "Use a spectral or Cholesky-type factorization to obtain V with X=VᵀV; its columns are the required vectors.",
+            "Track solver feasibility and objective error through rounding rather than assuming exact real arithmetic or exact polynomial-time solution of every SDP."
+          ],
+          "proof": "A Gram matrix is positive semidefinite, and every positive semidefinite matrix admits such a factorization.",
+          "pitfall": "The representation equivalence is not a proof that arbitrary semidefinite programs can be solved exactly in polynomial time.",
+          "role": "Supporting subroutine"
+        },
+        {
           "name": "Independent random partition",
           "technique": "Randomized rounding",
           "label": "1/2 approximation",
@@ -181,7 +483,34 @@
             "Sum the weighted contributions; conditional expectation can derandomize this baseline."
           ],
           "proof": "Every cut uses at most the total nonnegative edge weight.",
-          "pitfall": "A graph may have a maximum cut containing far less than all its edges."
+          "pitfall": "A graph may have a maximum cut containing far less than all its edges.",
+          "id": "cut-fair",
+          "section": "§5.1 · Theorem 5.3",
+          "sourceSections": [
+            "5.1"
+          ],
+          "reference": "Theorem 5.3",
+          "role": "Main section"
+        },
+        {
+          "id": "cut-conditional",
+          "name": "Greedy conditional-expectation cut",
+          "section": "§5.2 · Derandomized §5.1; Exercise 5.2",
+          "sourceSections": [
+            "5.2"
+          ],
+          "reference": "Derandomized §5.1; Exercise 5.2",
+          "technique": "Derandomization",
+          "label": "Deterministic factor 1/2",
+          "guarantee": "With nonnegative edge weights, a sequential choice of sides returns a cut weighing at least half the total edge weight, hence at least OPT/2.",
+          "steps": [
+            "Process vertices in any fixed order, keeping the previous choices unchanged.",
+            "For the next vertex, compare its total edge weight to already placed vertices on each side; put it on the opposite side from the larger weight.",
+            "Each edge is considered when its later endpoint is placed. Charge at least half of that vertex’s already exposed incident weight to the cut."
+          ],
+          "proof": "Every vertex choice maximizes the conditional expectation; edges to unplaced vertices contribute the same expected half-weight under either choice.",
+          "pitfall": "When weights differ, compare weight totals rather than just neighbor counts.",
+          "role": "Main section"
         },
         {
           "name": "Goemans–Williamson SDP and hyperplane rounding",
@@ -191,11 +520,18 @@
           "tex": "\\alpha_{\\rm GW}=\\min_{0<\\theta\\le\\pi}\\frac{2\\theta}{\\pi(1-\\cos\\theta)}\\approx0.87856.",
           "steps": [
             "Relax binary side labels to unit vectors, represented by a positive semidefinite Gram matrix.",
-            "Choose a random hyperplane through the origin and use the sign of each vector’s projection as its side.",
+            "Draw independent standard Gaussian coordinates for a normal vector r; put vertex i on the side given by the sign of vᵢ·r.",
             "An edge of vector angle θ is cut with probability θ/π. Compare this with its SDP contribution (1−cos θ)/2 and sum over edges."
           ],
           "proof": "Rotational symmetry gives an exact two-dimensional separation probability; the worst angle determines the ratio.",
-          "pitfall": "The edge-wise comparison uses nonnegative weights."
+          "pitfall": "The edge-wise comparison uses nonnegative weights.",
+          "id": "cut-gw",
+          "section": "§6.2 · Theorem 6.9",
+          "sourceSections": [
+            "6.2"
+          ],
+          "reference": "Theorem 6.9",
+          "role": "Main section"
         }
       ]
     },
@@ -225,7 +561,14 @@
             "Integrate that connection bound and the exclusion probabilities over α. The lower endpoint makes the two coefficients equal."
           ],
           "proof": "The integral of 1/α controls connection cost, while a vertex’s exclusion probability controls its penalty.",
-          "pitfall": "Substituting the mean threshold into 1/α does not compute its expectation."
+          "pitfall": "Substituting the mean threshold into 1/α does not compute its expectation.",
+          "id": "pcst-random-threshold",
+          "section": "§5.7 · Corollary 5.18",
+          "sourceSections": [
+            "5.7"
+          ],
+          "reference": "Corollary 5.18",
+          "role": "Main section"
         }
       ]
     },
@@ -249,13 +592,20 @@
           "guarantee": "The assigned clustering-and-rounding algorithm is a randomized 3-approximation under the metric assumption.",
           "tex": "\\mathbb E[\\operatorname{cost}]\\le3\\operatorname{OPT}.",
           "steps": [
-            "Solve the facility-location LP, obtaining fractional openings and client assignments.",
-            "Choose client representatives and disjoint representative neighborhoods using fractional connection information.",
-            "Make coordinated opening choices within the representative neighborhoods so required clusters receive an open facility.",
-            "Assign remaining clients through their representative’s open facility, bounding the detour by metric inequalities."
+            "Solve the facility-location primal and dual LPs. Let N(j)={i:xᵢⱼ>0}, N²(j) be clients sharing a neighbor, and Cⱼ=Σᵢcᵢⱼxᵢⱼ.",
+            "Among unassigned clients choose j minimizing the dual value vⱼ plus Cⱼ.",
+            "Open exactly one facility i in N(j), sampled with probabilities xᵢⱼ. Assign j and all still-unassigned clients in N²(j) to i.",
+            "Remove those clients and repeat. Disjoint representative neighborhoods bound opening costs; dual feasibility and the metric inequality bound reassignment."
           ],
           "proof": "Controlled opening marginals bound facility cost; triangle inequalities bound rerouting cost.",
-          "pitfall": "Independent facility openings alone can leave an entire client support closed."
+          "pitfall": "Independent facility openings alone can leave an entire client support closed.",
+          "id": "facility-cluster-round",
+          "section": "§5.8 · Algorithm 5.1; Theorem 5.19",
+          "sourceSections": [
+            "5.8"
+          ],
+          "reference": "Algorithm 5.1; Theorem 5.19",
+          "role": "Main section"
         }
       ]
     },
@@ -273,6 +623,27 @@
       "objective": "\\min\\sum_j w_jC_j\\quad\\text{with}\\quad S_j\\ge r_j\\quad\\text{and nonoverlapping job intervals}.",
       "algorithms": [
         {
+          "id": "schedule-relaxation",
+          "name": "Event-based preemptive density-priority relaxation",
+          "section": "§5.9 · Lemma 5.22",
+          "sourceSections": [
+            "5.9"
+          ],
+          "reference": "Lemma 5.22",
+          "technique": "Scheduling",
+          "label": "Exact relaxation subroutine",
+          "guarantee": "For integer processing times, release dates and weights, this computes an optimum of the section’s midpoint-objective relaxation in polynomial time; it is not an optimum nonpreemptive schedule.",
+          "steps": [
+            "Sort jobs by nonincreasing density wⱼ/pⱼ and maintain their remaining processing times.",
+            "At each release or completion event, run the highest-density available unfinished job, preempting if a denser job becomes available.",
+            "Represent processing by the at most 2n event intervals rather than enumerating every time slot.",
+            "For each job, compute its average processing-time midpoint plus pⱼ/2 from these intervals, obtaining Cⱼ for the relaxation objective."
+          ],
+          "proof": "An interchange argument puts higher-density available work first for the linear time-price objective. The relaxation underestimates every feasible nonpreemptive schedule.",
+          "pitfall": "Shortest remaining processing time is a different priority rule; do not replace the fixed density order.",
+          "role": "Supporting subroutine"
+        },
+        {
           "name": "Randomized α-point ordering",
           "technique": "LP rounding",
           "label": "Expected factor 2",
@@ -285,7 +656,34 @@
             "Condition on one job’s point, bound earlier workload and release-date delay using fractional prefix capacities, then average and sum with weights."
           ],
           "proof": "The fractional schedule’s capacity constraints bound expected work placed before a job.",
-          "pitfall": "A raw time-indexed formulation with a binary-encoded huge horizon is not automatically a polynomial implementation."
+          "pitfall": "A raw time-indexed formulation with a binary-encoded huge horizon is not automatically a polynomial implementation.",
+          "id": "schedule-independent-alpha",
+          "section": "§5.9 · Theorem 5.21",
+          "sourceSections": [
+            "5.9"
+          ],
+          "reference": "Theorem 5.21",
+          "role": "Main section"
+        },
+        {
+          "id": "schedule-shared-alpha",
+          "name": "One common α and deterministic enumeration",
+          "section": "§5.9 · Variant discussed after Theorem 5.21",
+          "sourceSections": [
+            "5.9"
+          ],
+          "reference": "Variant discussed after Theorem 5.21",
+          "technique": "Scheduling",
+          "label": "Randomized and deterministic factor 2",
+          "guarantee": "The source states that one uniform α shared by all jobs also gives expected factor 2, and that enumerating the at most n resulting schedules derandomizes it. Its shared-α proof is explicitly outside the section.",
+          "steps": [
+            "Use the same density-priority preemptive schedule and choose one α uniformly in [0,1] for all jobs.",
+            "Order jobs by their α-points and run the resulting nonpreemptive schedule as early as release dates permit.",
+            "For derandomization enumerate the distinct orderings obtained as α crosses the breakpoints of the event schedule, evaluate their weighted completion costs, and take the best."
+          ],
+          "proof": "Only finitely many schedules occur, so one attains at most the expected cost. The expectation guarantee here is an imported source result, not the independent-points proof.",
+          "pitfall": "Independence of per-job αⱼ is unavailable for the common-α variant; it needs its own analysis.",
+          "role": "Mentioned variant; proof imported"
         }
       ]
     },
@@ -315,7 +713,34 @@
             "Union-bound the edge failures. For a nontrivial instance, max{W*,1} is also a lower bound on the integral optimum."
           ],
           "proof": "Independence is across different pairs for one fixed edge. Loads on different edges need not be independent.",
-          "pitfall": "The additive square-root bound needs the stated large-W* condition; it is not unconditional."
+          "pitfall": "The additive square-root bound needs the stated large-W* condition; it is not unconditional.",
+          "id": "routing-path-round",
+          "section": "§5.11 · Theorem 5.29; Corollary 5.30",
+          "sourceSections": [
+            "5.11"
+          ],
+          "reference": "Theorem 5.29; Corollary 5.30",
+          "role": "Main section"
+        },
+        {
+          "id": "routing-flow-lp",
+          "name": "Compact edge-flow LP and path decomposition",
+          "section": "§5.11 · Exercise 5.14; polynomial implementation",
+          "sourceSections": [
+            "5.11"
+          ],
+          "reference": "Exercise 5.14; polynomial implementation",
+          "technique": "Linear programming",
+          "label": "Equivalent fractional relaxation",
+          "guarantee": "A polynomial-sized multicommodity edge-flow LP realizes the path relaxation’s value; a polynomial number of flow paths suffice for independent path rounding.",
+          "steps": [
+            "For each commodity and each directed orientation of an undirected edge introduce nonnegative flow, impose unit source-to-sink conservation, and bound total bidirectional load on each edge by W.",
+            "Solve the LP minimizing W, then cancel cycles in each commodity without increasing any edge load.",
+            "Repeatedly extract a positive-flow source-to-sink path, subtract its minimum edge flow, and record that mass as its sampling probability."
+          ],
+          "proof": "Flow conservation permits path decomposition, and each extraction removes at least one positive edge. Cycle removal never increases congestion.",
+          "pitfall": "Sample one complete path per commodity; independently rounding individual edge flows can disconnect the route.",
+          "role": "Source exercise: implementation"
         }
       ]
     },
@@ -344,7 +769,35 @@
             "Encode the remaining edge restrictions as 2-SAT. The enumeration containing a restriction of a genuine coloring has a satisfying extension."
           ],
           "proof": "The minimum-degree assumption makes a small random sample dominate all remaining vertices.",
-          "pitfall": "A constant total edge density does not by itself imply the required minimum-degree promise."
+          "pitfall": "A constant total edge density does not by itself imply the required minimum-degree promise.",
+          "id": "dense-sample-enumerate",
+          "section": "§5.12 · Corollary 5.35 and extension construction",
+          "sourceSections": [
+            "5.12"
+          ],
+          "reference": "Corollary 5.35 and extension construction",
+          "role": "Main section"
+        },
+        {
+          "id": "dense-two-sat",
+          "name": "Extend two-color lists using the implication graph",
+          "section": "§5.12 · Extension subroutine; Exercise 6.3",
+          "sourceSections": [
+            "5.12"
+          ],
+          "reference": "Extension subroutine; Exercise 6.3",
+          "technique": "Graph algorithms",
+          "label": "Exact extension or rejection",
+          "guarantee": "Once a sampled coloring leaves at most two possible colors at every remaining vertex, a 2-SAT instance decides exactly whether that sampled coloring extends.",
+          "steps": [
+            "Remove neighbor colors fixed by the sample. Reject an empty color list and force any singleton choice.",
+            "Give a binary variable to each two-color list. For every edge, forbid each pair of choices giving its endpoints the same color by a clause (¬choiceᵤ∨¬choiceᵥ).",
+            "For each clause a∨b add implication edges ¬a→b and ¬b→a. Compute strongly connected components.",
+            "Reject if a variable and its negation share a component; otherwise use reverse topological component order to obtain a satisfying choice and verify the coloring."
+          ],
+          "proof": "Every forbidden local color collision is encoded as a clause, and the SCC criterion is exact for 2-SAT.",
+          "pitfall": "Dense sampling and this extension solver are separate steps: 2-SAT alone does not solve unrestricted 3-coloring.",
+          "role": "Supporting subroutine"
         }
       ]
     },
@@ -363,34 +816,168 @@
       "objective": "\\text{Find a proper }k\\text{-coloring, with }k\\text{ bounded despite only the promise }\\chi(G)\\le3.",
       "algorithms": [
         {
+          "id": "color-combinatorial",
+          "name": "High-degree neighborhoods, then greedy coloring",
+          "section": "§6.5 · Theorem 6.20",
+          "sourceSections": [
+            "6.5"
+          ],
+          "reference": "Theorem 6.20",
+          "technique": "Graph algorithms",
+          "label": "At most 4√n colors",
+          "guarantee": "For a promised 3-colorable graph, a combinatorial algorithm uses at most 4√n colors; it needs no semidefinite relaxation.",
+          "steps": [
+            "Fix the original n. While some vertex has degree at least √n in the remaining graph, choose one.",
+            "Use one fresh color for that vertex and two other fresh colors for its bipartite neighborhood; remove this closed neighborhood.",
+            "Greedily color the residual graph, whose maximum degree is below √n, using another palette."
+          ],
+          "proof": "The neighbors of a vertex in a 3-colorable graph are bipartite. Each removal eliminates at least √n vertices, so only O(√n) fresh palettes are needed.",
+          "pitfall": "Bipartiteness of every neighborhood uses the 3-colorability promise; it fails for a general graph.",
+          "role": "Main section"
+        },
+        {
+          "id": "color-bipartite",
+          "name": "Two-color a bipartite neighborhood",
+          "section": "§6.5 · Subroutine used in Theorem 6.20",
+          "sourceSections": [
+            "6.5"
+          ],
+          "reference": "Subroutine used in Theorem 6.20",
+          "technique": "Graph algorithms",
+          "label": "Exact two-coloring or conflict detection",
+          "guarantee": "Breadth-first or depth-first traversal two-colors a bipartite graph in linear graph time. A neighborhood of a vertex in a promised 3-colorable graph is bipartite.",
+          "steps": [
+            "Start an unvisited component with one of two colors and explore its edges by BFS or DFS.",
+            "Assign every newly reached vertex the opposite color to its parent.",
+            "If an edge joins vertices of the same color, report a conflict; otherwise repeat for remaining components."
+          ],
+          "proof": "A successful traversal colors every edge properly. A conflict exposes an odd cycle in that component.",
+          "pitfall": "The promise concerns the induced neighborhood; arbitrary graphs need not be two-colorable.",
+          "role": "Supporting subroutine"
+        },
+        {
+          "id": "color-greedy",
+          "name": "Greedy coloring of a bounded-degree remainder",
+          "section": "§6.5 · Low-degree subroutine; Exercise 6.4",
+          "sourceSections": [
+            "6.5"
+          ],
+          "reference": "Low-degree subroutine; Exercise 6.4",
+          "technique": "Graph algorithms",
+          "label": "At most Δ+1 colors",
+          "guarantee": "For a graph of maximum degree Δ, sequential greedy coloring always returns a proper coloring using at most Δ+1 colors.",
+          "steps": [
+            "Choose any order of the remaining vertices and maintain colors already assigned.",
+            "At a vertex, collect the colors of its already colored neighbors.",
+            "Choose a color absent from that set; a palette of Δ+1 always has an available color."
+          ],
+          "proof": "At most Δ forbidden neighbor colors exist when any vertex is processed.",
+          "pitfall": "The Δ used in the guarantee is a maximum-degree bound for this remaining graph, not its average degree.",
+          "role": "Supporting subroutine"
+        },
+        {
+          "id": "color-hyperplane-semi",
+          "name": "Random-hyperplane semicoloring",
+          "section": "§6.5 · Theorem 6.23",
+          "sourceSections": [
+            "6.5"
+          ],
+          "reference": "Theorem 6.23",
+          "technique": "SDP rounding",
+          "label": "O(Δ^(log₃2)) semicolors",
+          "guarantee": "In expected polynomial time obtain a sign-pattern labeling with at most n/4 monochromatic edges and O(Δ^(log₃2)) labels. This is a semicoloring, not yet a full proper coloring.",
+          "steps": [
+            "Find unit vectors with adjacent inner products at most −1/2; handle the edgeless case directly.",
+            "Choose t=⌈2+log₃Δ⌉ independent standard-Gaussian hyperplane normals and label each vertex by its t projection signs.",
+            "Count monochromatic edges. Accept if there are at most n/4; otherwise repeat the random hyperplanes."
+          ],
+          "proof": "An edge fails separation in all t planes with probability at most 3^(−t). The expected number of bad edges is small enough for at least constant success probability.",
+          "pitfall": "A sign-pattern label can still contain edges. Never call the output a proper coloring before the deletion step.",
+          "role": "Main section"
+        },
+        {
+          "id": "color-semi-wrapper",
+          "name": "Convert a semicoloring into a full coloring",
+          "section": "§6.5 · Wrapper preceding Theorem 6.23",
+          "sourceSections": [
+            "6.5"
+          ],
+          "reference": "Wrapper preceding Theorem 6.23",
+          "technique": "Graph algorithms",
+          "label": "O(k log n) full colors",
+          "guarantee": "If each remaining induced graph has a k-label semicoloring with at most one quarter as many bad edges as vertices, repeated extraction yields O(k log n) proper colors.",
+          "steps": [
+            "Run the semicoloring on the current remaining graph.",
+            "Discard both endpoints of every monochromatic edge from this round’s selected vertices, retaining at least half the current vertices.",
+            "Permanently color those retained vertices by their labels, using fresh colors. Repeat on the discarded vertices until none remain."
+          ],
+          "proof": "At most n/2 vertices are deleted per round, and all retained label classes are independent. Geometric decay gives O(log n) rounds.",
+          "pitfall": "Reusing an earlier palette can create conflicts with already colored vertices.",
+          "role": "Supporting conversion"
+        },
+        {
           "name": "Vector coloring, hyperplane semicoloring, and degree balancing",
           "technique": "SDP rounding",
           "label": "Õ(n^0.38685) colors",
           "guarantee": "The §6.5 analysis yields Õ(n^(log₆2)) colors; log₆2≈0.38685. Õ suppresses logarithmic factors.",
           "tex": "k=\\widetilde O\\!\\left(n^{\\log_6 2}\\right).",
           "steps": [
-            "Solve a unit-vector feasibility relaxation with adjacent vectors having inner product at most −1/2.",
-            "Use several random hyperplanes and label each vertex by its sequence of projection signs.",
-            "Control monochromatic edges. Removing their endpoints leaves a constant fraction of vertices properly colored, and repeat on the rest.",
-            "Combine low-degree semicoloring with high-degree neighborhood removal and balance the two color costs."
+            "Set σ=n^(log₆3) using the original graph size.",
+            "Remove high-degree closed neighborhoods of degree at least σ, using a fresh three-color palette for each.",
+            "On the residual maximum-degree-σ graph, use hyperplane semicoloring followed by the full-coloring wrapper.",
+            "Balance O(n/σ) neighborhood colors with Õ(σ^(log₃2)) residual colors to get Õ(n^(log₆2))."
           ],
           "proof": "An edge’s angle is at least 2π/3, so one plane fails to separate it with probability at most 1/3.",
-          "pitfall": "A semicoloring with few bad edges needs a deletion/recursion argument to become a full proper coloring."
+          "pitfall": "A semicoloring with few bad edges needs a deletion/recursion argument to become a full proper coloring.",
+          "id": "color-degree-balanced",
+          "section": "§6.5 · Theorem 6.24",
+          "sourceSections": [
+            "6.5"
+          ],
+          "reference": "Theorem 6.24",
+          "role": "Main section"
         },
         {
-          "name": "Repeated Gaussian independent-set extraction",
-          "technique": "SDP rounding",
-          "label": "Degree-sensitive coloring; Õ(n^1/4) extension",
-          "guarantee": "The §13.2 extractor gives O(Δ^(1/3)√lnΔ·ln n) colors after repetition, with bounded-degree cases handled greedily. Exercise 13.1 supplies the degree-balancing Õ(n^(1/4)) refinement.",
-          "tex": "k=O\\!\\left(\\Delta^{1/3}\\sqrt{\\ln\\Delta}\\,\\ln n\\right)\\quad\\text{for the degree-sensitive bound}.",
-          "steps": [
-            "Find a large independent set using the Gaussian-threshold algorithm in the separate independent-set entry.",
-            "Repeat the extractor enough times to obtain a suitably large set with high probability.",
-            "Give that set one new color, delete it, and repeat on the remaining graph.",
-            "Handle small maximum degree greedily; use the high/low-degree balancing exercise for the n^(1/4) refinement."
+          "id": "color-gaussian-repeat",
+          "name": "Amplified Gaussian extraction and repeated coloring",
+          "section": "§13.2 · Wrapper preceding Algorithm 13.2",
+          "sourceSections": [
+            "13.2"
           ],
-          "proof": "Removing a fixed fraction γ of the remaining vertices at each successful stage needs O((ln n)/γ) colors.",
-          "pitfall": "The promise of 3-colorability does not mean these general-graph algorithms output three colors."
+          "reference": "Wrapper preceding Algorithm 13.2",
+          "technique": "SDP rounding",
+          "label": "O(Δ^(1/3)√lnΔ · ln n) colors",
+          "guarantee": "Use the independent-set extractor with expected fraction γ=Ω(Δ^(−1/3)/√lnΔ), amplify until a set of size at least γ times the remaining order divided by two is found, and repeatedly remove such sets.",
+          "steps": [
+            "Use a valid lower bound γ from the extractor analysis for the current degree range, with bounded-degree graphs handled greedily.",
+            "A single trial yields size at least γn/2 with probability at least γ/2. Run ⌈(2c/γ)ln n⌉ independent trials to make a failed extraction probability at most n^(−c).",
+            "Color a successful independent set with one new color and remove it. Recompute on the remaining induced graph and repeat.",
+            "Allocate failure probabilities across all extraction rounds; a constant fraction γ/2 removed each round yields O((ln n)/γ) colors."
+          ],
+          "proof": "The expected-size statement needs amplification before it can guarantee progress. The geometric removal count and the number of trials per extraction are different quantities.",
+          "pitfall": "Amplification is not merely O(log n) trials independent of γ; its 1/γ dependence is essential.",
+          "role": "Main section"
+        },
+        {
+          "id": "color-gaussian-balanced",
+          "name": "Degree balancing for Gaussian coloring",
+          "section": "§13.2 · Exercise 13.1",
+          "sourceSections": [
+            "13.2"
+          ],
+          "reference": "Exercise 13.1",
+          "technique": "SDP rounding",
+          "label": "Õ(n^(1/4)) colors",
+          "guarantee": "The exercise extension balances high-degree neighborhood removal with the Gaussian residual coloring, giving Õ(n^(1/4)) colors.",
+          "steps": [
+            "Set the high-degree threshold D=n^(3/4) using the original graph size.",
+            "Repeatedly remove a vertex of degree at least D and its neighborhood, coloring each closed neighborhood with three fresh colors.",
+            "Use amplified Gaussian independent-set extraction on the residual graph of maximum degree below D.",
+            "Add the two color costs: Õ(n/D+D^(1/3))=Õ(n^(1/4))."
+          ],
+          "proof": "The neighborhood removal pays one palette per D deleted vertices, and the residual bound depends on D rather than the original maximum degree.",
+          "pitfall": "This improvement is an explicitly attributed exercise extension, not Theorem 6.24.",
+          "role": "Source exercise extension"
         }
       ]
     },
@@ -414,13 +1001,20 @@
           "guarantee": "For sufficiently large Δ, the expected set size is Ω(n·Δ^(−1/3)/√lnΔ). Constant-degree cases have elementary greedy alternatives.",
           "tex": "\\mathbb E|I|=\\Omega\\!\\left(\\frac{n}{\\Delta^{1/3}\\sqrt{\\ln\\Delta}}\\right).",
           "steps": [
-            "Obtain unit vectors with adjacent inner products at most −1/2.",
-            "Draw a standard Gaussian direction and retain vertices whose projection exceeds a chosen threshold.",
-            "Discard retained vertices that have a retained neighbor, leaving an independent set.",
-            "Use Gaussian marginal and joint-tail bounds to choose the threshold and lower-bound the expected surviving size."
+            "Solve the feasible vector program with unit vectors and adjacent inner products exactly −1/2, as in program (13.5).",
+            "If Δ≤5, use a greedy (Δ+1)-coloring and return its largest color class. Otherwise set τ=√((2/3)lnΔ).",
+            "Draw a standard Gaussian vector r and select S={v:vᵥ·r≥τ}.",
+            "Return only vertices of S with no neighbor in S; discard every selected vertex incident to an internal selected edge."
           ],
           "proof": "Negative correlation on an edge makes adjacent co-selection much rarer than single-vertex selection.",
-          "pitfall": "The selected threshold set can contain edges; the conflict-removal step is essential."
+          "pitfall": "The selected threshold set can contain edges; the conflict-removal step is essential.",
+          "id": "gaussian-independent-set",
+          "section": "§13.2 · Algorithm 13.2; Theorem 13.9",
+          "sourceSections": [
+            "13.2"
+          ],
+          "reference": "Algorithm 13.2; Theorem 13.9",
+          "role": "Main section"
         }
       ]
     },
@@ -444,20 +1038,26 @@
           "guarantee": "The output costs at most f·OPT, where f is the maximum number of input sets containing any one element.",
           "tex": "\\operatorname{cost}(\\mathcal C)\\le f\\operatorname{OPT},\\qquad f=\\max_{u\\in U}|\\{S:u\\in S\\}|.",
           "steps": [
-            "Start with zero element dual variables and no chosen sets.",
-            "Raise dual variables for uncovered elements while preserving every set’s dual inequality.",
-            "When a set becomes tight, select it and mark its elements covered. Continue until all elements are covered.",
-            "Write each chosen set’s cost as its tight dual sum. Charge each element at most f times and apply weak duality."
+            "Choose an uncovered element e; every set containing e is currently unselected.",
+            "Increase only dual variable yₑ by the minimum remaining slack c(S)−Σᵥ∈S yᵥ over sets S containing e.",
+            "Select a set attaining this minimum slack, making it tight, and mark all its elements covered. Repeat until the universe is covered."
           ],
           "proof": "The frequency bound limits repeated charging of one dual variable.",
-          "pitfall": "Frequency per element and cardinality per set are different parameters."
+          "pitfall": "Frequency per element and cardinality per set are different parameters.",
+          "id": "cover-primal-dual",
+          "section": "§7.1 · Algorithm 7.1",
+          "sourceSections": [
+            "7.1"
+          ],
+          "reference": "Algorithm 7.1",
+          "role": "Main section"
         },
         {
           "name": "Greedy cost per newly covered element",
           "technique": "Greedy",
           "label": "Additional algorithm",
           "additional": true,
-          "section": "§1.6 · additional background",
+          "section": "§1.6 · Additional background",
           "guarantee": "For n=|U|, greedy weighted Set Cover has an Hₙ≤1+ln n approximation guarantee.",
           "tex": "\\operatorname{ALG}\\le H_{|U|}\\operatorname{OPT}.",
           "steps": [
@@ -466,7 +1066,13 @@
             "Compare the charges within an optimal set and sum the resulting harmonic bound."
           ],
           "proof": "The denominator must count newly covered elements at the current step.",
-          "pitfall": "Greedy’s logarithmic guarantee and the primal–dual frequency guarantee come from different analyses."
+          "pitfall": "Greedy’s logarithmic guarantee and the primal–dual frequency guarantee come from different analyses.",
+          "id": "cover-greedy",
+          "sourceSections": [
+            "1.6"
+          ],
+          "reference": "Additional background",
+          "role": "Additional background"
         }
       ]
     },
@@ -484,19 +1090,25 @@
       "objective": "\\min_{P:s\\leadsto t}\\sum_{e\\in P}c_e.",
       "algorithms": [
         {
-          "name": "Primal–dual cut growth and reverse deletion",
+          "name": "Primal–dual cut growth and path extraction",
           "technique": "Primal–dual",
           "label": "Exact algorithm",
           "guarantee": "The surviving path has cost equal to a feasible dual value, proving optimality.",
           "tex": "\\operatorname{cost}(P)=\\sum_S y_S=\\operatorname{OPT}.",
           "steps": [
-            "Maintain the region reachable from s using selected tight edges.",
-            "Increase the dual variable of the current s-side cut until another crossing edge becomes tight; add the edge and update reachability.",
-            "Stop once t is connected. Delete redundant selected edges in reverse order while preserving an s–t connection.",
-            "Use the nested cuts and final path to show each positive dual variable is charged exactly once."
+            "Start a tree on {s}; its current vertex set S excludes t. Raise the dual variable for the separating cut δ(S) until a crossing edge becomes tight.",
+            "Add a tight crossing edge and its outside endpoint to the tree; repeat until t enters the tree.",
+            "Return the unique s–t path within the selected tree, discarding all other branches."
           ],
-          "proof": "Primal feasibility and an equal-cost feasible dual certify an exact optimum.",
-          "pitfall": "Tight edges alone can include branches; cleanup is part of the correctness and cost proof."
+          "proof": "The returned path crosses each grown tree cut exactly once. Tight path edges charge exactly to the feasible dual, giving equality of primal and dual cost.",
+          "pitfall": "The source’s Algorithm 7.4 extracts the unique tree path. Canonical reverse deletion is the separately taught Steiner-forest cleanup.",
+          "id": "path-primal-dual",
+          "section": "§7.3 · Algorithm 7.4",
+          "sourceSections": [
+            "7.3"
+          ],
+          "reference": "Algorithm 7.4",
+          "role": "Main section"
         }
       ]
     },
@@ -514,19 +1126,46 @@
       "objective": "\\min_{F\\subseteq E}\\sum_{e\\in F}c_e\\quad\\text{subject to }s_i,t_i\\text{ connected in }(V,F)\\text{ for every }i.",
       "algorithms": [
         {
+          "id": "steiner-first-attempt",
+          "name": "Grow one active component at a time: diagnostic first attempt",
+          "section": "§7.4 · Algorithm 7.5",
+          "sourceSections": [
+            "7.4"
+          ],
+          "reference": "Algorithm 7.5",
+          "technique": "Primal–dual",
+          "label": "Feasible; displayed dual analysis is insufficient",
+          "guarantee": "The algorithm connects every required pair, but the displayed single-component dual-growth analysis does not establish a constant approximation certificate.",
+          "steps": [
+            "Maintain a forest of tight edges. Choose one connected component that separates some required terminal pair.",
+            "Raise that component’s cut dual until a crossing edge becomes tight, add it to the forest, and update components.",
+            "Repeat until all pairs are connected; compare its dual accounting with the simultaneous-growth algorithm."
+          ],
+          "proof": "Tight crossing edges merge components and ensure feasibility. In the source’s unit-cost example, the primal cost k equals OPT while the generated dual is only one.",
+          "pitfall": "That example defeats this dual certificate; it does not prove that the actual solution is k times worse than OPT.",
+          "role": "Diagnostic first attempt"
+        },
+        {
           "name": "Simultaneous moat growth followed by pruning",
           "technique": "Primal–dual",
           "label": "Factor 2",
           "guarantee": "The pruned forest costs at most twice OPT.",
           "tex": "\\operatorname{cost}(F)\\le2\\sum_S y_S\\le2\\operatorname{OPT}.",
           "steps": [
-            "Start with separate vertex components and mark a component active when it separates a still-disconnected required pair.",
-            "Grow active component duals together until an edge becomes tight, then add it and merge the affected components.",
-            "Continue until every required pair is connected. Prune edges that are unnecessary for the pair requirements.",
-            "Contract the current components in the pruned forest and use the aggregate forest degree bound to charge each period of growth."
+            "Start with isolated vertices and zero cut duals. A component is active exactly when it contains one endpoint but not the other of a required pair.",
+            "Raise all active component cut duals at the same rate until an edge becomes tight; add it to the forest and merge components.",
+            "When every pair is connected, inspect selected edges in reverse insertion order and delete an edge whenever all prescribed pairs remain connected.",
+            "Charge remaining tight edges to active components and use the forest degree bound for the factor-two analysis."
           ],
           "proof": "The factor two comes from an aggregate forest inequality, not a degree-two bound on every active component.",
-          "pitfall": "Requiring every terminal to lie in one component changes the problem."
+          "pitfall": "Pruning must preserve every demand pair. The source uses reverse insertion order; arbitrary-order deletion is a valid separately attributed Exercise 7.4 extension.",
+          "id": "steiner-simultaneous",
+          "section": "§7.4 · Algorithm 7.6",
+          "sourceSections": [
+            "7.4"
+          ],
+          "reference": "Algorithm 7.6",
+          "role": "Main section"
         }
       ]
     },
@@ -550,13 +1189,20 @@
           "label": "Expected O(log n) stretch",
           "guarantee": "Every sampled tree dominates original distances; each fixed pair has expected stretch O(log n).",
           "steps": [
-            "Choose the random ordering and scale shift for a hierarchy of metric clusters.",
-            "Build nested partitions from coarse to fine scales using the randomized ball-growing rule.",
-            "Represent cluster inclusion by a tree, choosing edge lengths according to scale so original distances are not underestimated.",
-            "Bound the probability that a fixed pair is separated at each level and sum its expected tree-distance contribution."
+            "Rescale the metric if needed and choose a top scale Δ that is a power of two greater than twice the diameter. Draw one uniform permutation π of all vertices and one r₀ uniformly from [1/2,1).",
+            "At scale i set rᵢ=2ⁱr₀. Within each current parent cluster, assign unassigned points to the first radius-rᵢ ball centered at π(j) that contains them; centers range over the entire original vertex set.",
+            "Repeat at decreasing scales until singleton leaves. Connect each cluster to its parent with the source’s scale edge length 2ⁱ.",
+            "Use the resulting hierarchical tree metric: each sample dominates original distances, and a fixed pair has expected tree distance O(log n) times its original distance."
           ],
           "proof": "Random separation probabilities control each pair’s expected distortion even though some sampled pairs can be highly stretched.",
-          "pitfall": "This is a metric construction guarantee, not a claim that one tree simultaneously has logarithmic worst-case stretch for all pairs."
+          "pitfall": "This is a metric construction guarantee, not a claim that one tree simultaneously has logarithmic worst-case stretch for all pairs.",
+          "id": "frt-hierarchy",
+          "section": "§8.5 · Algorithm 8.4",
+          "sourceSections": [
+            "8.5"
+          ],
+          "reference": "Algorithm 8.4",
+          "role": "Main section"
         }
       ]
     },
@@ -575,6 +1221,46 @@
       "objective": "\\min_{P_i,\\,u_e}\\sum_e\\ell_e f(u_e)\\quad\\text{subject to}\\quad u_e\\ge\\sum_{i:e\\in P_i}d_i.",
       "algorithms": [
         {
+          "id": "buy-bulk-tree",
+          "name": "Exact buy-at-bulk routing on a tree",
+          "section": "§8.6 · Algorithm 8.5",
+          "sourceSections": [
+            "8.6"
+          ],
+          "reference": "Algorithm 8.5",
+          "technique": "Tree algorithms",
+          "label": "Exact on a supplied tree",
+          "guarantee": "A tree has only one path per demand pair. Routing each demand on that path and installing exactly the resulting load is optimal for every nondecreasing edge installation function.",
+          "steps": [
+            "For each source–sink pair find its unique tree path and send the entire prescribed demand along it.",
+            "For each tree edge, sum all demands whose paths contain that edge.",
+            "Install exactly that capacity and pay the edge’s installation cost at that load."
+          ],
+          "proof": "Every feasible route must cross the same tree edges; nondecreasing cost means extra capacity cannot improve the objective.",
+          "pitfall": "The exact guarantee is for the tree instance, not the original general metric.",
+          "role": "Supporting subroutine"
+        },
+        {
+          "id": "tree-remove-steiner",
+          "name": "Remove auxiliary vertices from the sampled hierarchical tree",
+          "section": "§8.6 · Theorem 8.19; Corollary 8.20",
+          "sourceSections": [
+            "8.6"
+          ],
+          "reference": "Theorem 8.19; Corollary 8.20",
+          "technique": "Tree algorithms",
+          "label": "Distances increase by at most factor 4",
+          "guarantee": "For the source’s hierarchical tree with the original vertices as leaves, contraction yields a tree on original vertices with Tᵤᵥ≤T′ᵤᵥ≤4Tᵤᵥ.",
+          "steps": [
+            "Start with the hierarchical tree produced by the embedding, whose original metric vertices label leaves.",
+            "Repeatedly contract an edge from a labeled vertex into an unlabeled parent, preserving the original labels and continuing until all auxiliary vertices are removed.",
+            "Multiply the remaining edge lengths by four. Use the hierarchy’s geometric scales to compare all original pair distances."
+          ],
+          "proof": "Geometric level lengths bound the distortion caused by label-preserving contractions; the final scaling restores domination.",
+          "pitfall": "This factor-four statement is specific to the hierarchical tree in the source, not an arbitrary tree contraction.",
+          "role": "Supporting subroutine"
+        },
+        {
           "name": "Route on a random tree and transfer to the graph",
           "technique": "Metric embedding",
           "label": "Expected O(log n) approximation",
@@ -587,37 +1273,148 @@
             "Compare with a fixed optimum: expected metric stretch bounds transferred length, and subadditivity of f bounds merged-capacity cost."
           ],
           "proof": "Economies of scale imply subadditivity. Pairwise expected stretch is enough after summing the fixed optimum’s cost.",
-          "pitfall": "Replacing the general capacity cost by a linear function treats only a special case and removes the bulk-discount behavior."
+          "pitfall": "Replacing the general capacity cost by a linear function treats only a special case and removes the bulk-discount behavior.",
+          "id": "buy-bulk-general",
+          "section": "§8.6 · Algorithm 8.6",
+          "sourceSections": [
+            "8.6"
+          ],
+          "reference": "Algorithm 8.6",
+          "role": "Main section"
         }
       ]
     },
     {
       "id": "planar-independent-set",
-      "title": "Maximum independent set in planar graphs",
+      "title": "Maximum-weight independent set in planar graphs",
       "family": "Independent sets",
       "scope": "assigned",
       "sections": "§10.2",
       "units": [
         "core-planar-mis"
       ],
-      "input": "A planar graph G and desired accuracy ε>0.",
-      "goal": "Find a maximum-cardinality set of pairwise nonadjacent vertices approximately.",
-      "objective": "\\max_{I\\subseteq V}|I|\\quad\\text{subject to}\\quad E(G[I])=\\varnothing.",
+      "input": "A planar graph with nonnegative vertex weights and a planar embedding, obtained by a standard polynomial-time embedding routine if needed.",
+      "goal": "Find an independent set of maximum total vertex weight approximately; cardinality is the special case of unit weights.",
+      "objective": "\\max_{I\\subseteq V\\,\\text{independent}}\\sum_{v\\in I}w_v,\\qquad w_v\\ge0.",
       "algorithms": [
+        {
+          "id": "mis-tree",
+          "name": "Weighted independent-set DP on a rooted tree",
+          "section": "§10.2 · Tree example preceding Theorem 10.10",
+          "sourceSections": [
+            "10.2"
+          ],
+          "reference": "Tree example preceding Theorem 10.10",
+          "technique": "Dynamic programming",
+          "label": "Exact; linear tree time",
+          "guarantee": "For a tree with nonnegative vertex weights, a two-state dynamic program returns a maximum-weight independent set in linear time.",
+          "steps": [
+            "Root the tree and process children before their parent.",
+            "Use IN(u)=wᵤ+Σchild OUT(child), and OUT(u)=Σchild max{IN(child),OUT(child)}.",
+            "At the root take the better state and reconstruct choices, forcing children out whenever their parent is included."
+          ],
+          "proof": "Distinct child subtrees interact only through their parent. The two states encode its entire effect.",
+          "pitfall": "This recurrence depends on the tree structure; applying it directly to a cyclic graph omits conflicts.",
+          "role": "Supporting subroutine"
+        },
+        {
+          "id": "mis-bag-dp",
+          "name": "Weighted independent set on a supplied tree decomposition",
+          "section": "§10.2 · Theorem 10.12",
+          "sourceSections": [
+            "10.2"
+          ],
+          "reference": "Theorem 10.12",
+          "technique": "Dynamic programming",
+          "label": "Exact; O(2^O(t)N)",
+          "guarantee": "Given a valid width-t decomposition with N bags, solve weighted independent set by compatible bag subsets in O(2^O(t)N) time.",
+          "steps": [
+            "Root the bag tree. For every bag list its independent vertex subsets as possible states.",
+            "For a fixed parent state, maximize each child contribution over child states that agree on the shared bag intersection.",
+            "Subtract the shared selected-vertex weight when combining subproblem values so that no vertex is charged twice.",
+            "Choose the best root state and use stored maximizing states to reconstruct the independent set."
+          ],
+          "proof": "The running-intersection property separates child subgraphs once the selected vertices of the bag are fixed.",
+          "pitfall": "Bag membership alone is insufficient: a valid tree decomposition must satisfy edge coverage and connected occurrence of every vertex.",
+          "role": "Supporting subroutine"
+        },
+        {
+          "id": "mis-planar-decomposition",
+          "name": "Construct the bounded-width outerplanar decomposition",
+          "section": "§10.2 · Lemmas 10.13–10.15; Theorem 10.16",
+          "sourceSections": [
+            "10.2"
+          ],
+          "reference": "Lemmas 10.13–10.15; Theorem 10.16",
+          "technique": "Graph algorithms",
+          "label": "Width O(k); exact k-outerplanar solver",
+          "guarantee": "The source constructs a width-O(k) decomposition of a k-outerplanar graph and combines it with bag DP for O(2^O(k)n²) weighted independent-set time.",
+          "steps": [
+            "Use the planar embedding to split high-degree vertices into a degree-at-most-three expansion, preserving a mapping back to original vertices for the decomposition.",
+            "Recursively remove exterior-face edges, construct a spanning forest of the remainder, then extend it by exterior edges without cycles; the resulting forest has fundamental-cycle load at most 3k.",
+            "Create vertex and forest-edge bags. For every nonforest edge propagate one endpoint along the bags of its fundamental forest path, giving width at most the load plus one.",
+            "Map split-vertex bag occurrences back to original vertices and run the weighted bag-state DP on the resulting decomposition."
+          ],
+          "proof": "Bounded outerplanarity controls fundamental-cycle load, which controls bag width. The split graph is only a tool for constructing bags.",
+          "pitfall": "Do not solve MIS on the split graph as if its independent sets were the original independent sets.",
+          "role": "Supporting subroutine"
+        },
         {
           "name": "Baker’s layer deletion and bounded-treewidth DP",
           "technique": "Dynamic programming",
           "label": "PTAS",
-          "guarantee": "For any fixed 0<ε<1, return an independent set of size at least (1−ε)OPT in polynomial time.",
-          "tex": "|I|\\ge(1-\\varepsilon)\\operatorname{OPT}.",
+          "guarantee": "For fixed 0<ε<1, return an independent set of weight at least (1−ε)OPT in polynomial time. The exact k-outerplanar subroutine runs in O(2^O(k)n²).",
+          "tex": "w(I)\\ge(1-\\varepsilon)\\operatorname{OPT}.",
           "steps": [
-            "Assign outer-face layers and choose an integer k of order 1/ε.",
-            "For each residue class modulo k, delete that class of layers.",
-            "The remaining bounded-outerplanarity pieces have treewidth O(k). Solve independent set exactly by bag-state dynamic programming.",
-            "Return the best result over residues. Some deletion removes at most a 1/k fraction of a fixed optimal independent set."
+            "Assign successive outer-face layers of the planar embedding. Choose k with 1/k≤ε.",
+            "For every residue modulo k, delete that class of layers. Every remaining component has bounded outerplanarity O(k).",
+            "Construct its bounded-width tree decomposition and run the exact weighted bag-state independent-set DP.",
+            "Return the heaviest result over all residues. Averaging the weight of a fixed optimum over layer classes bounds the lost weight by OPT/k."
           ],
           "proof": "Averaging limits the lost optimum; bounded treewidth supplies the exact subroutine on what remains.",
-          "pitfall": "The treewidth bound depends on the layered planar structure; arbitrary vertex deletion does not provide it."
+          "pitfall": "The treewidth bound depends on the layered planar structure; arbitrary vertex deletion does not provide it.",
+          "id": "planar-baker",
+          "section": "§10.2 · Theorem 10.11; Theorem 10.16 as subroutine",
+          "sourceSections": [
+            "10.2"
+          ],
+          "reference": "Theorem 10.11; Theorem 10.16",
+          "role": "Main section"
+        }
+      ]
+    },
+    {
+      "id": "odd-even-csp",
+      "title": "Three-variable odd/even constraint satisfaction",
+      "family": "Satisfiability and hardness",
+      "scope": "assigned",
+      "sections": "§16.3",
+      "units": [
+        "core-hardness"
+      ],
+      "input": "A collection of odd/even parity constraints, each on three distinct Boolean variables; nonnegative weights can be summed in the same way.",
+      "goal": "Find an assignment maximizing the total satisfied constraint weight.",
+      "objective": "\\max_{x\\in\\{0,1\\}^n}\\sum_Cw_C\\,\\mathbf1\\!\\left[\\bigoplus_{i\\in C}x_i=b_C\\right].",
+      "algorithms": [
+        {
+          "id": "parity-two-constants",
+          "name": "Choose the better of the two constant assignments",
+          "section": "§16.3 · Discussion following Corollary 16.20",
+          "sourceSections": [
+            "16.3"
+          ],
+          "reference": "Discussion following Corollary 16.20",
+          "technique": "Enumeration",
+          "label": "Deterministic factor 1/2",
+          "guarantee": "All-one satisfies every odd constraint, and all-zero satisfies every even constraint. Their better value is at least half the total weight and hence at least OPT/2.",
+          "steps": [
+            "Evaluate the total satisfied weight for the assignment setting every variable to zero.",
+            "Evaluate the total satisfied weight for the assignment setting every variable to one.",
+            "Return whichever complete assignment has the larger satisfied weight."
+          ],
+          "proof": "Each three-variable odd/even constraint is satisfied by exactly one of the two constant assignments. Their values sum to total constraint weight.",
+          "pitfall": "The argument uses odd arity. For even-arity parity constraints, the two constant assignments need not complement one another.",
+          "role": "Main section"
         }
       ]
     },
@@ -645,7 +1442,9 @@
             "Take an Euler tour of the resulting connected even-degree multigraph, then shortcut repeated vertices."
           ],
           "proof": "The MST costs at most OPT, the matching at most OPT/2, and metric shortcutting does not increase length.",
-          "pitfall": "The guarantee relies on symmetry and the triangle inequality."
+          "pitfall": "The guarantee relies on symmetry and the triangle inequality.",
+          "id": "metric-tsp-0",
+          "role": "Additional background"
         }
       ]
     },
@@ -673,7 +1472,9 @@
             "Run dynamic programming over the boundary states and return the best represented tour."
           ],
           "proof": "Geometry bounds the expected or selected extra length charged to boundaries and portals.",
-          "pitfall": "This is additional §10.1 material. The assigned §10.2 problem is planar independent set."
+          "pitfall": "This is additional §10.1 material. The assigned §10.2 problem is planar independent set.",
+          "id": "euclidean-tsp-0",
+          "role": "Additional background"
         }
       ]
     },
@@ -701,9 +1502,523 @@
             "Each edge has a selected endpoint, and the selected indicator is at most twice the fractional value for every vertex."
           ],
           "proof": "Feasibility and the objective bound follow from two pointwise inequalities.",
-          "pitfall": "Using a strict threshold greater than 1/2 can leave an edge with two half-valued endpoints uncovered."
+          "pitfall": "Using a strict threshold greater than 1/2 can leave an edge with two half-valued endpoints uncovered.",
+          "id": "vertex-cover-0",
+          "role": "Additional background"
         }
       ]
+    }
+  ],
+  "sectionAudit": [
+    {
+      "section": "3.1",
+      "methods": [
+        {
+          "problem": "knapsack",
+          "algorithm": "knapsack-exact"
+        },
+        {
+          "problem": "knapsack",
+          "algorithm": "knapsack-fptas"
+        }
+      ],
+      "reductions": [],
+      "tool": null
+    },
+    {
+      "section": "3.2",
+      "methods": [
+        {
+          "problem": "makespan",
+          "algorithm": "makespan-fixed-m"
+        },
+        {
+          "problem": "makespan",
+          "algorithm": "makespan-variable-m"
+        },
+        {
+          "problem": "makespan",
+          "algorithm": "makespan-config-dp"
+        },
+        {
+          "problem": "makespan",
+          "algorithm": "makespan-bisection"
+        }
+      ],
+      "reductions": [
+        "fptas-integrality"
+      ],
+      "tool": null
+    },
+    {
+      "section": "3.3",
+      "methods": [
+        {
+          "problem": "bin-packing",
+          "algorithm": "bin-first-fit"
+        },
+        {
+          "problem": "bin-packing",
+          "algorithm": "bin-ffd"
+        },
+        {
+          "problem": "bin-packing",
+          "algorithm": "bin-config-dp"
+        },
+        {
+          "problem": "bin-packing",
+          "algorithm": "bin-small-insertion"
+        },
+        {
+          "problem": "bin-packing",
+          "algorithm": "bin-linear-grouping"
+        }
+      ],
+      "reductions": [
+        "partition-bin"
+      ],
+      "tool": null
+    },
+    {
+      "section": "5.1",
+      "methods": [
+        {
+          "problem": "max-sat",
+          "algorithm": "sat-fair"
+        },
+        {
+          "problem": "max-cut",
+          "algorithm": "cut-fair"
+        }
+      ],
+      "reductions": [],
+      "tool": null
+    },
+    {
+      "section": "5.2",
+      "methods": [
+        {
+          "problem": "max-sat",
+          "algorithm": "sat-conditional"
+        },
+        {
+          "problem": "max-cut",
+          "algorithm": "cut-conditional"
+        }
+      ],
+      "reductions": [],
+      "tool": null
+    },
+    {
+      "section": "5.3",
+      "methods": [
+        {
+          "problem": "max-sat",
+          "algorithm": "sat-biased"
+        }
+      ],
+      "reductions": [],
+      "tool": null
+    },
+    {
+      "section": "5.4",
+      "methods": [
+        {
+          "problem": "max-sat",
+          "algorithm": "sat-lp"
+        }
+      ],
+      "reductions": [],
+      "tool": null
+    },
+    {
+      "section": "5.5",
+      "methods": [
+        {
+          "problem": "max-sat",
+          "algorithm": "sat-best-two"
+        }
+      ],
+      "reductions": [],
+      "tool": null
+    },
+    {
+      "section": "5.6",
+      "methods": [
+        {
+          "problem": "max-sat",
+          "algorithm": "sat-nonlinear"
+        }
+      ],
+      "reductions": [],
+      "tool": null
+    },
+    {
+      "section": "5.7",
+      "methods": [
+        {
+          "problem": "prize-collecting-steiner",
+          "algorithm": "pcst-random-threshold"
+        }
+      ],
+      "reductions": [],
+      "tool": null
+    },
+    {
+      "section": "5.8",
+      "methods": [
+        {
+          "problem": "facility-location",
+          "algorithm": "facility-cluster-round"
+        }
+      ],
+      "reductions": [],
+      "tool": null
+    },
+    {
+      "section": "5.9",
+      "methods": [
+        {
+          "problem": "release-date-scheduling",
+          "algorithm": "schedule-relaxation"
+        },
+        {
+          "problem": "release-date-scheduling",
+          "algorithm": "schedule-independent-alpha"
+        },
+        {
+          "problem": "release-date-scheduling",
+          "algorithm": "schedule-shared-alpha"
+        }
+      ],
+      "reductions": [],
+      "tool": null
+    },
+    {
+      "section": "5.10",
+      "methods": [],
+      "reductions": [],
+      "tool": "Chernoff upper/lower tails, moment-generating functions and edge-wise union bounds. Used by routing and dense coloring; an analysis tool rather than a separate optimization algorithm."
+    },
+    {
+      "section": "5.11",
+      "methods": [
+        {
+          "problem": "integer-routing",
+          "algorithm": "routing-path-round"
+        },
+        {
+          "problem": "integer-routing",
+          "algorithm": "routing-flow-lp"
+        }
+      ],
+      "reductions": [],
+      "tool": null
+    },
+    {
+      "section": "5.12",
+      "methods": [
+        {
+          "problem": "dense-three-coloring",
+          "algorithm": "dense-sample-enumerate"
+        },
+        {
+          "problem": "dense-three-coloring",
+          "algorithm": "dense-two-sat"
+        }
+      ],
+      "reductions": [],
+      "tool": null
+    },
+    {
+      "section": "6.1",
+      "methods": [
+        {
+          "problem": "max-cut",
+          "algorithm": "sdp-gram-vectors"
+        }
+      ],
+      "reductions": [],
+      "tool": null
+    },
+    {
+      "section": "6.2",
+      "methods": [
+        {
+          "problem": "max-cut",
+          "algorithm": "cut-gw"
+        }
+      ],
+      "reductions": [],
+      "tool": null
+    },
+    {
+      "section": "6.5",
+      "methods": [
+        {
+          "problem": "three-colorable-coloring",
+          "algorithm": "color-combinatorial"
+        },
+        {
+          "problem": "three-colorable-coloring",
+          "algorithm": "color-bipartite"
+        },
+        {
+          "problem": "three-colorable-coloring",
+          "algorithm": "color-greedy"
+        },
+        {
+          "problem": "three-colorable-coloring",
+          "algorithm": "color-hyperplane-semi"
+        },
+        {
+          "problem": "three-colorable-coloring",
+          "algorithm": "color-semi-wrapper"
+        },
+        {
+          "problem": "three-colorable-coloring",
+          "algorithm": "color-degree-balanced"
+        }
+      ],
+      "reductions": [],
+      "tool": null
+    },
+    {
+      "section": "13.2",
+      "methods": [
+        {
+          "problem": "three-colorable-coloring",
+          "algorithm": "color-gaussian-repeat"
+        },
+        {
+          "problem": "three-colorable-coloring",
+          "algorithm": "color-gaussian-balanced"
+        },
+        {
+          "problem": "three-colorable-independent-set",
+          "algorithm": "gaussian-independent-set"
+        }
+      ],
+      "reductions": [],
+      "tool": null
+    },
+    {
+      "section": "7.1",
+      "methods": [
+        {
+          "problem": "set-cover",
+          "algorithm": "cover-primal-dual"
+        }
+      ],
+      "reductions": [],
+      "tool": null
+    },
+    {
+      "section": "7.3",
+      "methods": [
+        {
+          "problem": "shortest-path",
+          "algorithm": "path-primal-dual"
+        }
+      ],
+      "reductions": [],
+      "tool": null
+    },
+    {
+      "section": "7.4",
+      "methods": [
+        {
+          "problem": "steiner-forest",
+          "algorithm": "steiner-first-attempt"
+        },
+        {
+          "problem": "steiner-forest",
+          "algorithm": "steiner-simultaneous"
+        }
+      ],
+      "reductions": [],
+      "tool": null
+    },
+    {
+      "section": "8.5",
+      "methods": [
+        {
+          "problem": "tree-metric-embedding",
+          "algorithm": "frt-hierarchy"
+        }
+      ],
+      "reductions": [],
+      "tool": null
+    },
+    {
+      "section": "8.6",
+      "methods": [
+        {
+          "problem": "buy-at-bulk",
+          "algorithm": "buy-bulk-tree"
+        },
+        {
+          "problem": "buy-at-bulk",
+          "algorithm": "tree-remove-steiner"
+        },
+        {
+          "problem": "buy-at-bulk",
+          "algorithm": "buy-bulk-general"
+        }
+      ],
+      "reductions": [],
+      "tool": null
+    },
+    {
+      "section": "10.2",
+      "methods": [
+        {
+          "problem": "planar-independent-set",
+          "algorithm": "mis-tree"
+        },
+        {
+          "problem": "planar-independent-set",
+          "algorithm": "mis-bag-dp"
+        },
+        {
+          "problem": "planar-independent-set",
+          "algorithm": "mis-planar-decomposition"
+        },
+        {
+          "problem": "planar-independent-set",
+          "algorithm": "planar-baker"
+        }
+      ],
+      "reductions": [
+        "clique-complement"
+      ],
+      "tool": null
+    },
+    {
+      "section": "16.1",
+      "methods": [],
+      "reductions": [
+        "three-dm-first",
+        "three-dm-refined",
+        "disjoint-path-gap",
+        "recapped-reductions"
+      ],
+      "tool": null
+    },
+    {
+      "section": "16.3",
+      "methods": [
+        {
+          "problem": "odd-even-csp",
+          "algorithm": "parity-two-constants"
+        }
+      ],
+      "reductions": [
+        "pcp-csp",
+        "pcp-parity",
+        "parity-e3sat",
+        "or-pcp-e3sat",
+        "parity-2sat"
+      ],
+      "tool": null
+    }
+  ],
+  "hardnessConstructions": [
+    {
+      "id": "partition-bin",
+      "section": "3.3",
+      "title": "PARTITION to bin packing",
+      "reference": "Theorem 3.8",
+      "construction": "Scale integers bᵢ summing to B into sizes 2bᵢ/B. A partition packs in two bins; absence of a partition needs at least three. Items larger than one immediately certify NO.",
+      "lesson": "This rules out an absolute factor below 3/2 unless P=NP; it does not rule out an additive-bin APTAS."
+    },
+    {
+      "id": "fptas-integrality",
+      "section": "3.2",
+      "title": "Hypothetical FPTAS to an exact algorithm",
+      "reference": "Strong NP-hardness discussion",
+      "construction": "If integer OPT has a polynomial upper bound nq(n), choose ε≤1/(2nq(n)). An assumed FPTAS then returns an integer value less than OPT+1, forcing equality.",
+      "lesson": "This is a contradiction wrapper for strong NP-hardness, not a constructed FPTAS."
+    },
+    {
+      "id": "three-dm-first",
+      "section": "16.1",
+      "title": "3-dimensional matching to threshold-three scheduling",
+      "reference": "Initial 3DM construction",
+      "construction": "Create one machine for each triple, unit-time element jobs allowed only on incident triples, and m−n dummy jobs of length three. A schedule of makespan at most three exists exactly for a perfect matching.",
+      "lesson": "This first construction proves feasibility hardness; use the refined threshold-two gadget for the strict 3/2 approximation gap."
+    },
+    {
+      "id": "three-dm-refined",
+      "section": "16.1",
+      "title": "Refined restricted-assignment scheduling gap",
+      "reference": "Theorem 16.1",
+      "construction": "Create unit jobs for the B and C elements. For each a, create kₐ−1 length-two dummy jobs allowed on its type-a triple machines. Deal with absent a-elements as immediate NO cases.",
+      "lesson": "YES has OPT≤2 and NO has integer OPT≥3, excluding factors below 3/2 unless P=NP."
+    },
+    {
+      "id": "disjoint-path-gap",
+      "section": "16.1",
+      "title": "Directed edge-disjoint-path gap amplification",
+      "reference": "Theorem 16.2",
+      "construction": "Arrange k pair-routes and replace their crossings by copies of the hard two-pair directed routing instance. Select k as a polynomial in the base arc count for fixed ε.",
+      "lesson": "YES routes all k pairs; NO routes at most one. Track the O(k²|A|) new arc count before expressing the hardness exponent."
+    },
+    {
+      "id": "recapped-reductions",
+      "section": "16.1",
+      "title": "Earlier reductions recapped in the assigned section",
+      "reference": "Opening of §16.1",
+      "construction": "Review the dominating-set to {1,2}-distance k-center gap, Hamiltonian-cycle to nonmetric-TSP cost gap, and PARTITION to two-versus-three-bin gap.",
+      "lesson": "These are recaps of earlier reductions. They do not make every positive algorithm in those earlier chapters assigned."
+    },
+    {
+      "id": "pcp-csp",
+      "section": "16.3",
+      "title": "PCP verifier to a bounded-arity gap CSP",
+      "reference": "Theorem 16.18",
+      "construction": "Enumerate polynomially many random tapes, create one local acceptance predicate per tape, and share one Boolean variable for each global proof location.",
+      "lesson": "Completeness c and soundness s exclude a maximization fraction greater than s/c. The PCP theorem is an input."
+    },
+    {
+      "id": "pcp-parity",
+      "section": "16.3",
+      "title": "Odd/even PCP to parity CSP",
+      "reference": "Theorem 16.19; Corollary 16.20",
+      "construction": "Translate each three-query parity test into its odd or even constraint, keeping the common global proof variables.",
+      "lesson": "Retain YES≥1−ε and NO≤1/2+δ through the ratio comparison; pair it with the positive half-approximation story."
+    },
+    {
+      "id": "parity-e3sat",
+      "section": "16.3",
+      "title": "Four-clause parity to MAX-E3SAT gadget",
+      "reference": "Theorems 16.21–16.22",
+      "construction": "For each three-variable parity predicate, introduce the four three-literal clauses that exclude exactly its four violating assignments.",
+      "lesson": "A satisfied parity yields four satisfied clauses, otherwise three. Direct gap accounting gives the sharp 7/8 barrier; the coarser L-reduction analysis yields 13/14."
+    },
+    {
+      "id": "or-pcp-e3sat",
+      "section": "16.3",
+      "title": "Direct OR-PCP to MAX-E3SAT",
+      "reference": "Theorem 16.23",
+      "construction": "Use the OR-of-three-literals acceptance tests themselves as the clauses, sharing global proof-bit variables across random tapes.",
+      "lesson": "Completeness one and soundness 7/8+δ are imported from the PCP theorem, not derived by merely enumerating clauses."
+    },
+    {
+      "id": "parity-2sat",
+      "section": "16.3",
+      "title": "Twelve-clause parity to MAX-2SAT gadget",
+      "reference": "Theorem 16.24",
+      "construction": "Use the source’s twelve-clause even-parity gadget with four fresh auxiliary variables per constraint; flip one original literal for odd parity. Optimize auxiliary choices locally.",
+      "lesson": "Satisfied parity permits eleven clauses and violated parity at most ten; the resulting limiting ratio is 21/22, not 7/8."
+    },
+    {
+      "id": "clique-complement",
+      "section": "10.2",
+      "title": "Clique and independent set by complementation",
+      "reference": "Theorem 10.9",
+      "construction": "Complement the general graph, preserve vertex weights, and use the same selected set: cliques become independent sets and conversely.",
+      "lesson": "The transformation does not preserve planarity; it cannot transfer arbitrary-graph hardness to the planar PTAS."
     }
   ]
 }

@@ -2,9 +2,23 @@
 
 **GitHub Pages URL:** https://hadi1373z.github.io/doctoral-exam/
 
+## Complete 15-day revision schedule
+
+The [15-day study plan](https://hadi1373z.github.io/doctoral-exam/#plan/15) assigns all **50 confirmed topics exactly once across Days 1–12**: 19 approximation, 21 probability and 10 paper topics. Days 13–15 audit the full sources, reconstruct proofs and rehearse a three-subject examination. Daily instructions require the assigned Williamson–Shmoys sections, Alon–Spencer Chapters 6, 7, 15 and 17 in full, and all four complete LFKN, Shamir, BFL and GMW papers. The three original summaries support this primary reading.
+
+Choose an optional start date and 4, 6 or 8 focused hours per day. Each day links to its lectures, primary sources, visual proofs, Foundation quizzes and hard questions. Reading, written proof reconstruction, examiner defense, and spaced retrieval have explicit time budgets and deliverables. Notes and four manual planning marks per day save in the existing progress backup. This is intensive revision for previously studied material: extend a day when necessary. Calendar completion does not supply cold-exam or retention evidence.
+
+The complete sequence is also visible as a fifteen-row reading schedule and portable in [data/study-plan-15.json](data/study-plan-15.json). Verify coverage, dates, links, saved work and unchanged exam evidence with `node src/verify-study-plan.cjs .`.
+
+## Assigned algorithm coverage audit
+
+The [section checklist](https://hadi1373z.github.io/doctoral-exam/#algorithms/coverage) maps **all 27 assigned Williamson–Shmoys sections** to **57 named method and subroutine guides across 22 problem stories**, plus **12 separately labeled hardness constructions**. Main methods, supporting routines, diagnostic first attempts, cited results and source exercises have explicit references and roles. This covers the assigned main text; source exercise extensions are labeled and it does not claim to solve every exercise or include the entire book.
+
+The expansion separates all six MAX-SAT methods, the exact knapsack DP, both scheduling schemes and their implementation tools, bin-packing insertion routines, the combinatorial coloring precursor, semicoloring and full-coloring conversions, Gaussian amplification, shared-alpha scheduling, and exact tree and decomposition solvers. It adds the odd/even CSP half-approximation from the hardness section. Planar independent set includes nonnegative vertex weights; shortest-path growth extracts its unique tree path, while reverse deletion belongs to the Steiner-forest cleanup. Each story offers a jump list for its methods.
+
 ## Problems and algorithms
 
-The [Problems & Algorithms story reader](https://hadi1373z.github.io/doctoral-exam/#algorithms) presents **one complete problem guide per page**, moving through **18 assigned algorithmic tasks** and **three additional background problems** from the approximation course. A segmented story strip, Previous/Next controls, a problem selector, and left/right arrow keys let you move at your own pace. On touch screens, swipe the story header to change problems; the mathematical explanation scrolls vertically. Navigation stays visible while reading. The strip shows position in the sequence and does not certify learning or award examination credit.
+The [Problems & Algorithms story reader](https://hadi1373z.github.io/doctoral-exam/#algorithms) presents **one complete problem guide per page**, moving through **19 assigned algorithmic tasks** and **three additional background problems** from the approximation course. A segmented story strip, Previous/Next controls, a problem selector, and left/right arrow keys let you move at your own pace. On touch screens, swipe the story header to change problems; the mathematical explanation scrolls vertically. Navigation stays visible while reading. The strip shows position in the sequence and does not certify learning or award examination credit.
 
 Each page contains the problem statement, all its algorithm steps and guarantees, the proof idea, common mistakes, and further-study links together. Choose Assigned, All, or Additional to change the sequence. Scope is preserved in shareable story links and on reload; endpoints do not wrap silently. Additional problems and methods carry amber labels. The [searchable comparison list](https://hadi1373z.github.io/doctoral-exam/#algorithms/index) remains one click away.
 

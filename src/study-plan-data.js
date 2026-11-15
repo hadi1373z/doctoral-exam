@@ -1,0 +1,186 @@
+'use strict';
+/* Intensive revision sequence: primary reading remains required; calendar marks are not exam evidence. */
+const STUDY_PLAN_15=[
+ {
+  day:1,
+  title:'Approximation schemes and the first correlation proof',
+  units:['core-knapsack','core-scheduling-scheme','core-bin-scheme','core-four-functions'],
+  reading:[
+   'Read Williamson–Shmoys §§3.1–3.3 completely: exact dynamic programs, both scheduling constructions, grouping, all approximation guarantees, and the additive bin term. Record the input encoding and every accuracy-dependent running time.',
+   'Begin Alon–Spencer Chapter 6 with §6.1. Read the full Four Functions statement, induction, examples, and consequences supplied there; match the lattice operations to the site’s proof pictures.'
+  ],
+  revisit:[],
+  deliverable:'Produce a three-row FPTAS/PTAS/APTAS comparison and reconstruct the knapsack rounding-loss proof and the one-coordinate Four Functions induction without notes.',
+  challenge:'An examiner proposes scaling weights rather than profits and treating an asymptotic bin-packing guarantee as an absolute ratio. Give a concrete failure for each proposal, then identify the hypothesis used in the Four Functions induction.'
+ },
+ {
+  day:2,
+  title:'Correlation inequalities and biased assignments',
+  units:['core-fkg','core-harris','core-xyz','core-sat-random'],
+  reading:[
+   'Finish Alon–Spencer Chapter 6 in full through §§6.2–6.4, including FKG, product-measure correlation, the XYZ result, the chapter’s examples and end notes. Check that no intervening lemma has been skipped.',
+   'Read Williamson–Shmoys §§5.1–5.3 completely: fair MAX-SAT and MAX-CUT, conditional expectations, and the biased-coin improvement with unit-clause normalization.'
+  ],
+  revisit:['core-four-functions','core-knapsack'],
+  deliverable:'Write the implication chain from Four Functions to FKG and product-measure correlation, and derive the biased-assignment factor with the correct upper bound on OPT.',
+  challenge:'Construct increasing events that fail positive correlation under a measure lacking the required lattice condition. Separately explain why a common SAT bias needs a polarity normalization when unit clauses have both signs.'
+ },
+ {
+  day:3,
+  title:'LP rounding, network design, and martingales',
+  units:['core-sat-lp','core-pcst','core-facility','core-azuma'],
+  reading:[
+   'Read Williamson–Shmoys §§5.4–5.8 in full. Separate LP-marginal MAX-SAT, better-of-two and transformed-marginal rounding; then follow the threshold distribution for prize collection and the precise client-selection and opening rule for facility location.',
+   'Read Alon–Spencer §§7.1–7.2, including the martingale definitions, conditional exponential-moment argument, exposure examples, and every stated bounded-difference hypothesis.'
+  ],
+  revisit:['core-sat-random','core-fkg'],
+  deliverable:'Make a separate algorithm card for each MAX-SAT method, derive the prize-collecting threshold integral, and prove one Azuma bound from conditional MGFs rather than quoting independence of increments.',
+  challenge:'Explain why averaging two published global approximation ratios misses the MAX-SAT 3/4 guarantee. Then give an outcome where independent facility openings leave a client unserved and show what the clustering construction repairs.'
+ },
+ {
+  day:4,
+  title:'Exposure choices and scheduling with release dates',
+  units:['core-chromatic','core-gradation','core-azuma-app','core-release'],
+  reading:[
+   'Read Alon–Spencer §§7.3–7.5 completely: chromatic concentration, gradations and adaptive exposure, and each concentration application. For every application specify the exposure and the conditional sensitivity or variance charge.',
+   'Read Williamson–Shmoys §5.9 completely, including the relaxation’s completion-time expression, the polynomial preemptive-schedule construction, independent α-points, and the shared-α variant and derandomization discussed at the end.'
+  ],
+  revisit:['core-azuma','core-facility'],
+  deliverable:'Create an exposure table for the Chapter 7 applications and reconstruct the scheduling algorithm with release-date feasibility, a per-job expected completion bound, and polynomial implementation.',
+  challenge:'An examiner replaces a conditional range bound by an unconditional one and says a time-indexed formulation is automatically polynomial. Locate both gaps and repair the arguments without changing the problems.'
+ },
+ {
+  day:5,
+  title:'Concentration in algorithms and the LFKN protocol',
+  units:['core-flow','core-dense-color','core-sdp-cut','core-lfkn-permanent'],
+  reading:[
+   'Read Williamson–Shmoys §§5.10–5.12 and §§6.1–6.2 completely: Chernoff tools, routing regimes, dense-coloring extension, PSD/Gram representations, and MAX-CUT hyperplane rounding. This finishes all main-text sections of Chapter 5; review its notes and choose exercises addressing your gaps.',
+   'Begin the complete LFKN paper, Algebraic Methods for Interactive Proof Systems. Read its introduction, definitions, permanent-verification construction, algebraic reductions, and soundness argument. Mark the remaining sections for completion on Day 6.'
+  ],
+  revisit:['core-sat-lp','core-azuma'],
+  deliverable:'Derive one routing tail bound with the union bound visible, construct the dense-coloring 2-SAT restrictions, derive the angular MAX-CUT probability, and write the LFKN verifier’s messages and checks.',
+  challenge:'Contrast a randomized coloring constructor with a property tester. Then defend LFKN soundness when the prover’s later polynomial messages adapt to all earlier random challenges.'
+ },
+ {
+  day:6,
+  title:'Sharper concentration and LFKN consequences',
+  units:['core-talagrand','core-certificate','core-kim-vu','core-lfkn-consequences'],
+  reading:[
+   'Finish Alon–Spencer Chapter 7 through §§7.6–7.8 in full, including convex distance, certificates, polynomial concentration, all examples and end notes. Identify which deep inequalities are inputs and which consequences are proved in the chapter.',
+   'Finish every remaining section of the LFKN paper, including closure statements, counting and hierarchy consequences, program checking, and the relativization discussion. Reconcile each consequence with the exact oracle or computation model used.'
+  ],
+  revisit:['core-lfkn-permanent','core-gradation'],
+  deliverable:'Compare bounded differences, certificates and derivative-expectation concentration on one counting problem. Produce a complete LFKN theorem-and-dependency map with no unread paper sections.',
+  challenge:'For a polynomial count with overlapping monomials, explain why its mean alone cannot determine the concentration scale. For one LFKN consequence, give the reduction explicitly and distinguish containment from equality.'
+ },
+ {
+  day:7,
+  title:'Coloring algorithms and all of Shamir',
+  units:['core-color-sdp','core-gaussian-color','core-qbf','core-private-ip'],
+  reading:[
+   'Read Williamson–Shmoys §§6.5 and 13.2 completely: the combinatorial precursor, semicoloring, conversion to full coloring, degree balancing, Gaussian independent-set extraction and amplification. Label Exercise 13.1’s refined exponent as an exercise extension.',
+   'Read the complete Shamir IP = PSPACE paper, including arithmetization, degree control, the protocol, soundness, verifier resources and the upper-bound discussion. Distinguish the paper’s presentation from modern notation used in the site.'
+  ],
+  revisit:['core-sdp-cut','core-lfkn-permanent'],
+  deliverable:'Derive both coloring exponent balances, state the Gaussian extractor’s probability amplification cost, and reconstruct Shamir’s protocol with a full degree and field-size budget.',
+  challenge:'Explain why hyperplane region labels are not yet a proper coloring. In the private-coin IP upper bound, identify what information the prover actually observes before choosing its next message.'
+ },
+ {
+  day:8,
+  title:'Primal–dual constructions and random coding',
+  units:['core-dual-cover','core-dual-path','core-steiner','core-shannon'],
+  reading:[
+   'Read Williamson–Shmoys §§7.1, 7.3 and 7.4 completely: set cover, shortest path, both Steiner-forest growth attempts, reverse deletion, and the degree-counting argument. Keep unassigned §7.2 separate from the required reading.',
+   'Begin Alon–Spencer Chapter 15 with §15.1 in full: channel model, coding statement, random construction, noise and confusion bounds, and the distinction from adversarial errors.'
+  ],
+  revisit:['core-knapsack','core-scheduling-scheme','core-bin-scheme','core-four-functions'],
+  deliverable:'Give the dual certificate and cleanup rule for each primal–dual algorithm; derive the random-code rate/error comparison with separate error events. Reconstruct a Day 1 proof before opening its explanation.',
+  challenge:'Produce a tight-edge construction that still needs pruning, and justify the forest degree lemma after pruning. Explain why a code for random channel errors is not automatically a code correcting the same fraction of worst-case errors.'
+ },
+ {
+  day:9,
+  title:'Adaptive games and the BFL oracle model',
+  units:['core-liar','core-tenure','core-balancing','core-half-liar','core-bfl-oracle'],
+  reading:[
+   'Read Alon–Spencer §§15.2–15.6 completely: Liar Game, Tenure Game, vector balancing, the online/nonadaptive information pattern, and the one-sided Half-Liar Game. Separate counting obstructions, existence results, and actual legal strategies.',
+   'Begin the complete BFL Two-Prover Interactive Protocols paper: introduction, computational models, oracle characterization and consistency mechanism. Make an outline of all remaining sections for Days 10–11.'
+  ],
+  revisit:['core-fkg','core-harris','core-xyz','core-sat-random'],
+  deliverable:'Write a model-and-potential table for the games, prove the exact Tenure threshold with a response rule, and describe the BFL oracle simulation and its consistency test.',
+  challenge:'Show where a sphere/weight bound gives only a necessary condition rather than a winning adaptive strategy. Explain why two provers cannot be treated as a single prover choosing new answers after seeing both queries.'
+ },
+ {
+  day:10,
+  title:'Metric structure, planar structure, hardness, and BFL tests',
+  units:['core-tree-metrics','core-planar-mis','core-hardness','core-bfl-multilinear'],
+  reading:[
+   'Read Williamson–Shmoys §§8.5–8.6 and §10.2 completely: hierarchical tree construction, the exact tree buy-at-bulk solver and metric transfer, weighted planar independent set, tree decompositions and layer deletion.',
+   'Read Williamson–Shmoys §§16.1 and 16.3 in full. Track every constructive reduction and its YES/NO gap; keep hardness statements distinct from approximation algorithms.',
+   'Continue BFL through its multilinearity tests, proximity statements, self-correction, and the use of a global algebraic witness. Read the auxiliary lemmas in the paper, not only the site’s mechanism outline.'
+  ],
+  revisit:['core-sat-lp','core-pcst','core-facility','core-azuma'],
+  deliverable:'Prove the expected metric-transfer inequality, reconstruct weighted planar MIS dynamic programming and the layer averaging argument, and state BFL testing/correction guarantees with all quantifiers.',
+  challenge:'Explain why expected stretch for each fixed pair does not promise a uniformly low-distortion sampled tree. For BFL, distinguish “passes many local tests” from “is close to one globally consistent low-degree object.”'
+ },
+ {
+  day:11,
+  title:'Entropy, BFL completion, and zero-knowledge definitions',
+  units:['core-entropy','core-shearer','core-bfl-nexp','core-gmw-def'],
+  reading:[
+   'Finish Alon–Spencer Chapter 15 with all of §15.7, including the basic entropy inequalities, projection inequalities, applications, examples, and chapter end notes. Check Chapters 15’s earlier sections for any unread statements or proofs.',
+   'Finish every remaining section of BFL, including the main characterization, both complexity bounds and structural consequences. Record any theorem whose proof is cited rather than supplied.',
+   'Begin the complete GMW Proofs that Yield Nothing But Their Validity paper: definitions, malicious-verifier views, simulation quantifiers and graph-isomorphism material. Reserve the remaining graph and NP constructions for Day 12.'
+  ],
+  revisit:['core-chromatic','core-gradation','core-azuma-app','core-release'],
+  deliverable:'Prove Shearer by one global coordinate order, derive a projection bound, finish a BFL dependency chart, and write the GMW zero-knowledge definition with the simulator’s quantifiers and running-time claim.',
+  challenge:'Give a conditional distribution whose entropy exceeds the unconditional entropy for one particular conditioning value. Then explain why a simulator for an honest verifier is insufficient for the malicious-verifier claim.'
+ },
+ {
+  day:12,
+  title:'Property testing and completion of GMW',
+  units:['core-tester-color','core-triangle-removal','core-hereditary','core-gmw-gni','core-gmw-np'],
+  reading:[
+   'Read all of Alon–Spencer Chapter 17, §§17.1–17.4, including definitions, the complete restriction-tree argument, removal and induced-removal inputs, hereditary/semi-hereditary distinctions, examples and end notes.',
+   'Finish every remaining section of GMW: graph nonisomorphism and verifier certification, cryptographic assumptions and commitments, the NP construction, soundness, simulation, and the paper’s conclusions. Audit the complete paper against its own section list.'
+  ],
+  revisit:['core-flow','core-dense-color','core-sdp-cut','core-lfkn-permanent'],
+  deliverable:'Build a tester table with model, farness, sample size, rejection certificate and imported structural theorem; give the GMW NP protocol and simulator with their assumptions stated explicitly.',
+  challenge:'Explain why one failed greedy 3-coloring branch is not a tester rejection certificate. In GMW simulation, show how commitments and rewinding address a verifier whose challenge depends on the message it receives.'
+ },
+ {
+  day:13,
+  title:'Approximation synthesis and proof repair',
+  units:[],
+  reading:[
+   'Audit every assigned Williamson–Shmoys section: §§3.1–3.3; the whole of Chapter 5; §§6.1, 6.2, 6.5, 13.2; §§7.1, 7.3, 7.4; §§8.5, 8.6; §10.2; §§16.1, 16.3. Reopen unresolved proofs and the source passages behind every unclear algorithm step.',
+   'Use the algorithm stories as an index, then return to the book for subroutines, assumptions and omitted lemmas. Attempt selected source exercises targeting the gaps you found; the plan does not require solving every exercise in every chapter.'
+  ],
+  revisit:['core-knapsack','core-scheduling-scheme','core-bin-scheme','core-sat-random','core-sat-lp','core-pcst','core-facility','core-release','core-flow','core-dense-color','core-sdp-cut','core-color-sdp','core-gaussian-color','core-dual-cover','core-dual-path','core-steiner','core-tree-metrics','core-planar-mis','core-hardness'],
+  deliverable:'Prepare an algorithm inventory with input, output, precise procedure, benchmark, guarantee, randomness and time complexity. Give two closed-notes proofs from different techniques, then repair the weakest argument.',
+  challenge:'Compare rounding data, randomized rounding, SDP rounding, primal–dual growth and structural decomposition on changed hypotheses. Defend one hardness gap without reversing the approximation-ratio convention.'
+ },
+ {
+  day:14,
+  title:'Probability synthesis and changed-hypothesis defenses',
+  units:[],
+  reading:[
+   'Audit Alon–Spencer Chapters 6, 7, 15 and 17 in full against their chapter outlines. Resolve unread lemmas, examples and notes; keep an explicit list of structural theorems the book states or cites without a full proof.',
+   'Select source exercises and the site’s examiner follow-ups by your remaining gaps. Reconstruct a correlation proof, an exposure argument, a game or coding argument, and an entropy or testing argument before reading feedback.'
+  ],
+  revisit:['core-four-functions','core-fkg','core-harris','core-xyz','core-azuma','core-chromatic','core-gradation','core-azuma-app','core-talagrand','core-certificate','core-kim-vu','core-shannon','core-liar','core-tenure','core-balancing','core-half-liar','core-entropy','core-shearer','core-tester-color','core-triangle-removal','core-hereditary'],
+  deliverable:'Produce a theorem-selection map linking assumptions to the appropriate inequality or construction. Write two complete proofs without notes and a counterexample showing why one important hypothesis is necessary.',
+  challenge:'For each chosen theorem, change the dependence, information pattern, or distance model and decide whether the conclusion survives. Supply a repaired proof, a counterexample, or an accurately stated imported theorem.'
+ },
+ {
+  day:15,
+  title:'Four-paper audit and a three-subject mock examination',
+  units:[],
+  reading:[
+   'Audit the complete LFKN, Shamir, BFL and GMW papers against their own section lists. Every section should be read; every main theorem should have its assumptions, mechanism, error/resource bound and dependencies recorded. Revisit unresolved technical lemmas before relying on a summary.',
+   'Run a mixed mock examination across approximation, interactive proofs/zero knowledge, and probability. Commit each unaided response before opening its lecture or solution; then review the exact failed proof obligations and plan repairs beyond Day 15.'
+  ],
+  revisit:['core-lfkn-permanent','core-lfkn-consequences','core-qbf','core-private-ip','core-bfl-oracle','core-bfl-multilinear','core-bfl-nexp','core-gmw-def','core-gmw-gni','core-gmw-np','core-shannon','core-steiner'],
+  deliverable:'Present a four-paper comparison of prover model, algebra/cryptography, completeness, soundness, verifier resources and simulation. Complete one timed written problem in each subject and a short oral defense, then record concrete repair tasks.',
+  challenge:'A committee mixes adaptive polynomial messages, oracle consistency and malicious-verifier simulation in one question. Identify which source supplies each mechanism and defend why their quantifiers and resource bounds cannot be interchanged.'
+ }
+];
