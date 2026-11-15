@@ -4,7 +4,9 @@
 
 ## Problems and algorithms
 
-The [Problems & Algorithms catalogue](https://hadi1373z.github.io/doctoral-exam/#algorithms) collects **18 assigned algorithmic tasks** and **three additional background problems** from the approximation course. Search by problem or method, filter by technique, and compare objectives and guarantees. Additional problems and methods carry amber labels.
+The [Problems & Algorithms story reader](https://hadi1373z.github.io/doctoral-exam/#algorithms) presents **one complete problem guide per page**, moving through **18 assigned algorithmic tasks** and **three additional background problems** from the approximation course. A segmented story strip, Previous/Next controls, a problem selector, and left/right arrow keys let you move at your own pace. On touch screens, swipe the story header to change problems; the mathematical explanation scrolls vertically. Navigation stays visible while reading. The strip shows position in the sequence and does not certify learning or award examination credit.
+
+Each page contains the problem statement, all its algorithm steps and guarantees, the proof idea, common mistakes, and further-study links together. Choose Assigned, All, or Additional to change the sequence. Scope is preserved in shareable story links and on reload; endpoints do not wrap silently. Additional problems and methods carry amber labels. The [searchable comparison list](https://hadi1373z.github.io/doctoral-exam/#algorithms/index) remains one click away.
 
 Each problem has a precise input and objective, a typeset mathematical statement, algorithm steps, the guarantee with its assumptions, a proof idea, and a common mistake. Further-study links lead to the matching lecture, proof explanation, visual proof and examiner follow-ups, Foundation quiz, textbook section, and the Williamson–Shmoys primary source. Hardness sections and supporting tools are linked separately. Browsing this reference earns no examination credit.
 
