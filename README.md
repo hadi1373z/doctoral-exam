@@ -2,6 +2,14 @@
 
 **GitHub Pages URL:** https://hadi1373z.github.io/doctoral-exam/
 
+## Algorithm-by-algorithm video companions
+
+[Browse the algorithm video guide](https://hadi1373z.github.io/doctoral-exam/#algorithm-videos) for **57 recommendations covering every named method and supporting routine**, drawn from **39 distinct recordings**. There are **24 focused matches** and **33 supporting matches**. Sources include Stanford, Harvard, MIT, IISc, NPTEL and instructor-hosted courses. A selected lecture appears directly beside each method’s written guide, with a reason for choosing it, source links, precise scope limits and continuation links where needed.
+
+The recommendations were checked on 16 November 2026 against official catalogues, instructor descriptions, and available notes or transcripts. Availability checks succeeded for the selected public video metadata or official media endpoint; this does not guarantee embedded playback on every network. No whole-video viewing or invented timestamps are claimed. Specialist routines without a verified exact recording retain explicit gaps. Videos open on demand with a single player, direct-viewing alternatives, and no automatic playback or examination credit.
+
+The existing 21-lecture three-subject library remains available and now links to the method guide. Exportable metadata is in [data/algorithm-videos.json](data/algorithm-videos.json), with a [source-linked index](videos/algorithms.md). Run `node src/verify-algorithm-videos.cjs .`.
+
 ## Complete 15-day revision schedule
 
 The [15-day study plan](https://hadi1373z.github.io/doctoral-exam/#plan/15) assigns all **50 confirmed topics exactly once across Days 1–12**: 19 approximation, 21 probability and 10 paper topics. Days 13–15 audit the full sources, reconstruct proofs and rehearse a three-subject examination. Daily instructions require the assigned Williamson–Shmoys sections, Alon–Spencer Chapters 6, 7, 15 and 17 in full, and all four complete LFKN, Shamir, BFL and GMW papers. The three original summaries support this primary reading.

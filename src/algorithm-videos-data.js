@@ -1,0 +1,1043 @@
+'use strict';
+/* Original selection notes based on official catalogues, descriptions and lecture material; scope gaps are explicit. */
+const ALGORITHM_VIDEO_CHECKED_DATE='2026-11-16';
+const ALGORITHM_VIDEO_SELECTIONS=[
+  {
+    "methodId": "knapsack-exact",
+    "video": {
+      "title": "CS264 Lecture 14: Smoothed Pareto Curves",
+      "speaker": "Tim Roughgarden",
+      "institution": "Stanford University",
+      "watchUrl": "https://www.youtube.com/watch?v=KoegpdEw29E",
+      "sourceUrl": "https://theory.stanford.edu/~tim/f14/f14.html",
+      "youtubeId": "KoegpdEw29E",
+      "evidenceUrl": "https://theory.stanford.edu/~tim/f14/l/l14.pdf",
+      "coverage": "exact",
+      "scopeNote": "The opening knapsack section develops the Pareto-frontier algorithm by merging the previous frontier with its shifted copy. The later smoothed-analysis material is additional background.",
+      "reason": "The official paired notes explicitly describe the same merge-and-prune construction; this is a closer match than a generic capacity-indexed knapsack DP lecture."
+    },
+    "gap": null,
+    "problemId": "knapsack",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "knapsack-fptas",
+    "video": {
+      "title": "Advanced Algorithms (COMPSCI 224), Lecture 12",
+      "speaker": "Jelani Nelson",
+      "institution": "Harvard University",
+      "watchUrl": "https://www.youtube.com/watch?v=2Gl-yNso0_0",
+      "sourceUrl": "https://people.seas.harvard.edu/~cs224/fall14/lec.html",
+      "youtubeId": "2Gl-yNso0_0",
+      "evidenceUrl": "https://people.seas.harvard.edu/~cs224/fall14/lec/lec12.pdf",
+      "coverage": "exact",
+      "scopeNote": "The knapsack portion derives profit scaling, the profit-indexed dynamic program, its approximation loss, and polynomial dependence on inverse accuracy. Other portions of the lecture cover counting and SDP.",
+      "reason": "The official university recording has matching written derivation and analysis. Compared with a general DP tutorial, it directly addresses the FPTAS proof."
+    },
+    "gap": null,
+    "problemId": "knapsack",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "makespan-fixed-m",
+    "video": {
+      "title": "Lecture 19: PTAS for Minimizing Makespan for Scheduling Jobs on Constant Number of Machines",
+      "speaker": "Palash Dey",
+      "institution": "IIT Kharagpur / NPTEL",
+      "watchUrl": "https://www.youtube.com/watch?v=Dpu7OQohMuU",
+      "sourceUrl": "https://nptel.ac.in/courses/106105471",
+      "youtubeId": "Dpu7OQohMuU",
+      "evidenceUrl": "https://nptel.ac.in/courses/106105471",
+      "coverage": "exact",
+      "scopeNote": "Dedicated lecture on the fixed-number-of-machines PTAS. Keep the fixed-m assumption visible when comparing its enumeration cost with the variable-m scheme.",
+      "reason": "The official lecture distinguishes the fixed-m case explicitly; the adjacent lectures separately address arbitrary numbers of identical machines."
+    },
+    "gap": null,
+    "problemId": "makespan",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "makespan-variable-m",
+    "video": {
+      "title": "Lecture 20: PTAS for Minimizing Makespan for Scheduling Jobs on Parallel Identical Machines",
+      "speaker": "Palash Dey",
+      "institution": "IIT Kharagpur / NPTEL",
+      "watchUrl": "https://www.youtube.com/watch?v=fXtty_E7TG8",
+      "sourceUrl": "https://nptel.ac.in/courses/106105471",
+      "youtubeId": "fXtty_E7TG8",
+      "evidenceUrl": "https://nptel.ac.in/courses/106105471",
+      "coverage": "exact",
+      "scopeNote": "Dedicated identical-machine PTAS lecture, followed by Lecture 21 on the official course page. Use both parts when studying the complete construction and analysis.",
+      "reason": "This is a focused textbook-based treatment of the same scheme, rather than a different scheduling objective or an unrelated-machine LP approximation.",
+      "followups": [
+        {
+          "title": "Lecture 21 :  PTAS for Minimizing Makespan for Scheduling Jobs on Parallel Identical Machines Contd.",
+          "watchUrl": "https://www.youtube.com/watch?v=q2IZQi8InJY"
+        }
+      ]
+    },
+    "gap": "The complete treatment is split across Lectures 20 and 21; this selected video is the first part.",
+    "problemId": "makespan",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "makespan-config-dp",
+    "video": {
+      "title": "Lecture 21: PTAS for Minimizing Makespan for Scheduling Jobs on Parallel Identical Machines, continued",
+      "speaker": "Palash Dey",
+      "institution": "IIT Kharagpur / NPTEL",
+      "watchUrl": "https://www.youtube.com/watch?v=q2IZQi8InJY",
+      "sourceUrl": "https://nptel.ac.in/courses/106105471",
+      "youtubeId": "q2IZQi8InJY",
+      "evidenceUrl": "https://nptel.ac.in/courses/106105471",
+      "coverage": "support",
+      "scopeNote": "Continuation of the identical-machine PTAS. Study it with Lecture 20 and the story’s explicit count-vector recurrence.",
+      "reason": "The official course verifies the matching PTAS topic. A publicly indexed transcript isolating the configuration recurrence was not available, so this is labeled supporting coverage."
+    },
+    "gap": "A complete explanation of this exact DP recurrence was not independently verified in the recording; use Williamson–Shmoys §3.2 alongside it.",
+    "problemId": "makespan",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "makespan-bisection",
+    "video": {
+      "title": "MIT 6.854: Approximation Schemes, part 2 (2020)",
+      "speaker": "David Karger",
+      "institution": "Massachusetts Institute of Technology",
+      "watchUrl": "https://www.youtube.com/watch?v=BG17J83G7X8",
+      "sourceUrl": "https://courses.csail.mit.edu/6.854/21/course_materials.html",
+      "youtubeId": "BG17J83G7X8",
+      "evidenceUrl": "https://courses.csail.mit.edu/6.854/21/Notes/n20-approx.html",
+      "coverage": "support",
+      "scopeNote": "The course’s approximation-schemes materials explain optimizing a guessed makespan using an approximate decision procedure. Its rounding conventions differ from the assigned book.",
+      "reason": "The official notes explicitly connect binary search and approximate feasibility. It complements the NPTEL PTAS, but the course cautions that historical recordings and pooled notes can differ."
+    },
+    "gap": "The exact endpoint updates and retained-schedule invariant used in the story are not separately indexed in the video. Read the source proof for those details.",
+    "problemId": "makespan",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "makespan-list-lpt",
+    "video": {
+      "title": "Lecture 12: Greedy Algorithm for Scheduling Jobs on Multiple Identical Machines",
+      "speaker": "Palash Dey",
+      "institution": "IIT Kharagpur / NPTEL",
+      "watchUrl": "https://www.youtube.com/watch?v=dqoO_iK83AE",
+      "sourceUrl": "https://nptel.ac.in/courses/106105471",
+      "youtubeId": "dqoO_iK83AE",
+      "evidenceUrl": "https://storage.googleapis.com/swayam-node1-production.appspot.com/assets/vtt/noc25_cs153/106105471/Lec12.vtt",
+      "coverage": "exact",
+      "scopeNote": "The official captions explicitly discuss sorting by nonincreasing processing time and the longest-processing-time rule. Compare this ordered rule with ordinary list scheduling.",
+      "reason": "The NPTEL captions confirm the LPT variant, so this is a closer match than unrelated job-shop or release-date tutorials."
+    },
+    "gap": null,
+    "problemId": "makespan",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "bin-first-fit",
+    "video": {
+      "title": "Greedy Algorithms — Part 1: First Fit and basic properties",
+      "speaker": "Arindam Khan",
+      "institution": "Indian Institute of Science",
+      "watchUrl": "https://www.youtube.com/watch?v=dovJUGbsZNA",
+      "sourceUrl": "https://www.csa.iisc.ac.in/~arindamkhan/courses/TopicsCombOpt26/TopicsCombinatorialOptimization_Fall2026.html",
+      "youtubeId": "dovJUGbsZNA",
+      "evidenceUrl": "https://www.csa.iisc.ac.in/~arindamkhan/courses/TopicsCombOpt26/TopicsCombinatorialOptimization_Fall2026.html",
+      "coverage": "exact",
+      "scopeNote": "First-Fit construction and basic properties. The official course places this video in its bin-packing greedy-algorithms module.",
+      "reason": "A specialist instructor’s dedicated First-Fit lecture gives a closer match than general approximation or programming tutorials."
+    },
+    "gap": null,
+    "problemId": "bin-packing",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "bin-ffd",
+    "video": {
+      "title": "Greedy Algorithms — Part 2: Weight-function analysis for bin packing",
+      "speaker": "Arindam Khan",
+      "institution": "Indian Institute of Science",
+      "watchUrl": "https://www.youtube.com/watch?v=5HQkIajpidU",
+      "sourceUrl": "https://www.csa.iisc.ac.in/~arindamkhan/courses/TopicsCombOpt26/TopicsCombinatorialOptimization_Fall2026.html",
+      "youtubeId": "5HQkIajpidU",
+      "evidenceUrl": "https://www.csa.iisc.ac.in/~arindamkhan/courses/TopicsCombOpt26/TopicsCombinatorialOptimization_Fall2026.html",
+      "coverage": "support",
+      "scopeNote": "Proof-oriented background on greedy bin packing and weight functions. The official module covers First Fit and First Fit Decreasing, but this recording’s complete FFD theorem was not verified.",
+      "reason": "The advanced analysis is useful for understanding why simple insertion rules need substantial proofs. It is more relevant than a code-only FFD demonstration."
+    },
+    "gap": "Do not treat this as a verified full proof of the precise FFD additive guarantee; retain the story’s cited source result.",
+    "problemId": "bin-packing",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "bin-config-dp",
+    "video": {
+      "title": "Lecture 22: An APTAS for Bin Packing",
+      "speaker": "Palash Dey",
+      "institution": "IIT Kharagpur / NPTEL",
+      "watchUrl": "https://www.youtube.com/watch?v=xDRYw6G3dGY",
+      "sourceUrl": "https://nptel.ac.in/courses/106105471",
+      "youtubeId": "xDRYw6G3dGY",
+      "evidenceUrl": "https://nptel.ac.in/courses/106105471",
+      "coverage": "support",
+      "scopeNote": "Beginning of the bin-packing approximation-scheme treatment. Use the story’s recurrence for the exact bounded-type solver and Lecture 23 for continuation.",
+      "reason": "The dedicated APTAS sequence is a better prerequisite match than configuration-LP videos about a different relaxation."
+    },
+    "gap": "Public metadata does not isolate the exact count-vector DP, so its recurrence and reconstruction proof remain a reading task.",
+    "problemId": "bin-packing",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "bin-small-insertion",
+    "video": {
+      "title": "Lecture 23: An APTAS for Bin Packing, continued",
+      "speaker": "Palash Dey",
+      "institution": "IIT Kharagpur / NPTEL",
+      "watchUrl": "https://www.youtube.com/watch?v=LJqILLzeZsk",
+      "sourceUrl": "https://nptel.ac.in/courses/106105471",
+      "youtubeId": "LJqILLzeZsk",
+      "evidenceUrl": "https://nptel.ac.in/courses/106105471",
+      "coverage": "support",
+      "scopeNote": "Continuation of the large/small-item bin-packing scheme. Use it with the story’s separate small-item insertion lemma and the preceding lecture.",
+      "reason": "The freely playable official APTAS sequence is more accessible than the alternative Claire Mathieu small-items lecture, whose Coursera player may require sign-in."
+    },
+    "gap": "A complete recording of the exact Williamson–Shmoys Lemma 3.10 proof was not separately verified from public metadata.",
+    "problemId": "bin-packing",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "bin-linear-grouping",
+    "video": {
+      "title": "E0 249: Bin Packing — dynamic programming and rounding",
+      "speaker": "Arindam Khan",
+      "institution": "Indian Institute of Science",
+      "watchUrl": "https://www.csa.iisc.ac.in/~arindamkhan/courses/ApproxAlgo22/video/approx22w2p3binpacking",
+      "sourceUrl": "https://www.csa.iisc.ac.in/~arindamkhan/courses/ApproxAlgo22/ApproxAlgo.html",
+      "mediaUrl": "https://www.csa.iisc.ac.in/~arindamkhan/courses/ApproxAlgo22/video/approx22w2p3binpacking",
+      "evidenceUrl": "https://www.csa.iisc.ac.in/~arindamkhan/courses/ApproxAlgo22/handwritten/hand_w2.pdf",
+      "coverage": "exact",
+      "scopeNote": "The paired notes develop bounded large types, grouping and rounding, then handle the small items. Accuracy constants differ in presentation; compare after rescaling the internal accuracy.",
+      "reason": "Official paired teaching notes verify the grouping construction, making this more specific than an APTAS-only title. The official course supplies the video link directly."
+    },
+    "gap": "The source supplies an extensionless media URL; use the official course page if a browser cannot play it directly.",
+    "problemId": "bin-packing",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "sat-fair",
+    "video": {
+      "title": "Lecture 32 :  Randomized 1/2 Factor Approximation Algorithm for MAX-SAT and MAX-CUT",
+      "speaker": "Palash Dey",
+      "institution": "IIT Kharagpur · NPTEL",
+      "watchUrl": "https://www.youtube.com/watch?v=-sWJTi5JirE",
+      "youtubeId": "-sWJTi5JirE",
+      "sourceUrl": "https://nptel.ac.in/courses/106105471",
+      "evidenceUrl": "https://nptel.ac.in/courses/106105471",
+      "coverage": "exact",
+      "scopeNote": "Fair independent assignments for MAX-SAT and MAX-CUT, with the half-approximation analysis. Use the on-page clause-length formula to specialize the guarantee.",
+      "reason": "A dedicated university lecture matching the two baseline algorithms, rather than a brief MAX-3SAT example inside a broad probability lecture."
+    },
+    "gap": null,
+    "problemId": "max-sat",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "sat-conditional",
+    "video": {
+      "title": "Lecture 33 :  Derandomization using Method of Conditional Expectation",
+      "speaker": "Palash Dey",
+      "institution": "IIT Kharagpur · NPTEL",
+      "watchUrl": "https://www.youtube.com/watch?v=BPVj_5layJs",
+      "youtubeId": "BPVj_5layJs",
+      "sourceUrl": "https://nptel.ac.in/courses/106105471",
+      "evidenceUrl": "https://nptel.ac.in/courses/106105471",
+      "coverage": "exact",
+      "scopeNote": "The method of conditional expectations and deterministic choices preserving a randomized guarantee. Pair it with the preceding fair-assignment lecture.",
+      "reason": "The course gives derandomization its own lecture immediately after the MAX-SAT baseline."
+    },
+    "gap": null,
+    "problemId": "max-sat",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "sat-biased",
+    "video": {
+      "title": "Lecture 34 : Flipping Biased Coin for Better Than .5 Approximation Algorithm for Max-SAT",
+      "speaker": "Palash Dey",
+      "institution": "IIT Kharagpur · NPTEL",
+      "watchUrl": "https://www.youtube.com/watch?v=n3X_mcTp9c0",
+      "youtubeId": "n3X_mcTp9c0",
+      "sourceUrl": "https://nptel.ac.in/courses/106105471",
+      "evidenceUrl": "https://nptel.ac.in/courses/106105471",
+      "coverage": "exact",
+      "scopeNote": "The biased-coin improvement for MAX-SAT. Check unit-clause polarity normalization and the improved upper bound on OPT while following the on-page guide.",
+      "reason": "This lecture is devoted to the assigned biased-coin method, which general randomized-algorithms introductions often omit."
+    },
+    "gap": null,
+    "problemId": "max-sat",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "sat-lp",
+    "video": {
+      "title": "Lecture 35 :  Randomized Rounding Based (1-1/e) Factor Approximation Algorithm for Max-SAT",
+      "speaker": "Palash Dey",
+      "institution": "IIT Kharagpur · NPTEL",
+      "watchUrl": "https://www.youtube.com/watch?v=WtB9S-ixwVw",
+      "youtubeId": "WtB9S-ixwVw",
+      "sourceUrl": "https://nptel.ac.in/courses/106105471",
+      "evidenceUrl": "https://nptel.ac.in/courses/106105471",
+      "coverage": "exact",
+      "scopeNote": "Independent randomized rounding of the MAX-SAT LP and its 1−1/e guarantee.",
+      "reason": "The lecturer separates this LP method from the fair assignment and the later best-of-two improvement, matching the study sequence."
+    },
+    "gap": null,
+    "problemId": "max-sat",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "sat-best-two",
+    "video": {
+      "title": "Lecture 36 : Best of Two Solutions for Max-SAT",
+      "speaker": "Palash Dey",
+      "institution": "IIT Kharagpur · NPTEL",
+      "watchUrl": "https://www.youtube.com/watch?v=lslKiyFhK7Q",
+      "youtubeId": "lslKiyFhK7Q",
+      "sourceUrl": "https://nptel.ac.in/courses/106105471",
+      "evidenceUrl": "https://nptel.ac.in/courses/106105471",
+      "coverage": "exact",
+      "scopeNote": "Combining the fair and LP-based assignments by choosing the better result. Use the clause-wise comparison rather than averaging only the two global ratios.",
+      "reason": "A standalone lecture on exactly the better-of-two construction, following the two prerequisite algorithms."
+    },
+    "gap": null,
+    "problemId": "max-sat",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "sat-nonlinear",
+    "video": {
+      "title": "Lecture 37 : Nonlinear Rounding for Max-SAT",
+      "speaker": "Palash Dey",
+      "institution": "IIT Kharagpur · NPTEL",
+      "watchUrl": "https://www.youtube.com/watch?v=GHgqQQ42Cos",
+      "youtubeId": "GHgqQQ42Cos",
+      "sourceUrl": "https://nptel.ac.in/courses/106105471",
+      "evidenceUrl": "https://nptel.ac.in/courses/106105471",
+      "coverage": "exact",
+      "scopeNote": "Transformed-marginal rounding for MAX-SAT. Compare the permitted transformation envelopes with the on-page statement.",
+      "reason": "One of the few verified public lectures devoted specifically to nonlinear MAX-SAT rounding, from a full approximation-algorithms course."
+    },
+    "gap": null,
+    "problemId": "max-sat",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "sdp-gram-vectors",
+    "video": {
+      "title": "A Second Course in Algorithms · Lecture 20: Semidefinite Programming and the Maximum Cut Problem",
+      "speaker": "Tim Roughgarden",
+      "institution": "Stanford University",
+      "watchUrl": "https://www.youtube.com/watch?v=8IwoS1io5BM",
+      "youtubeId": "8IwoS1io5BM",
+      "sourceUrl": "https://timroughgarden.org/w16/w16.html",
+      "evidenceUrl": "https://theory.stanford.edu/~tim/w16/l/l20.pdf",
+      "coverage": "support",
+      "scopeNote": "The vector and positive-semidefinite formulations underlying MAX-CUT provide the concrete Gram-matrix setting for this supporting routine.",
+      "reason": "Shows why the representation matters inside an actual rounding algorithm, with official notes to connect the algebra to geometry."
+    },
+    "gap": "Use the on-page routine for the matrix factorization and the numerical-precision boundary; this is not a standalone numerical SDP implementation lecture.",
+    "problemId": "max-cut",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "cut-fair",
+    "video": {
+      "title": "Lecture 32 :  Randomized 1/2 Factor Approximation Algorithm for MAX-SAT and MAX-CUT",
+      "speaker": "Palash Dey",
+      "institution": "IIT Kharagpur · NPTEL",
+      "watchUrl": "https://www.youtube.com/watch?v=-sWJTi5JirE",
+      "youtubeId": "-sWJTi5JirE",
+      "sourceUrl": "https://nptel.ac.in/courses/106105471",
+      "evidenceUrl": "https://nptel.ac.in/courses/106105471",
+      "coverage": "exact",
+      "scopeNote": "Independent random sides for MAX-CUT and its expected half-of-total-weight analysis.",
+      "reason": "A dedicated treatment of the exact baseline alongside MAX-SAT; nonnegative weighted-edge accounting is supplied by the story."
+    },
+    "gap": null,
+    "problemId": "max-cut",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "cut-conditional",
+    "video": {
+      "title": "Lecture 33 :  Derandomization using Method of Conditional Expectation",
+      "speaker": "Palash Dey",
+      "institution": "IIT Kharagpur · NPTEL",
+      "watchUrl": "https://www.youtube.com/watch?v=BPVj_5layJs",
+      "youtubeId": "BPVj_5layJs",
+      "sourceUrl": "https://nptel.ac.in/courses/106105471",
+      "evidenceUrl": "https://nptel.ac.in/courses/106105471",
+      "coverage": "support",
+      "scopeNote": "Conditional-expectation derandomization. Apply its conditional-choice rule to the cut’s already placed vertices using the on-page weighted calculation.",
+      "reason": "The cleanest companion found for the derandomization mechanism; the explicit cut specialization is short enough to reconstruct from the guide."
+    },
+    "gap": "The lecture’s catalog establishes the general conditional-expectation method; the exact weighted MAX-CUT greedy specialization is not separately verified in this recording.",
+    "problemId": "max-cut",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "cut-gw",
+    "video": {
+      "title": "A Second Course in Algorithms · Lecture 20: Semidefinite Programming and the Maximum Cut Problem",
+      "speaker": "Tim Roughgarden",
+      "institution": "Stanford University",
+      "watchUrl": "https://www.youtube.com/watch?v=8IwoS1io5BM",
+      "youtubeId": "8IwoS1io5BM",
+      "sourceUrl": "https://timroughgarden.org/w16/w16.html",
+      "evidenceUrl": "https://theory.stanford.edu/~tim/w16/l/l20.pdf",
+      "coverage": "exact",
+      "scopeNote": "Vector/Gram MAX-CUT relaxation, random-hyperplane rounding, angular separation probability and the approximately 0.878 ratio.",
+      "reason": "A focused graduate lecture with an official worked derivation, geometric explanation and matching written notes."
+    },
+    "gap": null,
+    "problemId": "max-cut",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "pcst-random-threshold",
+    "video": {
+      "title": "Lecture 38: Randomized Rounding for Prize Collecting Steiner Tree",
+      "speaker": "Palash Dey",
+      "institution": "IIT Kharagpur · NPTEL",
+      "watchUrl": "https://www.youtube.com/watch?v=hfGwc4KCQmE",
+      "sourceUrl": "https://nptel.ac.in/courses/106105471",
+      "youtubeId": "hfGwc4KCQmE",
+      "evidenceUrl": "https://nptel.ac.in/courses/106105471",
+      "coverage": "support",
+      "scopeNote": "The official course has a dedicated randomized prize-collecting Steiner-tree unit in Lectures 38–39. This link starts that unit; Lecture 39 continues at https://www.youtube.com/watch?v=9Tt5g3TuhR4. The course listing establishes the topic, but does not verify every detail of the assigned threshold analysis.",
+      "reason": "A focused university lecture is a closer teaching match than a general Steiner-tree video or a modern research talk. The player ID and instructor come from the official course. The syllabus explicitly includes randomized rounding for Steiner problems.",
+      "followups": [
+        {
+          "title": "Lecture 39 :  Randomized Rounding for Prize Collecting Steiner Tree Contd.",
+          "watchUrl": "https://www.youtube.com/watch?v=9Tt5g3TuhR4"
+        }
+      ]
+    },
+    "gap": "Exact coverage of uniform α in [exp(−1/2),1], the y≥α convention, and the LP-relative (1−exp(−1/2))^−1 bound has not been verified from a primary transcript or companion lecture notes. Use the assigned §5.7 proof for those details.",
+    "problemId": "prize-collecting-steiner",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "facility-cluster-round",
+    "video": {
+      "title": "Lecture 40: Randomized Rounding for Uncapacitated Facility Location",
+      "speaker": "Palash Dey",
+      "institution": "IIT Kharagpur · NPTEL",
+      "watchUrl": "https://www.youtube.com/watch?v=IfGNAaiqZKU",
+      "sourceUrl": "https://nptel.ac.in/courses/106105471",
+      "youtubeId": "IfGNAaiqZKU",
+      "evidenceUrl": "https://nptel.ac.in/courses/106105471",
+      "coverage": "support",
+      "scopeNote": "Official lecture devoted to randomized rounding for uncapacitated facility location. This is more specific than the course's earlier deterministic 4-approximation lectures. The live official player was checked and identifies NPTEL IIT Kharagpur as uploader.",
+      "reason": "The university course distinguishes deterministic and randomized facility-location algorithms, making this a strong specialist candidate. A separate Johns Hopkins recording was considered, but its public companion notes use a different 2+√3 filtering algorithm and its video redirects to a university login."
+    },
+    "gap": "The metadata does not prove that this recording teaches the exact §5.8 representative rule minimizing v_j+C_j, x_ij sampling on N(j), and expected factor 3. Treat it as related instruction until the particular construction is checked.",
+    "problemId": "facility-location",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "schedule-relaxation",
+    "video": {
+      "title": "Lecture 25: 3 Factor Approximation Algorithm for Scheduling Weighted Jobs on a Single Machine",
+      "speaker": "Palash Dey",
+      "institution": "IIT Kharagpur · NPTEL",
+      "watchUrl": "https://www.youtube.com/watch?v=TmM4I4PCMHM",
+      "sourceUrl": "https://nptel.ac.in/courses/106105471",
+      "youtubeId": "TmM4I4PCMHM",
+      "evidenceUrl": "https://nptel.ac.in/courses/106105471",
+      "coverage": "support",
+      "scopeNote": "Background on approximating weighted single-machine scheduling. The official title explicitly identifies a 3-factor algorithm; this is a related scheduling lecture, rather than verified coverage of the assigned mean-busy-time relaxation.",
+      "reason": "A dedicated approximation-algorithms lecturer gives the relevant optimization context. Generic operating-systems priority-scheduling videos were excluded because they do not teach the approximation benchmark or its proof."
+    },
+    "gap": "No public video was verified for Lemma 5.22's exact event-based density-priority optimizer of the midpoint objective. In particular, this video is not evidence that fixed original w_j/p_j priority minimizes actual preemptive weighted completion time; that claim would be false.",
+    "problemId": "release-date-scheduling",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "schedule-independent-alpha",
+    "video": {
+      "title": "Lecture 25: 3 Factor Approximation Algorithm for Scheduling Weighted Jobs on a Single Machine",
+      "speaker": "Palash Dey",
+      "institution": "IIT Kharagpur · NPTEL",
+      "watchUrl": "https://www.youtube.com/watch?v=TmM4I4PCMHM",
+      "sourceUrl": "https://nptel.ac.in/courses/106105471",
+      "youtubeId": "TmM4I4PCMHM",
+      "evidenceUrl": "https://nptel.ac.in/courses/106105471",
+      "coverage": "support",
+      "scopeNote": "Related weighted single-machine scheduling instruction using a different 3-approximation. The exact α-point algorithm and factor-two proof are supplied in the written story.",
+      "reason": "A focused scheduling lesson is more useful here than an application-oriented talk. No verified freely accessible recording of the assigned α-point procedure was found in the search."
+    },
+    "gap": "This recording is not verified to teach independent uniform αⱼ, the mean-busy-time lower bound, or the expected 2-approximation of §5.9. It teaches a different 3-factor method.",
+    "problemId": "release-date-scheduling",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "schedule-shared-alpha",
+    "video": {
+      "title": "Lecture 25: 3 Factor Approximation Algorithm for Scheduling Weighted Jobs on a Single Machine",
+      "speaker": "Palash Dey",
+      "institution": "IIT Kharagpur · NPTEL",
+      "watchUrl": "https://www.youtube.com/watch?v=TmM4I4PCMHM",
+      "sourceUrl": "https://nptel.ac.in/courses/106105471",
+      "youtubeId": "TmM4I4PCMHM",
+      "evidenceUrl": "https://nptel.ac.in/courses/106105471",
+      "coverage": "support",
+      "scopeNote": "Related weighted single-machine scheduling instruction using a different 3-approximation. The exact α-point algorithm and factor-two proof are supplied in the written story.",
+      "reason": "A focused scheduling lesson is more useful here than an application-oriented talk. No verified freely accessible recording of the assigned α-point procedure was found in the search."
+    },
+    "gap": "This recording does not establish the shared-α theorem or enumeration of the at most n schedules. That source variant has a different analysis from independent αⱼ.",
+    "problemId": "release-date-scheduling",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "routing-path-round",
+    "video": {
+      "title": "Lecture 43: Integer Multicommodity Flow",
+      "speaker": "Palash Dey",
+      "institution": "IIT Kharagpur · NPTEL",
+      "watchUrl": "https://www.youtube.com/watch?v=lDpShqiG6YU",
+      "sourceUrl": "https://nptel.ac.in/courses/106105471",
+      "youtubeId": "lDpShqiG6YU",
+      "evidenceUrl": "https://nptel.ac.in/courses/106105471",
+      "coverage": "support",
+      "scopeNote": "Official integer-multicommodity-flow lecture immediately following two lectures on Chernoff bounds. This is the course's specialist rounding-and-concentration unit. The exact theorem assumptions are not established by its title alone.",
+      "reason": "The precise problem and concentration prerequisites are present in a university approximation-algorithms course. It is a closer candidate than a generic max-flow lesson; existing Roughgarden material remains useful related background with different stated bounds."
+    },
+    "gap": "Confirm the independent per-commodity path sampling and Theorem 5.29's W*≥c ln n hypothesis in §5.11. Do not assert W*+√(cW*ln n) for arbitrarily small W*; the general bound uses O(log n)·max{W*,1}.",
+    "problemId": "integer-routing",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "routing-flow-lp",
+    "video": {
+      "title": "Lecture 5: Flow Decomposition",
+      "speaker": "Palash Dey",
+      "institution": "IIT Kharagpur · NPTEL",
+      "watchUrl": "https://www.youtube.com/watch?v=cA2wHoXOu6Y",
+      "sourceUrl": "https://nptel.ac.in/courses/106105242",
+      "youtubeId": "cA2wHoXOu6Y",
+      "evidenceUrl": "https://nptel.ac.in/courses/106105242",
+      "coverage": "support",
+      "scopeNote": "A dedicated flow-decomposition lecture in Selected Topics in Algorithms. The official course's lecture map supplies its title and player ID. It supports the conversion from edge flows into paths, a separate implementation ingredient from randomized path selection.",
+      "reason": "Decomposition is the central constructive subroutine needed to make the path-distribution formulation usable. A focused flow lecture is more useful for this method than repeating the concentration analysis."
+    },
+    "gap": "The recording has not been verified to formulate the particular multicommodity congestion LP, prove its equivalence to the path LP, or discuss the polynomial support bound of Exercise 5.14. Those remain assigned implementation details.",
+    "problemId": "integer-routing",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "dense-sample-enumerate",
+    "video": {
+      "title": "Lecture 41: Chernoff Bound",
+      "speaker": "Palash Dey",
+      "institution": "Indian Institute of Technology Kharagpur — NPTEL",
+      "watchUrl": "https://www.youtube.com/watch?v=i5tXmci-GJw",
+      "sourceUrl": "https://nptel.ac.in/courses/106105471",
+      "youtubeId": "i5tXmci-GJw",
+      "evidenceUrl": "https://nptel.ac.in/courses/106105471",
+      "coverage": "support",
+      "scopeNote": "Probability-analysis preparation for random sampling. The official course identifies this lecture as Chernoff bounds; it does not identify the dense-graph coloring construction.",
+      "reason": "A focused mathematical prerequisite from a full approximation course. Prefer it to unrelated videos about coloring dense random graphs, which use different promises."
+    },
+    "gap": "No exact public recording of the minimum-degree δn sampling, sample-color enumeration, and 2-SAT extension proof was verified. Read the on-page construction and Williamson–Shmoys §5.12 for that algorithm.",
+    "problemId": "dense-three-coloring",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "dense-two-sat",
+    "video": {
+      "title": "Lecture 4: SAT I",
+      "speaker": "Erik Demaine",
+      "institution": "Massachusetts Institute of Technology — OpenCourseWare",
+      "watchUrl": "https://www.youtube.com/watch?v=x-Ik9YAFAPo",
+      "sourceUrl": "https://ocw.mit.edu/courses/6-890-algorithmic-lower-bounds-fun-with-hardness-proofs-fall-2014/resources/lecture-4-sat-i/",
+      "youtubeId": "x-Ik9YAFAPo",
+      "evidenceUrl": "https://ocw.mit.edu/courses/6-890-algorithmic-lower-bounds-fun-with-hardness-proofs-fall-2014/d912936386d6510e901850815a3c81f2_x-Ik9YAFAPo.vtt",
+      "coverage": "support",
+      "scopeNote": "The official transcript explains converting two-literal clauses to an implication graph and following implications to solve 2-SAT. Its presentation uses propagation rather than the SCC implementation in this guide.",
+      "reason": "Verified instructor explanation with an official transcript. It teaches the exact feasibility problem needed by the extension, while distinguishing the chosen implementation."
+    },
+    "gap": "Does not teach the dense-coloring reduction itself, and the transcript does not derive the guide's SCC criterion and reverse-condensation assignment procedure.",
+    "problemId": "dense-three-coloring",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "color-combinatorial",
+    "video": {
+      "title": "Lecture 19: SDP (#2) — Coloring 3-Colorable Graphs",
+      "speaker": "Rakesh Venkat",
+      "institution": "Indian Institute of Technology Hyderabad",
+      "watchUrl": "https://www.youtube.com/watch?v=5F3oxsDBoW4",
+      "sourceUrl": "https://www.youtube.com/watch?v=5F3oxsDBoW4",
+      "youtubeId": "5F3oxsDBoW4",
+      "evidenceUrl": "https://hackmd.io/VoLtmTQ0S_m5deqmnGDntg",
+      "coverage": "support",
+      "scopeNote": "The instructor's public lecture concerns approximate coloring of 3-colorable graphs. The IITH course schedule recommends this recording alongside Wigderson's neighborhood method and KMS SDP coloring.",
+      "reason": "The closest focused public course lecture found; more relevant than a MAX-CUT-only SDP lecture. Public availability and instructor identity were checked with YouTube metadata."
+    },
+    "gap": "The public title and description do not independently establish the complete high-degree-neighborhood 4√n proof. Keep the guide and Theorem 6.20 as the exact reference.",
+    "problemId": "three-colorable-coloring",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "color-bipartite",
+    "video": {
+      "title": "Lecture 6: Graph Theory and Coloring",
+      "speaker": "Tom Leighton",
+      "institution": "Massachusetts Institute of Technology — OpenCourseWare",
+      "watchUrl": "https://www.youtube.com/watch?v=h9wxtqoa1jY",
+      "sourceUrl": "https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-fall-2010/resources/lecture-6-graph-theory-and-coloring/",
+      "youtubeId": "h9wxtqoa1jY",
+      "evidenceUrl": "https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-fall-2010/ebd05945c1b35a019089c5a683a66005_h9wxtqoa1jY.vtt",
+      "coverage": "support",
+      "scopeNote": "The official transcript develops graph coloring, identifies bipartite graphs with two-colorability, and contrasts this with greedy coloring. It leaves finding a bipartition as an exercise.",
+      "reason": "Clear prerequisite explanation and concrete graph examples, with a verified transcript. It also exposes why arbitrary-order greedy coloring cannot replace bipartite traversal."
+    },
+    "gap": "The BFS/DFS alternating-color algorithm and its linear-time proof are not taught in this lecture. Use the guide's traversal steps for the actual subroutine.",
+    "problemId": "three-colorable-coloring",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "color-greedy",
+    "video": {
+      "title": "Lecture 6: Graph Theory and Coloring",
+      "speaker": "Tom Leighton",
+      "institution": "Massachusetts Institute of Technology — OpenCourseWare",
+      "watchUrl": "https://www.youtube.com/watch?v=h9wxtqoa1jY",
+      "sourceUrl": "https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-fall-2010/resources/lecture-6-graph-theory-and-coloring/",
+      "youtubeId": "h9wxtqoa1jY",
+      "evidenceUrl": "https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-fall-2010/ebd05945c1b35a019089c5a683a66005_h9wxtqoa1jY.vtt",
+      "coverage": "exact",
+      "scopeNote": "The official transcript gives sequential greedy vertex coloring, proves the maximum-degree-plus-one bound, and discusses vertex ordering and examples where the output exceeds the chromatic number.",
+      "reason": "Direct match to this subroutine, including its guarantee and limitation, with a full official transcript rather than an unexplained code demonstration."
+    },
+    "gap": null,
+    "problemId": "three-colorable-coloring",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "color-hyperplane-semi",
+    "video": {
+      "title": "Lecture 20: Semidefinite Programming and the Maximum Cut Problem",
+      "speaker": "Tim Roughgarden",
+      "institution": "Stanford University",
+      "watchUrl": "https://www.youtube.com/watch?v=8IwoS1io5BM",
+      "sourceUrl": "https://timroughgarden.org/w16/w16.html",
+      "youtubeId": "8IwoS1io5BM",
+      "evidenceUrl": "https://timroughgarden.org/w16/l/l20.pdf",
+      "coverage": "support",
+      "scopeNote": "Teaches Gram/vector relaxations and random-hyperplane angular separation for MAX-CUT. These supply the geometric probability input used by the semicoloring analysis.",
+      "reason": "A developed derivation of the shared rounding primitive, supported by the instructor's notes. It is more defensible than claiming that a general KMS video proves this distinct hyperplane method."
+    },
+    "gap": "Does not construct sign-string semicolorings, choose logarithmically many planes, or prove the n/4 monochromatic-edge acceptance bound of Theorem 6.23.",
+    "problemId": "three-colorable-coloring",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "color-semi-wrapper",
+    "video": {
+      "title": "Lecture 19: SDP (#2) — Coloring 3-Colorable Graphs",
+      "speaker": "Rakesh Venkat",
+      "institution": "Indian Institute of Technology Hyderabad",
+      "watchUrl": "https://www.youtube.com/watch?v=5F3oxsDBoW4",
+      "sourceUrl": "https://www.youtube.com/watch?v=5F3oxsDBoW4",
+      "youtubeId": "5F3oxsDBoW4",
+      "evidenceUrl": "https://hackmd.io/VoLtmTQ0S_m5deqmnGDntg",
+      "coverage": "support",
+      "scopeNote": "A focused lecture on approximate 3-colorable-graph coloring. Use it to understand the surrounding coloring strategy; detailed semicoloring conversion is supplied on this page.",
+      "reason": "Keeps the support within the same approximation problem rather than linking to introductory color definitions."
+    },
+    "gap": "The inspected public metadata does not verify the specific delete-bad-edge-endpoints and fresh-palette semicoloring wrapper. Do not conflate it with Gaussian independent-set extraction.",
+    "problemId": "three-colorable-coloring",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "color-degree-balanced",
+    "video": {
+      "title": "Lecture 19: SDP (#2) — Coloring 3-Colorable Graphs",
+      "speaker": "Rakesh Venkat",
+      "institution": "Indian Institute of Technology Hyderabad",
+      "watchUrl": "https://www.youtube.com/watch?v=5F3oxsDBoW4",
+      "sourceUrl": "https://www.youtube.com/watch?v=5F3oxsDBoW4",
+      "youtubeId": "5F3oxsDBoW4",
+      "evidenceUrl": "https://hackmd.io/VoLtmTQ0S_m5deqmnGDntg",
+      "coverage": "support",
+      "scopeNote": "The IITH course lists this recording among resources for Wigderson and KMS coloring, including high/low-degree reasoning. The course's stated final refinement is the Gaussian-based Õ(n^(1/4)) result.",
+      "reason": "Useful comparison between combinatorial degree reduction and SDP rounding; its relationship to the guide's older hyperplane construction is explicit."
+    },
+    "gap": "This is not verified as a proof of the hyperplane-specific balancing σ=n^(log₆3) and Õ(n^(log₆2)) bound. Study Theorem 6.24 and the on-page derivation.",
+    "problemId": "three-colorable-coloring",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "color-gaussian-repeat",
+    "video": {
+      "title": "Lecture 19: SDP (#2) — Coloring 3-Colorable Graphs",
+      "speaker": "Rakesh Venkat",
+      "institution": "Indian Institute of Technology Hyderabad",
+      "watchUrl": "https://www.youtube.com/watch?v=5F3oxsDBoW4",
+      "sourceUrl": "https://www.youtube.com/watch?v=5F3oxsDBoW4",
+      "youtubeId": "5F3oxsDBoW4",
+      "evidenceUrl": "https://hackmd.io/VoLtmTQ0S_m5deqmnGDntg",
+      "coverage": "support",
+      "scopeNote": "Focused SDP coloring support recommended by the IITH course with Williamson–Shmoys §13.2 and KMS notes. It provides context for extracting independent sets and then coloring.",
+      "reason": "Best public topic-specific candidate found; the alternative Jaikumar recording linked by the course currently returns unauthorized metadata and was excluded."
+    },
+    "gap": "The γ-dependent amplification argument and its trial count were not independently verified in accessible video text. Retain the guide's explicit probability calculation.",
+    "problemId": "three-colorable-coloring",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "color-gaussian-balanced",
+    "video": {
+      "title": "Lecture 19: SDP (#2) — Coloring 3-Colorable Graphs",
+      "speaker": "Rakesh Venkat",
+      "institution": "Indian Institute of Technology Hyderabad",
+      "watchUrl": "https://www.youtube.com/watch?v=5F3oxsDBoW4",
+      "sourceUrl": "https://www.youtube.com/watch?v=5F3oxsDBoW4",
+      "youtubeId": "5F3oxsDBoW4",
+      "evidenceUrl": "https://hackmd.io/VoLtmTQ0S_m5deqmnGDntg",
+      "coverage": "support",
+      "scopeNote": "The IITH course schedule lists this video with KMS resources and explicitly teaches the Õ(n^(1/4)) coloring refinement in its corresponding course unit.",
+      "reason": "Closest focused public resource for the Gaussian/degree-balancing extension; stronger topic alignment than MAX-CUT-only lectures."
+    },
+    "gap": "The recording's exact degree threshold and proof were not verified in accessible subtitles or notes belonging to that recording. Keep Exercise 13.1 attribution and the complete derivation on the page.",
+    "problemId": "three-colorable-coloring",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "gaussian-independent-set",
+    "video": {
+      "title": "Lecture 19: SDP (#2) — Coloring 3-Colorable Graphs",
+      "speaker": "Rakesh Venkat",
+      "institution": "Indian Institute of Technology Hyderabad",
+      "watchUrl": "https://www.youtube.com/watch?v=5F3oxsDBoW4",
+      "sourceUrl": "https://www.youtube.com/watch?v=5F3oxsDBoW4",
+      "youtubeId": "5F3oxsDBoW4",
+      "evidenceUrl": "https://hackmd.io/VoLtmTQ0S_m5deqmnGDntg",
+      "coverage": "support",
+      "scopeNote": "The public title and description identify SDP coloring of 3-colorable graphs. The recommending IITH course points to KMS and Williamson–Shmoys §13.2 for its coloring unit.",
+      "reason": "Focused researcher-led course material. It is a better topical candidate than generic Gaussian probability or MAX-CUT videos, while the exact extractor remains explicitly sourced."
+    },
+    "gap": "The exact positive Gaussian threshold, removal of all selected vertices with selected neighbors, and Ω(nΔ^(−1/3)/√lnΔ) proof were not independently verified from available recording text. This video is supporting explanation, not a claimed full proof.",
+    "problemId": "three-colorable-independent-set",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "cover-primal-dual",
+    "video": {
+      "title": "Advanced Algorithms 11-7: Primal-Dual Schema",
+      "speaker": "Sebastian Wild",
+      "institution": "University of Marburg",
+      "watchUrl": "https://www.youtube.com/watch?v=CqydA6RFFXw",
+      "sourceUrl": "https://www2.wild-inter.net/videos/advalg-summer25/",
+      "youtubeId": "CqydA6RFFXw",
+      "evidenceUrl": "https://www2.wild-inter.net/videos/advalg-summer25/11-7/",
+      "coverage": "exact",
+      "scopeNote": "The instructor-hosted transcript explicitly chooses one uncovered element, increases its dual variable until a containing set becomes tight, selects that set, and proves the frequency-f guarantee using relaxed complementary slackness. This matches the construction in §7.1.",
+      "reason": "A focused postgraduate lecture with a searchable primary transcript makes the algorithm and its certificate easy to revisit. It carefully distinguishes the f-frequency bound from greedy set cover's harmonic bound. The direct YouTube link was read from the instructor's live page."
+    },
+    "gap": null,
+    "problemId": "set-cover",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "cover-greedy",
+    "video": {
+      "title": "Advanced Algorithms 10-3: Greedy Set Cover",
+      "speaker": "Sebastian Wild",
+      "institution": "University of Marburg",
+      "watchUrl": "https://www.youtube.com/watch?v=EgjYrSCrX20",
+      "sourceUrl": "https://www2.wild-inter.net/videos/advalg-summer25/10-3/",
+      "youtubeId": "EgjYrSCrX20",
+      "evidenceUrl": "https://www2.wild-inter.net/videos/advalg-summer25/10-3/",
+      "coverage": "exact",
+      "scopeNote": "The instructor's transcript specifies weighted cost per newly covered element, defines element prices, derives H_n, and presents a weighted-star example approaching the bound. This matches the catalogue's explicitly Additional §1.6 method.",
+      "reason": "The short, focused lesson combines the actual selection rule, proof, and a revealing failure example. The primary page links directly to this verified YouTube ID and provides a searchable transcript."
+    },
+    "gap": null,
+    "problemId": "set-cover",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "path-primal-dual",
+    "video": {
+      "title": "Mod-01 Lec-18: Shortest Path Problem, Primal-dual method, example",
+      "speaker": "Prabha Sharma",
+      "institution": "IIT Kanpur · NPTEL",
+      "watchUrl": "https://www.youtube.com/watch?v=ZPrW3QCMpNE",
+      "sourceUrl": "https://www.youtube.com/watch?v=ZPrW3QCMpNE",
+      "youtubeId": "ZPrW3QCMpNE",
+      "evidenceUrl": "https://www.youtube.com/watch?v=ZPrW3QCMpNE",
+      "coverage": "support",
+      "scopeNote": "The verified NPTEL uploader identifies a dedicated shortest-path primal-dual lecture with an example, taught in Linear Programming and Extensions. This supplies relevant duality instruction, but its exact formulation was not verified against the assigned cut-based presentation.",
+      "reason": "A specialist university LP lecture is a stronger match than a standard Dijkstra tutorial. The primary video metadata verifies its title, speaker, and institution."
+    },
+    "gap": "The recording is not verified to grow the dual of the current s-component cut, maintain an edge tree, and extract its unique s–t path exactly as Algorithm 7.4. Do not label every primal-dual shortest-path presentation as the identical cut formulation.",
+    "problemId": "shortest-path",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "steiner-first-attempt",
+    "video": {
+      "title": "Steiner Forest via Primal-Dual",
+      "speaker": "Algorithms Lab · presenter not named in the public metadata",
+      "institution": "Algorithms Lab · university affiliation not stated",
+      "watchUrl": "https://www.youtube.com/watch?v=oYGiDDqG_4s",
+      "sourceUrl": "https://www.youtube.com/watch?v=oYGiDDqG_4s",
+      "youtubeId": "oYGiDDqG_4s",
+      "evidenceUrl": "https://www.youtube.com/watch?v=oYGiDDqG_4s",
+      "coverage": "exact",
+      "scopeNote": "The uploader's chapter list explicitly includes the first primal-dual attempt, its analysis, the problem with that approach, and the transition to synchronized increases. This directly serves the diagnostic role of Algorithm 7.5.",
+      "reason": "This recording teaches why the first proof attempt fails, rather than presenting only the final 2-approximation. Its public description is unusually precise about the two constructions and their analyses; no unverified speaker or university attribution is added."
+    },
+    "gap": null,
+    "problemId": "steiner-forest",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "steiner-simultaneous",
+    "video": {
+      "title": "Steiner Forest via Primal-Dual",
+      "speaker": "Algorithms Lab · presenter not named in the public metadata",
+      "institution": "Algorithms Lab · university affiliation not stated",
+      "watchUrl": "https://www.youtube.com/watch?v=oYGiDDqG_4s",
+      "sourceUrl": "https://www.youtube.com/watch?v=oYGiDDqG_4s",
+      "youtubeId": "oYGiDDqG_4s",
+      "evidenceUrl": "https://www.youtube.com/watch?v=oYGiDDqG_4s",
+      "coverage": "exact",
+      "scopeNote": "The public description identifies the 2-approximation with synchronized dual increases. The chapter list includes an example, the structural lemma, its proof, and the algorithm analysis. These are the distinctive construction and proof ingredients of §7.4's final method.",
+      "reason": "The same lesson explains the repair to the failed first attempt and develops the aggregate structural argument. That makes it especially useful when studying why growing multiple active components changes the proof."
+    },
+    "gap": null,
+    "problemId": "steiner-forest",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "frt-hierarchy",
+    "video": {
+      "title": "Randomized tree metrics",
+      "speaker": "Kent Quanrud",
+      "institution": "Purdue University",
+      "watchUrl": "https://www.youtube.com/watch?v=o31Q8U4EeFQ",
+      "sourceUrl": "https://www.youtube.com/watch?v=o31Q8U4EeFQ",
+      "youtubeId": "o31Q8U4EeFQ",
+      "evidenceUrl": "https://ras24.s3.amazonaws.com/ras24.pdf",
+      "coverage": "exact",
+      "scopeNote": "The lecturer's Spring 2024 video points to Chapter 12 of his notes. That chapter explicitly presents FRT with one shared random order and one shared random radius multiplier across levels, hierarchical tree distances, domination, and expected logarithmic stretch. It uses base-4 levels, an equivalent constant-base variant of the assigned base-2 construction.",
+      "reason": "The instructor's own detailed notes establish the mechanism and its analysis, making this substantially closer than a generic metric-embedding introduction. The shared-randomness subtlety is stated explicitly."
+    },
+    "gap": null,
+    "problemId": "tree-metric-embedding",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "buy-bulk-tree",
+    "video": {
+      "title": "Randomized tree metrics",
+      "speaker": "Kent Quanrud",
+      "institution": "Purdue University",
+      "watchUrl": "https://www.youtube.com/watch?v=o31Q8U4EeFQ",
+      "sourceUrl": "https://www.youtube.com/watch?v=o31Q8U4EeFQ",
+      "youtubeId": "o31Q8U4EeFQ",
+      "evidenceUrl": "https://kentq.s3.us-east-1.amazonaws.com/raf25.pdf",
+      "coverage": "support",
+      "scopeNote": "The Spring 2024 tree-metric lecture supplies the setting for solving network-design problems on trees. The lecturer's later Fall 2025 notes include a buy-at-bulk exercise asking for an exact tree algorithm; that exercise is related reading, rather than proof that the earlier video solves it.",
+      "reason": "The later notes use the same monotone, subadditive capacity-cost model, making this closer preparation than an unrelated network-design research talk."
+    },
+    "gap": "No exact video proof was verified for Algorithm 8.5: route each demand on its unique tree path and purchase on each edge the sum of all demands using it. Learn the exactness argument from §8.6.",
+    "problemId": "buy-at-bulk",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "tree-remove-steiner",
+    "video": {
+      "title": "Randomized tree metrics",
+      "speaker": "Kent Quanrud",
+      "institution": "Purdue University",
+      "watchUrl": "https://www.youtube.com/watch?v=o31Q8U4EeFQ",
+      "sourceUrl": "https://www.youtube.com/watch?v=o31Q8U4EeFQ",
+      "youtubeId": "o31Q8U4EeFQ",
+      "evidenceUrl": "https://kentq.s3.us-east-1.amazonaws.com/raf25.pdf",
+      "coverage": "support",
+      "scopeNote": "Provides the hierarchical tree structure that the auxiliary-vertex removal step acts on. It supports understanding the geometry of the input tree, rather than verified coverage of the book's particular contraction routine.",
+      "reason": "A construction-level FRT lecture gives useful prerequisites for this easily overlooked implementation step. Keeping a separate support label prevents the FRT theorem from being mistaken for the terminal-only transformation theorem."
+    },
+    "gap": "The source-specific labeled-child contractions, factor-4 rescaling, and d_T≤d_T′≤4d_T comparison of Theorem 8.19/Corollary 8.20 were not verified in this recording. This transformation is not arbitrary contraction of an arbitrary tree.",
+    "problemId": "buy-at-bulk",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "buy-bulk-general",
+    "video": {
+      "title": "Randomized tree metrics",
+      "speaker": "Kent Quanrud",
+      "institution": "Purdue University",
+      "watchUrl": "https://www.youtube.com/watch?v=o31Q8U4EeFQ",
+      "sourceUrl": "https://www.youtube.com/watch?v=o31Q8U4EeFQ",
+      "youtubeId": "o31Q8U4EeFQ",
+      "evidenceUrl": "https://kentq.s3.us-east-1.amazonaws.com/raf25.pdf",
+      "coverage": "support",
+      "scopeNote": "Teaches the random-tree embedding used by the general-graph reduction. Buy-at-bulk appears as an exercise in the lecturer's later Fall 2025 notes. The Spring 2024 video is offered as preparation for the reduction, without claiming that it proves the complete application.",
+      "reason": "The later notes' model matches the assigned common subadditive function. An ETH course also lists a lecture explicitly on tree embeddings and buy-at-bulk with §§8.5–8.6, but routes recordings through Moodle, so this public instructor recording is the more usable support resource."
+    },
+    "gap": "No public exact video was verified for Algorithm 8.6's complete chain: remove auxiliary vertices, solve the sampled tree exactly, transfer tree edges to graph shortest paths, and use subadditivity plus expected stretch to bound cost.",
+    "problemId": "buy-at-bulk",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "mis-tree",
+    "video": {
+      "title": "Trees and Series-Parallel Graphs — Lecture 22a of CS Theory Toolkit",
+      "speaker": "Ryan O'Donnell",
+      "institution": "Carnegie Mellon University",
+      "watchUrl": "https://www.youtube.com/watch?v=YnZDAnImkdo",
+      "sourceUrl": "https://www.youtube.com/watch?v=YnZDAnImkdo",
+      "youtubeId": "YnZDAnImkdo",
+      "evidenceUrl": "https://www.cs.cmu.edu/~odonnell/",
+      "coverage": "support",
+      "scopeNote": "The instructor's description identifies tree-structured constraint problems and series-parallel graphs as the lead-in to treewidth. This is preparation for dynamic programming over tree structure.",
+      "reason": "A concise graduate explanation from the instructor's own channel, more focused on tree structure than a long general approximation survey."
+    },
+    "gap": "The public description does not certify every weighted include/exclude recurrence and reconstruction step in this guide. Use the on-page tree DP as the exact algorithm.",
+    "problemId": "planar-independent-set",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "mis-bag-dp",
+    "video": {
+      "title": "Lecture 25: Nice Tree Decomposition and Algorithm for Max Weight Independent Set",
+      "speaker": "Saket Saurabh and Neeldhara Misra (course instructors)",
+      "institution": "NPTEL — Institute of Mathematical Sciences Chennai / IIT Gandhinagar",
+      "watchUrl": "https://www.youtube.com/watch?v=i_69_-D8BlQ",
+      "sourceUrl": "https://nptel.ac.in/courses/106106230",
+      "youtubeId": "i_69_-D8BlQ",
+      "evidenceUrl": "https://www.youtube.com/watch?v=i_69_-D8BlQ",
+      "coverage": "exact",
+      "scopeNote": "The official NPTEL video description explicitly states construction of nice tree decompositions and a dynamic program for maximum-weight independent set on bounded-treewidth graphs. It uses a nice-decomposition presentation.",
+      "reason": "Direct weighted-objective and decomposition-DP match, unlike the existing Baker lecture's minimum-vertex-cover example. The official VTU mirror links this exact video, and NPTEL identifies the course instructors."
+    },
+    "gap": null,
+    "problemId": "planar-independent-set",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "mis-planar-decomposition",
+    "video": {
+      "title": "Approximation schemes in planar graphs: Branchwidth and Baker's technique",
+      "speaker": "Shay Mozes",
+      "institution": "Massachusetts Institute of Technology",
+      "watchUrl": "https://courses.csail.mit.edu/6.889/fall11/lectures/video/L08_720p.mp4",
+      "sourceUrl": "https://courses.csail.mit.edu/6.889/fall11/lectures/L08.html",
+      "mediaUrl": "https://courses.csail.mit.edu/6.889/fall11/lectures/video/L08_720p.mp4",
+      "evidenceUrl": "https://courses.csail.mit.edu/6.889/fall11/lectures/L08.html",
+      "coverage": "support",
+      "scopeNote": "The official lecture page specifies carving and branch decompositions and a planar radius-to-width theorem. It develops the structural reason a layered planar instance can be reduced to bounded width.",
+      "reason": "A graduate structural lecture with synchronized notes and direct university-hosted video. More useful for decomposition reasoning than an implementation-only treewidth tutorial."
+    },
+    "gap": "Its decomposition presentation is based on branchwidth and radius, rather than the guide's particular outer-face-layer construction and treewidth lemmas 10.13–10.16.",
+    "problemId": "planar-independent-set",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "planar-baker",
+    "video": {
+      "title": "Approximation schemes in planar graphs: Branchwidth and Baker's technique",
+      "speaker": "Shay Mozes",
+      "institution": "Massachusetts Institute of Technology",
+      "watchUrl": "https://courses.csail.mit.edu/6.889/fall11/lectures/video/L08_720p.mp4",
+      "sourceUrl": "https://courses.csail.mit.edu/6.889/fall11/lectures/L08.html",
+      "mediaUrl": "https://courses.csail.mit.edu/6.889/fall11/lectures/video/L08_720p.mp4",
+      "evidenceUrl": "https://courses.csail.mit.edu/6.889/fall11/lectures/L08.html",
+      "coverage": "support",
+      "scopeNote": "The official lecture page explicitly develops Baker's technique and proves a PTAS using minimum vertex cover as the worked application. It teaches the layer-deletion and bounded-width pattern.",
+      "reason": "High-quality full lecture with synchronized notes and a direct university video; the strongest verified public Baker recording found in this search."
+    },
+    "gap": "Its worked optimization objective is minimum vertex cover, not maximum-weight independent set. The independent-set averaging loss and weighted bag DP must be read in this guide; approximation ratios do not transfer merely by complementing a vertex cover.",
+    "problemId": "planar-independent-set",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "parity-two-constants",
+    "video": {
+      "title": "Lecture 32 :  Randomized 1/2 Factor Approximation Algorithm for MAX-SAT and MAX-CUT",
+      "speaker": "Palash Dey",
+      "institution": "IIT Kharagpur · NPTEL",
+      "watchUrl": "https://www.youtube.com/watch?v=-sWJTi5JirE",
+      "youtubeId": "-sWJTi5JirE",
+      "sourceUrl": "https://nptel.ac.in/courses/106105471",
+      "evidenceUrl": "https://nptel.ac.in/courses/106105471",
+      "coverage": "support",
+      "scopeNote": "Background on half-approximation guarantees and comparing an assignment value with total constraint weight. The parity-specific two-constant-assignment proof is given on this page.",
+      "reason": "A verified introductory baseline lecture is useful preparation; no dedicated strong recording of this elementary odd/even construction was verified."
+    },
+    "gap": "This video teaches fair MAX-SAT/MAX-CUT baselines, not the all-zero/all-one parity algorithm. Read the story’s three steps for the exact odd-arity argument.",
+    "problemId": "odd-even-csp",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "metric-tsp-0",
+    "video": {
+      "title": "Lecture 15: 1.5-Approximation Algorithm for Metric TSP",
+      "speaker": "Palash Dey",
+      "institution": "IIT Kharagpur / NPTEL",
+      "watchUrl": "https://www.youtube.com/watch?v=WB0P6WXyVus",
+      "sourceUrl": "https://nptel.ac.in/courses/106105471",
+      "youtubeId": "WB0P6WXyVus",
+      "evidenceUrl": "https://storage.googleapis.com/swayam-node1-production.appspot.com/assets/vtt/noc25_cs153/106105471/Lec15.vtt",
+      "coverage": "exact",
+      "scopeNote": "Dedicated metric-TSP 3/2-approximation lecture. Study the spanning-tree, matching, Euler-tour and shortcutting roles separately.",
+      "reason": "The exact approximation factor and problem variant are explicit in the official course. MIT 6.046 Recitation 9 is another strong teaching alternative."
+    },
+    "gap": null,
+    "problemId": "metric-tsp",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "euclidean-tsp-0",
+    "video": {
+      "title": "Tight results on Euclidean TSP — Frontiers of Geometric Algorithms",
+      "speaker": "Tobias Mömke",
+      "institution": "Frontiers of Geometric Algorithms workshop / Indian Institute of Science",
+      "watchUrl": "https://www.csa.iisc.ac.in/~arindamkhan/courses/TopicsGeom24/TSPtobius.mp4",
+      "sourceUrl": "https://www.csa.iisc.ac.in/~arindamkhan/courses/TopicsGeom24/TopicsGeom24.html",
+      "mediaUrl": "https://www.csa.iisc.ac.in/~arindamkhan/courses/TopicsGeom24/TSPtobius.mp4",
+      "evidenceUrl": "https://www.csa.iisc.ac.in/~arindamkhan/courses/TopicsGeom24/TopicsGeom24.html",
+      "coverage": "support",
+      "scopeNote": "Research-level context for Euclidean TSP, linked from the course’s Euclidean-TSP week. It is not a verified complete teaching proof of the classical portal-respecting dissection PTAS.",
+      "reason": "A specialist talk on the correct geometric problem is preferable to substituting a metric-TSP lecture, which does not explain the geometric PTAS."
+    },
+    "gap": "No openly accessible video with a verified complete classical portal/patching/DP proof was found. Use the assigned background section and its primary reading for that argument.",
+    "problemId": "euclidean-tsp",
+    "checked": "2026-11-16"
+  },
+  {
+    "methodId": "vertex-cover-0",
+    "video": {
+      "title": "Rounding LP Solutions: Min-Vertex-Cover · Lecture 18c of CS Theory Toolkit",
+      "speaker": "Ryan O’Donnell",
+      "institution": "Carnegie Mellon University",
+      "watchUrl": "https://www.youtube.com/watch?v=WT2MtXI35vc",
+      "youtubeId": "WT2MtXI35vc",
+      "sourceUrl": "https://www.youtube.com/watch?v=WT2MtXI35vc",
+      "evidenceUrl": "https://www.youtube.com/watch?v=WT2MtXI35vc",
+      "coverage": "exact",
+      "scopeNote": "Formulate the vertex-cover ILP, relax it, round at one half, prove feasibility and compare cost with twice the LP optimum.",
+      "reason": "A concise graduate-course explanation devoted to LP threshold rounding, with the construction and both proof obligations clearly identified in the instructor’s description."
+    },
+    "gap": null,
+    "problemId": "vertex-cover",
+    "checked": "2026-11-16"
+  }
+];
