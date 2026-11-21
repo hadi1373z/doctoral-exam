@@ -1,6 +1,6 @@
 # Visual proof walkthroughs and examiner follow-ups
 
-50 assigned topics, each with a sequence of mathematical inference pictures and two original examiner extensions. The questions extend the worked examples with a changed hypothesis, calculation, proof repair or counterexample. Each includes hints, an exact subcheck, a worked argument and three proof-review obligations. Checking the consequence does not automatically grade the written proof. These study problems do not supply cold-exam evidence.
+45 assigned topics, each with a sequence of mathematical inference pictures and two original examiner extensions. The questions extend the worked examples with a changed hypothesis, calculation, proof repair or counterexample. Each includes hints, an exact subcheck, a worked argument and three proof-review obligations. Checking the consequence does not automatically grade the written proof. These study problems do not supply cold-exam evidence.
 
 [Portable teaching data](../data/proof-tutor.json)
 
@@ -10,12 +10,7 @@
 - [§3.2 · Scheduling schemes: large jobs, rounded types, configurations](https://hadi1373z.github.io/doctoral-exam/#proof/core-scheduling-scheme) — 4 proof pictures; Find the double-counted scheduling slack; A locally feasible configuration can be globally impossible.
 - [§3.3 · Bin packing: linear grouping and the additive term](https://hadi1373z.github.io/doctoral-exam/#proof/core-bin-scheme) — 4 proof pictures; Do not add two incompatible bin charges; Why a tiny rounding error can double the bins.
 - [§§5.1–5.3 · Random and biased assignments; derandomization](https://hadi1373z.github.io/doctoral-exam/#proof/core-sat-random) — 4 proof pictures; Derandomize a biased, shared-variable instance; A computable lower bound is not automatically a valid potential.
-- [§§5.4–5.6 · MAX-SAT rounding: recover 1−1/e and 3/4](https://hadi1373z.github.io/doctoral-exam/#proof/core-sat-lp) — 4 proof pictures; Can changing the mixing probability beat 3/4?; Same marginals, opposite clause behavior.
-- [§5.7 · Prize-collecting Steiner tree: threshold rounding](https://hadi1373z.github.io/doctoral-exam/#proof/core-pcst) — 4 proof pictures; Re-derive the theorem for a different threshold density; Nested exclusions: expectation survives, variance changes.
-- [§5.8 · Facility location: clustering before randomized opening](https://hadi1373z.github.io/doctoral-exam/#proof/core-facility) — 4 proof pictures; Recover the dual charge you need not spend; The missing term in a clustering priority.
-- [§5.9 · Release-date scheduling: randomized α-points](https://hadi1373z.github.io/doctoral-exam/#proof/core-release) — 4 proof pictures; Trace sampling, idle time, and the relaxation separately; Does the same proof survive a shared quantile?.
-- [§§5.10–5.11 · Chernoff bounds and randomized unsplittable routing](https://hadi1373z.github.io/doctoral-exam/#proof/core-flow) — 4 proof pictures; Calibrate a global failure budget from exact tails; Pairwise independent routing bits can have a heavy tail.
-- [§5.12 · Dense 3-colorable graphs: sample, enumerate, extend](https://hadi1373z.github.io/doctoral-exam/#proof/core-dense-color) — 4 proof pictures; Turn a domination failure target into an enumeration cost; A proper sample coloring can leave an unsatisfiable extension.
+- [§§5.4–5.5 · MAX-SAT: LP rounding and the better-of-two 3/4 guarantee](https://hadi1373z.github.io/doctoral-exam/#proof/core-sat-lp) — 4 proof pictures; Can changing the mixing probability beat 3/4?; Same marginals, opposite clause behavior.
 - [§§6.1–6.2 · Gram matrices and the exact MAX-CUT ratio](https://hadi1373z.github.io/doctoral-exam/#proof/core-sdp-cut) — 4 proof pictures; A tight SDP can still lose value during rounding; Why independently correct edge probabilities do not define a cut.
 - [§6.5 · Vector coloring, semicoloring, and the 0.387 exponent](https://hadi1373z.github.io/doctoral-exam/#proof/core-color-sdp) — 4 proof pictures; Choose signatures for a specified success probability; Reconstruct the degree split rather than quote its exponent.
 - [§13.2 · Gaussian threshold rounding for independent sets](https://hadi1373z.github.io/doctoral-exam/#proof/core-gaussian-color) — 4 proof pictures; Derive the exponent for a weaker vector separation; Turn an expected size into an honest repetition guarantee.
@@ -23,7 +18,7 @@
 - [§7.3 · Shortest path: why reverse deletion is essential](https://hadi1373z.github.io/doctoral-exam/#proof/core-dual-path) — 4 proof pictures; Resolve a tie and certify both the branches and the path; Connected in the input is not connected in the bought tree.
 - [§7.4 · Generalized Steiner tree: moat growth and the forest lemma](https://hadi1373z.github.io/doctoral-exam/#proof/core-steiner) — 4 proof pictures; Compute the stronger forest charge with inactive components; A feasible dual can become too weak under nonuniform growth.
 - [§§8.5–8.6 · Random tree metrics and buy-at-bulk transfer](https://hadi1373z.github.io/doctoral-exam/#proof/core-tree-metrics) — 4 proof pictures; Compute the gap between merged and separate charges; Exact terminal distances do not give a free network map-back.
-- [§10.2 · Baker’s PTAS: layers, treewidth, independent-set DP](https://hadi1373z.github.io/doctoral-exam/#proof/core-planar-mis) — 4 proof pictures; Extend the proof to weights and repair a join-node double count; How accurate must each reduced-instance solver be?.
+- [§10.1 · Euclidean TSP: dissection, portals, patching and a PTAS](https://hadi1373z.github.io/doctoral-exam/#proof/core-euclidean-tsp) — 5 proof pictures; Repair a one-sided snapping analysis; Separate a portal-only QPTAS from a PTAS.
 - [§§16.1, 16.3 · Hardness: gaps, PCP predicates, and approximation conventions](https://hadi1373z.github.io/doctoral-exam/#proof/core-hardness) — 4 proof pictures; How small must the source error actually be?; Equivalent optima can have inequivalent approximation ratios.
 
 ## Interactive proofs and zero knowledge

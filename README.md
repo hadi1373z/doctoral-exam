@@ -1,201 +1,56 @@
 # Doctoral Exam Studio
 
-**GitHub Pages URL:** https://hadi1373z.github.io/doctoral-exam/
+[Open the study website](https://hadi1373z.github.io/doctoral-exam/)
 
-## Algorithm-by-algorithm video companions
+## Confirmed approximation syllabus · 21 November 2026
 
-[Browse the algorithm video guide](https://hadi1373z.github.io/doctoral-exam/#algorithm-videos) for **57 recommendations covering every named method and supporting routine**, drawn from **39 distinct recordings**. There are **24 focused matches** and **33 supporting matches**. Sources include Stanford, Harvard, MIT, IISc, NPTEL and instructor-hosted courses. A selected lecture appears directly beside each method’s written guide, with a reason for choosing it, source links, precise scope limits and continuation links where needed.
+Required reading is **only** the following Williamson–Shmoys sections:
 
-The recommendations were checked on 16 November 2026 against official catalogues, instructor descriptions, and available notes or transcripts. Availability checks succeeded for the selected public video metadata or official media endpoint; this does not guarantee embedded playback on every network. No whole-video viewing or invented timestamps are claimed. Specialist routines without a verified exact recording retain explicit gaps. Videos open on demand with a single player, direct-viewing alternatives, and no automatic playback or examination credit.
+- **3.1–3.3:** knapsack, approximation schemes for scheduling and bin packing.
+- **5.1–5.5:** MAX-SAT algorithms, conditional expectation, biased assignments, LP rounding and the better-of-two algorithm.
+- **6.1, 6.2, 6.5, 13.2:** SDP, MAX-CUT and its use for coloring.
+- **7.1, 7.3, 7.4:** primal–dual algorithms and generalized Steiner tree.
+- **8.5, 8.6:** approximating metrics by tree metrics and the buy-at-bulk application.
+- **10.1:** Euclidean TSP.
+- **16.1, 16.3:** hardness of approximation and the PCP theorem.
 
-The existing 21-lecture three-subject library remains available and now links to the method guide. Exportable metadata is in [data/algorithm-videos.json](data/algorithm-videos.json), with a [source-linked index](videos/algorithms.md). Run `node src/verify-algorithm-videos.cjs .`.
+These are 20 sections grouped into 14 required learning units. Sections 5.6–5.12 and planar MIS (§10.2) are **Additional**, shown in amber in the algorithm catalog. They do not enter the required study plan, assessment pool or progress denominator. Source dependencies are explained where needed without expanding the assigned section list.
 
-## Complete 15-day revision schedule
+The other subjects retain their confirmed scope: Alon–Spencer Chapters 6, 7, 15 and 17, and the complete LFKN, Shamir, BFL and GMW papers. The website has 45 required units in total.
 
-The [15-day study plan](https://hadi1373z.github.io/doctoral-exam/#plan/15) assigns all **50 confirmed topics exactly once across Days 1–12**: 19 approximation, 21 probability and 10 paper topics. Days 13–15 audit the full sources, reconstruct proofs and rehearse a three-subject examination. Daily instructions require the assigned Williamson–Shmoys sections, Alon–Spencer Chapters 6, 7, 15 and 17 in full, and all four complete LFKN, Shamir, BFL and GMW papers. The three original summaries support this primary reading.
+## Learning resources
 
-Each day links to its lectures, primary sources, visual proofs, Foundation quizzes and hard questions. Reading, written proof reconstruction, examiner defense, and spaced retrieval have explicit time budgets and deliverables. Notes and four manual planning marks per day save in the existing progress backup. This is intensive revision for previously studied material: extend a day when necessary. Calendar completion does not supply cold-exam or retention evidence.
+- [Continuous lectures](https://hadi1373z.github.io/doctoral-exam/#lecture): examples, board derivations, proof pictures and source links.
+- [Problem stories and section audit](https://hadi1373z.github.io/doctoral-exam/#algorithms/coverage): 14 assigned algorithmic tasks and 8 additional problem stories; 57 method guides in the full catalog. Individual additional methods within assigned problems have their own amber labels.
+- [Question repository](questions/README.md): 540 required-topic questions, 12 per unit: four doctoral proofs, four examiner challenges, two research investigations and two short oral checks. The 90 cold transfer forms are separate.
+- [Foundation practice](https://hadi1373z.github.io/doctoral-exam/#foundation): 135 assigned checks with explanations plus 68 original background checks.
+- [15-day map](https://hadi1373z.github.io/doctoral-exam/#plan/15): all 45 units once in Days 1–12, followed by source audits and mock exams. Planning checklists do not award examination credit.
+- [Videos](videos/algorithms.md): attributed recommendations for the full method catalog, with focused/supporting labels and explicit gaps.
+- [Textbook and LaTeX summaries](textbook/): approximation volume corrected to the exact section list; other volumes retained.
 
-The complete sequence is also visible as a fifteen-row reading schedule and portable in [data/study-plan-15.json](data/study-plan-15.json). Verify coverage, dates, links, saved work and unchanged exam evidence with `node src/verify-study-plan.cjs .`.
-
-## Assigned algorithm coverage audit
-
-The [section checklist](https://hadi1373z.github.io/doctoral-exam/#algorithms/coverage) maps **all 27 assigned Williamson–Shmoys sections** to **57 named method and subroutine guides across 22 problem stories**, plus **12 separately labeled hardness constructions**. Main methods, supporting routines, diagnostic first attempts, cited results and source exercises have explicit references and roles. This covers the assigned main text; source exercise extensions are labeled and it does not claim to solve every exercise or include the entire book.
-
-The expansion separates all six MAX-SAT methods, the exact knapsack DP, both scheduling schemes and their implementation tools, bin-packing insertion routines, the combinatorial coloring precursor, semicoloring and full-coloring conversions, Gaussian amplification, shared-alpha scheduling, and exact tree and decomposition solvers. It adds the odd/even CSP half-approximation from the hardness section. Planar independent set includes nonnegative vertex weights; shortest-path growth extracts its unique tree path, while reverse deletion belongs to the Steiner-forest cleanup. Each story offers a jump list for its methods.
-
-## Problems and algorithms
-
-The [Problems & Algorithms story reader](https://hadi1373z.github.io/doctoral-exam/#algorithms) presents **one complete problem guide per page**, moving through **19 assigned algorithmic tasks** and **three additional background problems** from the approximation course. A segmented story strip, Previous/Next controls, a problem selector, and left/right arrow keys let you move at your own pace. On touch screens, swipe the story header to change problems; the mathematical explanation scrolls vertically. Navigation stays visible while reading. The strip shows position in the sequence and does not certify learning or award examination credit.
-
-Each page contains the problem statement, all its algorithm steps and guarantees, the proof idea, common mistakes, and further-study links together. Choose Assigned, All, or Additional to change the sequence. Scope is preserved in shareable story links and on reload; endpoints do not wrap silently. Additional problems and methods carry amber labels. The [searchable comparison list](https://hadi1373z.github.io/doctoral-exam/#algorithms/index) remains one click away.
-
-Each problem has a precise input and objective, a typeset mathematical statement, algorithm steps, the guarantee with its assumptions, a proof idea, and a common mistake. Further-study links lead to the matching lecture, proof explanation, visual proof and examiner follow-ups, Foundation quiz, textbook section, and the Williamson–Shmoys primary source. Hardness sections and supporting tools are linked separately. Browsing this reference earns no examination credit.
-
-The portable catalogue is in [data/algorithms.json](data/algorithms.json). Verify coverage, links, mathematical rendering, filters, and read-only progress behavior with `node src/verify-algorithm-catalog.cjs .`.
-
-## Foundation quizzes with explanations and reading references
-
-[Foundation quizzes](https://hadi1373z.github.io/doctoral-exam/#foundation) now contain **218 explained questions**: three new questions for every one of the 50 assigned topics, plus all 68 original background checks. The original question IDs and answer histories are retained. Small calculations, changed hypotheses, and proof decisions complement the concept checks; selected legacy prompts were clarified where more than one listed bound was mathematically valid.
-
-After submitting an answer in guided practice, read a reasoning paragraph, three worked steps, a rationale for each of the four choices, a transferable takeaway, and a follow-up to attempt without the choices. Display equations compile to offline MathML. Each question links to a relevant lecture section and textbook chapter or, for supplementary material, its background reference lesson. Primary source and section references accompany assigned-topic links. Related material is labeled explicitly.
-
-Filter by subject, topic, assigned/background scope, question type, latest mistakes, or questions marked for review. Sessions spread questions across topics before repeating a topic. Quiz position, answers, optional explanation notes and review markers save in the existing progress backup; leaving for a lecture preserves the quiz. Timed mode withholds explanations until the session ends and keeps its clock running while away. Results supply a study route for missed topics and a retry option. None of this practice supplies cold-exam evidence.
-
-Every assigned lecture's Explore & practice section links to its own Foundation quiz. The complete study bank is portable in [data/foundation-questions.json](data/foundation-questions.json). Verify with `node src/verify-foundations.cjs .`.
-
-## Continuous lecture course
-
-The main [lecture course](https://hadi1373z.github.io/doctoral-exam/#learn) now organizes all **50 assigned topics into 17 ordered chapter sequences**. Each topic is a continuous, freely navigable lecture: motivation and prerequisites, precise definitions and theorem, a complete worked example, board reasoning, visual inferences with explanations, changed assumptions, supporting video and practice, and a retrieval task leading into the next lecture. The 202 proof pictures and 100 examiner extensions are integrated into this reading path. Checkpoints remain optional while reading; the separate checkpoint view retains its original staged checks.
-
-Fifteen lectures have additional board derivations with semantic MathML equations: all ten LFKN/Shamir/BFL/GMW topics plus knapsack, Four Functions, Azuma, random coding, and Shearer. Deep input theorems and omitted source lemmas are identified explicitly. These lectures develop the main mechanisms; they do not replace the complete assigned books and papers.
-
-The margin, mobile section selector, next-lecture links, chapter prerequisites, and subject search support a connected study session. Reading position, personal lecture notes, and manual section markers save in the existing progress backup. Reading all eight sections never awards a guided pass or cold-exam credit. Original answers, proof drafts, and examination evidence are retained. Textbook chapters link directly to the matching lectures, and all three original LaTeX drafts remain byte-identical.
-
-Video controls are visible in every lecture’s Explore & practice section. A verified exact-topic mapping is used when available; otherwise related subject background is clearly labeled. External players retain their original source links and do not autoplay.
-
-Teaching sequence and additional derivations are portable in [data/lectures.json](data/lectures.json). Run `node src/verify-lectures.cjs .` alongside the existing checks to verify coverage, resume/import, mathematical rendering, integrated problems, and separation from examination evidence.
-
-**New textbook reader:** https://hadi1373z.github.io/doctoral-exam/textbook/
-
-## Textbook first — three complete exam drafts
-
-The [mathematical textbook](textbook/index.html) remains a primary reading option in the homepage navigation and course hero. It provides section-by-section reading with native MathML, chapter search, outline navigation, proof-oriented introductions and worked examples. Seventeen chapter companions connect its full text to the matching continuous lectures.
-
-The **three original working drafts** are included unchanged as editable LaTeX sources: [Approximation algorithms](textbook/summaries/02_approximation_algorithms_summary_hadi_zamani.tex), [Interactive proof systems](textbook/summaries/03_interactive_proofs_summary_hadi_zamani.tex) and [Probabilistic method](textbook/summaries/04_probabilistic_method_summary_hadi_zamani.tex). The browser reader also presents the full source text as accessible mathematical HTML. See the [textbook README](textbook/README.md) for details.
-
-
-
-An interactive preparation workspace for Approximation Algorithms, Interactive Proof Systems, and the Probabilistic Method.
-
-The 50 main lesson equations are authored in LaTeX and compiled to semantic MathML with KaTeX at build time. Summation ranges, fractions, limits, subscripts and exponents render as mathematics in the lesson and proof definitions. Each equation includes expandable LaTeX source. The published equations work offline without a math CDN; the MIT-licensed build dependency is bundled under `src/vendor/`.
-
-## A calmer place to read
-
-The studio uses warm paper, forest-green accents, editorial headings and larger reading text. The learning course has a clear starting point, short lesson previews and a progress panel. Inside a lesson, the focused reader gives the explanation and checkpoint room to breathe; its stage navigation adapts to a phone screen. Practice, examination and reference tools remain available in expandable sidebar groups.
-
-The design is fully offline and uses system fonts. All existing lessons, source mappings, saved progress, staged checkpoints and cold-exam evidence rules are preserved.
-
-## Guided learning course
-
-The separate checkpoint view retains **50 authored lessons, 300 reading stages and 300 formative checkpoints**, covering every assigned study unit. Open it from the Checkpoint view button in a continuous lecture. Each lesson teaches intuition, notation, a worked example, a proof mechanism, two changed cases, and a retrieval recap. The prose is original teaching material based on the assigned sources; detailed feedback explains each choice. Deep source theorems used as inputs are identified explicitly.
-
-Worked calculations and proof implications reveal one step at a time. Pure-numeric example checks use free entry with fractions, decimals or scientific notation; other checks use specific choices and explanatory feedback. An incorrect response keeps the next stage locked. The two changed cases must both pass before the recap. A lesson is complete after its six checks and the recap declaration; a reflection is optional and is never judged correct based on length.
-
-Every assigned lesson now includes an interactive teaching picture: change a probability measure, reveal a random process, choose a graph configuration, or explore a concrete optimization or proof-protocol example. Worked examples and proofs also have visual step chains. The studio uses a bright paper palette with teal, coral and violet accents, plus brief checkpoint celebrations that respect reduced-motion settings. Picture experiments do not award course or exam credit.
-
-## Visual proofs and examiner extensions
-
-The [visual proof workspace](https://hadi1373z.github.io/doctoral-exam/#proof/core-four-functions) develops each assigned topic through four or five mathematical pictures. Each inference has a prediction prompt, a diagram of its actual objects or inequalities, a reveal explaining why the claim follows, and a fact to carry into the next inference. Completed steps can be revisited. The scope note identifies imported lemmas and the precise mechanism developed.
-
-Each worked-example stage also contains **two new examiner extensions: 100 problems across the 50 topics**. These require a derivation, counterexample, proof repair, or changed-parameter analysis. Every problem includes two staged hints, an exact numerical or logical subcheck, a worked solution, three concrete proof obligations, a common mistaken argument, and a further bounded question. A written attempt is committed before opening the worked solution. The first argument, revised draft, hints, consequences and self-review save locally and travel with the existing progress backup.
-
-Exact consequence checks are automatic; written arguments use worked solutions and human review. Their practice counters remain separate from the guided course and cold-exam evidence. [Browse all visual proof topics](proofs/README.md) or use the [portable teaching dataset](data/proof-tutor.json). The scheduling lesson now follows the assigned source's downward-rounding construction and original-volume short-job analysis.
-
-Your stage, answers, attempts, opened worked steps, reflection and completed lessons save locally. The guided course has its own progress record within the existing backup, separate from cold-exam evidence. Earlier reading marks remain preserved; they do not automatically count as completed guided lessons. Existing proof attempts and question drafts are not changed. Use Export/Import progress to move between browser origins or devices.
-
-The focused reader hides the main navigation while reading, with a button to show it. Mapped playgrounds and lectures can open inside the worked-example stage. Additional background remains available through Reference lessons and retains its amber label. The course teaches central mechanisms and examples; use the full assigned books and papers for omitted technical details and complete examination proofs.
-
-## Study roadmap and topic workspaces
-
-The [exam roadmap](https://hadi1373z.github.io/doctoral-exam/#roadmap) complements the learning course with a 50-unit evidence map, subject and chapter filters, search, explicit reading scope, resource counts and an evidence-based next priority. [Open the probability roadmap](https://hadi1373z.github.io/doctoral-exam/#roadmap/probability) for the 21 assigned Alon–Spencer units; additional background remains a separate amber scope.
-
-- **Topic workspace:** every assigned unit connects its statement, source, lesson, 12 questions, mapped videos and exact visual labs. A proof/examiner/research question ladder offers three starting points. For example, [Shearer's lemma](https://hadi1373z.github.io/doctoral-exam/#unit/core-shearer) links directly to its projections playground and lecture. Missing exact-resource mappings are stated explicitly.
-- **Blackboard notes:** topic notes autosave in the existing local progress record, share the oral-practice notes field, and can be exported. Existing answers, notes and locked exam responses are preserved. Notes and reading marks add no cold-exam credit.
-- **Repair desk:** [pending reviews, failed criteria and overdue retests](https://hadi1373z.github.io/doctoral-exam/#repairs) are prioritized from the existing evidence records. Each topic shows its latest six criterion ratings, recorded blockers and recent locked attempts. The site does not infer a grade from a free-form proof.
-- **Focused sessions:** 30-, 60- and 90-minute planning guides connect a cold test to review, visual exploration and reconstruction. Lock the cold attempt before opening study resources; choose the actual working budget on the exam screen. These planning times are not official exam requirements.
-
-Roadmap, topic and repair links work on reload. The interface is responsive, including the evidence grid, resource tiles, chapter filters and notes. Progress still uses the original strict evidence policy and storage schema; no activity has been promoted into cold evidence.
-
-## Assigned material
-
-The Syllabus & Sources page maps 50 study units to the latest confirmed reading list:
-
-- Williamson–Shmoys, *The Design of Approximation Algorithms*: §§3.1–3.3; all of Chapter 5; §§6.1, 6.2, 6.5, 13.2; §§7.1, 7.3, 7.4; §§8.5, 8.6; §10.2; §§16.1, 16.3.
-- Alon–Spencer, *The Probabilistic Method*, fourth edition: Chapters 6, 7, 15, and 17.
-- Lund–Fortnow–Karloff–Nisan, *Algebraic Methods for Interactive Proof Systems*.
-- Shamir, *IP = PSPACE*.
-- Babai–Fortnow–Lund, *Two-Prover Interactive Protocols*.
-- Goldreich–Micali–Wigderson, *Proofs that Yield Nothing But Their Validity*.
-
-The latest §10.2 assignment concerns planar maximum independent set. Earlier Euclidean TSP (§10.1) and the original general background topics remain available in the library.
-
-The study library marks confirmed units **Assigned** in green and optional background lessons **Additional** in amber. Labels use words as well as color. Choose Assigned reading, All topics, or Additional only; subject filters apply to each view. Probability has 21 assigned units (Chapters 6, 7, 15 and 17) and 10 additional background lessons. Every assigned probability unit has a lesson, a source checklist and 12 practice questions. These are study outlines; the original reading supplies omitted proof details. Additional lessons can support prerequisites without adding required exam units. Scope labels also appear in lesson details, warm-up quizzes, proof drills, oral prompts and playgrounds. The separate open-problem agendas are marked Additional.
-
-## Study tools
-
-- **[Educational videos](https://hadi1373z.github.io/doctoral-exam/#videos):** 21 source-linked lectures across the three subjects, including 15 advanced lectures. The library has 20 YouTube players, one official university-hosted MP4, subject/topic filters, and direct viewing links. Lecture and background coverage are labeled separately.
-- **600-question repository:** 12 original questions for every assigned topic: four doctoral proofs/constructions, four examiner challenges, two research seminar investigations and two short oral checks.
-- **100 research seminar investigations:** explicit hypotheses, a concrete deliverable, prerequisites, an adversarial follow-up and a proof route or reproducible investigation plan. These are research-style exercises, not claims of novel results.
-- **Two separately labeled open-problem agendas:** P versus NP and P versus BPP, with dated primary references and bounded seminar tasks. A solution of the unrestricted open problem is not expected and earns no exam credit.
-- Topic, subject, level and task filters; full-text question search; starred questions; locally saved written drafts and repair notes; shareable question links; printable question sheets; JSON exports.
-- **[Per-topic question files](questions/README.md)** and a **[portable JSON dataset](data/questions.json)** mirror the website. The 100 cold-exam transfer forms stay outside this study repository and remain hidden in the normal UI until proof commitment.
-- **Cold exam for all 50 assigned units:** locked proof snapshots, staged transfer and objection prompts, a parameterized numerical checkpoint, six separate proof criteria, and a declared practice time budget.
-- **100 new adversarial transfer questions:** two different forms per unit, with counterexamples and detailed resolutions held back until the response is committed.
-- **Assessment guide:** practical criteria for reviewing proofs, testing changed assumptions, planning delayed retests and seeking independent review.
-- **50 training challenges** with the earlier written-proof questions, two follow-ups, source-linked proof outlines and a 20-point training self-review.
-- **83 lessons:** 50 assigned-source units plus the original 33 foundation/background lessons.
-- **17 mathematical playgrounds:** 13 new SVG experiments plus the original four numerical labs.
-- **218 explained Foundation questions**, including all original 68 checks, plus **13 proof-order exercises** and the timed oral simulator.
-- Three-subject committee draws, local drafts, inspection of locked saved work, progress export/import, and an HTML examiner packet containing exact questions, responses, calculations, timings, criterion reviews and repair reflections.
-
-The new visual experiments cover knapsack scaling, conditional expectation, hyperplane rounding, shortest-path dual potentials, tree stretch, correlation inequalities, Doob martingales, Hamming balls, the Tenure Game, entropy, Shearer projections, graph-property testing, and algebraic identity checks.
-
-## Question coverage
-
-| Subject | Assigned topics | Course questions | Research seminar exercises |
-| --- | ---: | ---: | ---: |
-| Approximation algorithms | 19 | 228 | 38 |
-| Interactive proofs and zero knowledge | 10 | 120 | 20 |
-| Probabilistic method | 21 | 252 | 42 |
-| Total | 50 | 600 | 100 |
-
-The repository adds 450 new topic-specific problems to the 150 central-task and short-oral prompts already present. The 500 substantive proof, examiner and research tasks are counted separately from the 100 short oral checks. Questions in the research tier ask for a precise extension, comparison, reduction, model audit or finite experiment with a baseline and failure criterion. Guides identify deep imported lemmas rather than silently treating them as proved. QBF operator exercises explicitly identify their modern multilinearization presentation instead of attributing the notation verbatim to Shamir's paper.
+Euclidean TSP includes the two-sided snapping budget, nested portals, the distinction between portal-only and patched crossing bounds, connectivity-aware square DP, probability amplification and nontrivial examiner questions. Geometric structure lemmas are identified as source proof inputs, not claimed to follow from a toy picture.
 
 ## Assessment
 
-Progress counts per-unit cold evidence. Reading marks, MCQs, supplied proof-order tasks, playground use and earlier training scores earn no cold-exam credit. Existing records are preserved as training; they are not retroactively certified.
+Reading, quizzes, pictures and videos are formative. Required progress uses a written unaided proof, a changed-case defense, an objection, a numerical check and criterion review. Retention requires another form after at least seven days. Proof judgments are self-reviewed; the website does not predict an official examination result. Progress is stored on the device and can be exported.
 
-A cold pass needs: statement, construction, bounds/resources, transfer and defense each at least 3/4; central proof exactly 4/4; every numerical checkpoint answer correct; all critical-gap checks; an unaided declaration; and completion within the declared working budget. A high average cannot compensate for a central gap. Text-length thresholds only confirm that a draft exists, not its correctness.
+## Rebuild and verify
 
-Retention needs the other transfer form at least seven days after an earlier passed response. It stays current for thirty days after the last pass. A later failed, assisted or overtime attempt reopens that unit and retention must be rebuilt after the gap. The seven-day interval, thirty-day freshness window and selectable 20–90 minute budgets are explicit training policies, not official exam rules.
-
-Finishing automatically archives the locked responses before feedback appears. Unreviewed finished attempts block credit until their review is completed, so abandoning a failed checkpoint cannot conceal it. Saving the criterion review finalizes that same record. Attempt chronology follows when the response finished; reviewing an older attempt later cannot erase a newer failure.
-
-Free-form proofs remain **self-reviewed**. Only numerical checks, timestamps and the recorded sequence are automated. The page does not predict an exam grade or pass probability. Export a packet for independent examiner calibration and additional unseen questions. Study units group source results; their outlines do not replace complete proofs of every lemma in the assigned works.
-
-## Use and privacy
-
-Open `index.html` or visit the live site. The core study tools, code, styling, question content and graphics are inside the HTML file. There is no account, backend, or AI grading service. Educational videos require internet access and stream from their original providers; an external player loads when the video library is opened. Reference links open external source pages when followed.
-
-## Finding and playing educational videos
-
-Choose **Educational videos** at the top of the sidebar, or open the [video library](https://hadi1373z.github.io/doctoral-exam/#videos). Lessons and question pages also link to supporting lectures. Select **Watch here** to change the visible player. There is no automatic playback.
-
-If a player is blank, restricted or blocked by the network, use **Watch on YouTube**, **Open university video** or **Official lecture page** beneath it. A downloaded HTML file directs YouTube playback to the hosted site, since local-file embedding may lack the referrer required by the provider. Direct lecture links remain available.
-
-The catalogue maps verified support to 29 of the 50 assigned study units. For the other units the library explicitly offers related subject lectures; it does not claim exact coverage. In particular, these recordings do not replace the full BFL multilinearity or GMW certification arguments. See the [source-linked video index](videos/README.md) and [portable metadata](data/videos.json). Source links were checked on 6 November 2026. Watching videos earns no cold-exam credit.
-
-Progress stays in this browser on this device. Existing versions one through three are preserved alongside question drafts, stars and repair notes. Export a JSON backup before changing devices or clearing browser data. Downloaded-file progress and hosted-site progress use different browser origins.
-
-## Hosting and editing
-
-GitHub Pages serves `main` at the repository root; `.nojekyll` keeps deployment static. The self-contained `index.html` needs no install or backend. Editable source modules are in `src/`; the question collections are `src/bank-approx.js`, `src/bank-complexity.js` and `src/bank-probability.js`.
-
-After editing source, regenerate the HTML, portable dataset and 50 topic files with Node:
+Run from the repository root:
 
 ```sh
 node src/build-exam.cjs ..
-node src/verify-bank.cjs ..
-node src/verify-videos.cjs ..
+node src/verify-scope.cjs ..
 node src/verify-calibration.cjs ..
-node src/verify-depth.cjs ..
-node src/verify-roadmap.cjs ..
 node src/verify-guided.cjs ..
+node src/verify-foundations.cjs ..
+node src/verify-proof-tutor.cjs ..
+node src/verify-bank.cjs ..
+node src/verify-lectures.cjs ..
+node src/verify-study-plan.cjs ..
+node src/verify-algorithm-catalog.cjs ..
+node src/verify-algorithm-videos.cjs ..
+node src/verify-math.cjs ..
 ```
 
-The build uses only Node standard-library modules. Generated topic files and JSON should be rebuilt together so their stable question IDs match the website.
-
-For small independent research baselines, run `node src/research-audits.cjs`. It exhaustively computes the one- and two-copy classical CHSH values, checks a Four Functions counterexample on the non-distributive M3 lattice, and checks the two prize-collecting threshold coefficients numerically. These are finite or numerical audits, not replacements for the general proofs.
-
-The mathematical experiments have been checked against exact enumeration, including all 256 binary-triple families for the Shearer example and all 64 initial partitions of the Tenure example. Assessment checks cover criterion vetoes, assistance and timing gates, no activity credit, different-form retention, freshness, later-failure revocation, coverage of all 50 units, 300 checkpoint parameter cases, and backup migration. Repository checks verify counts and tiers for every topic, unique prompts and IDs, withheld cold transfers, JSON/topic-file agreement, search and filters, pagination, blind/revealed views, escaping and draft migration. Browser checks cover question browsing, guides, drafts, links, exports, responsive layout and the cold-evidence workflow.
+The standalone site uses offline KaTeX MathML. Public source data contains authored teaching material and source links; full extracted books and private uploads are not included.

@@ -868,7 +868,7 @@ const PROOF_APPROX = {
   "core-sat-lp": {
     "proof": {
       "goal": "Use length-sensitive clause bounds to prove the better of fair and LP-marginal rounding is a 3/4 approximation.",
-      "scope": "Williamson–Shmoys §§5.4–5.6. Normalize repeated literals and tautologies first; weights are nonnegative and variable rounding is independent. The LP solve and its bit-precision treatment are inputs.",
+      "scope": "Williamson–Shmoys §§5.4–5.5. Normalize repeated literals and tautologies first; weights are nonnegative and variable rounding is independent. The LP solve and its bit-precision treatment are inputs.",
       "frames": [
         {
           "title": "Convert a clause into a product bound",
@@ -1081,1039 +1081,6 @@ const PROOF_APPROX = {
         ],
         "mistake": "Negative dependence is not a magic label: the theorem needs the inequality for each clause’s specific mixture of positive and negative literals.",
         "followup": "Construct a third two-bit law with the same marginals whose success probability is exactly 3/4, and relate its covariance to the independent case."
-      }
-    ]
-  },
-  "core-pcst": {
-    "proof": {
-      "goal": "Use one common random threshold to balance expected tree cost against expected exclusion penalties.",
-      "scope": "Williamson–Shmoys §5.7. The factor-two tree-rounding theorem for the scaled terminal-cut relaxation is an explicit input; the walk proves the threshold integration and comparison with the LP.",
-      "frames": [
-        {
-          "title": "Use the same threshold for every terminal",
-          "question": "What makes one scaling x/α feasible for every retained terminal cut?",
-          "diagram": {
-            "kind": "table",
-            "columns": [
-              "Threshold α",
-              "Retained vertices",
-              "Required cut mass"
-            ],
-            "rows": [
-              [
-                "fixed α",
-                "all yᵢ≥α",
-                "x(δS)≥α"
-              ],
-              [
-                "scaled edges",
-                "x/α",
-                "every retained cut ≥1"
-              ]
-            ],
-            "focus": [
-              0,
-              1
-            ],
-            "note": "The common cutoff links terminal selection to one feasible fractional edge solution."
-          },
-          "claim": "For retained terminals, tree cost is at most 2E/α.",
-          "explanation": "Every relevant cut contains a retained terminal i with yᵢ≥α, so the LP cut constraint guarantees enough edge mass after division by α. The source tree-rounding theorem supplies the factor two.",
-          "carry": "The only random variable in this edge-cost bound is α."
-        },
-        {
-          "title": "Integrate the cost with its actual density",
-          "question": "Why is the edge coefficient not just its value at the mean threshold?",
-          "diagram": {
-            "kind": "inequality",
-            "lines": [
-              {
-                "left": "E[tree cost]",
-                "relation": "≤",
-                "right": "2E·E[1/α]",
-                "reason": "conditional tree bound"
-              },
-              {
-                "left": "E[1/α]",
-                "relation": "=",
-                "right": "ln(1/γ)/(1−γ)",
-                "reason": "α uniform on [γ,1]"
-              }
-            ],
-            "focus": 1,
-            "note": "A reciprocal must be averaged as a reciprocal; replacing α by E[α] reverses the useful bound."
-          },
-          "claim": "E[tree cost]≤[2ln(1/γ)/(1−γ)]E.",
-          "explanation": "Uniform density is 1/(1−γ). The integral of 1/α from γ to one is ln(1/γ); the positive lower cutoff keeps this finite.",
-          "carry": "The edge multiplier is explicit and distribution-dependent."
-        },
-        {
-          "title": "Charge every excluded vertex to its LP penalty",
-          "question": "How is the probability bound interpreted when yᵢ lies below γ?",
-          "diagram": {
-            "kind": "table",
-            "columns": [
-              "Connection yᵢ",
-              "Exclusion probability",
-              "LP charge ratio"
-            ],
-            "rows": [
-              [
-                "yᵢ≥γ",
-                "(1−yᵢ)/(1−γ)",
-                "1/(1−γ)"
-              ],
-              [
-                "yᵢ<γ",
-                "1",
-                "≤1/(1−γ)"
-              ]
-            ],
-            "focus": [
-              0,
-              1
-            ],
-            "note": "The ratio formula is an upper bound below γ, not a probability exceeding one."
-          },
-          "claim": "E[penalties]≤P/(1−γ), where P=∑πᵢ(1−yᵢ).",
-          "explanation": "Exclusion is the upper interval α>yᵢ. For yᵢ<γ this event is certain, while (1−yᵢ)/(1−γ)>1 still gives a valid charge bound. Add penalties by linearity; their exclusion events are not independent.",
-          "carry": "Both random costs are now compared with the same fixed LP solution."
-        },
-        {
-          "title": "Equalize the two worst coefficients",
-          "question": "Which equation makes one factor multiply E+P?",
-          "diagram": {
-            "kind": "inequality",
-            "lines": [
-              {
-                "left": "2ln(1/γ)",
-                "relation": "=",
-                "right": "1",
-                "reason": "balance the two multipliers"
-              },
-              {
-                "left": "γ",
-                "relation": "=",
-                "right": "e^(−1/2)",
-                "reason": "solve the balance equation"
-              },
-              {
-                "left": "E[total]",
-                "relation": "≤",
-                "right": "(E+P)/(1−e^(−1/2))",
-                "reason": "common coefficient"
-              }
-            ],
-            "focus": 2,
-            "note": "The LP objective E+P is a lower bound on the original optimum."
-          },
-          "claim": "The expected factor is (1−e^(−1/2))^−1.",
-          "explanation": "Choosing γ after identifying both coefficients avoids optimizing edge cost alone at the expense of penalties. The balancing argument minimizes the larger of these two uniform coefficients. Increasing γ removes low thresholds, so the reciprocal edge coefficient decreases while the penalty coefficient increases; their crossing minimizes the larger coefficient.",
-          "carry": "A single randomized construction is certified by one combined LP lower bound."
-        }
-      ]
-    },
-    "challenges": [
-      {
-        "id": "pcst-nonuniform-threshold",
-        "title": "Re-derive the theorem for a different threshold density",
-        "minutes": 16,
-        "skill": "Analyze a changed rounding distribution rather than importing its old coefficients.",
-        "connection": "The example computes exclusion intervals under a uniform threshold. Now the density gives more weight to large thresholds.",
-        "prompt": "Sample α from [γ,1] with density f(α)=2α/(1−γ²). Retain yᵢ≥α and keep the conditional tree bound 2E/α. Derive the edge multiplier A(γ), the smallest uniform multiplier B(γ) charging every expected penalty to πᵢ(1−yᵢ), including yᵢ<γ, and the γ minimizing max{A,B}. Compare this guarantee with the uniform-threshold factor without claiming either analysis is tight for every graph.",
-        "hints": [
-          "Integrate (2/α)f(α), and integrate f only above y for the exclusion event.",
-          "For y≥γ, divide (1−y²)/(1−γ²) by 1−y and take the supremum over y approaching one."
-        ],
-        "probe": {
-          "kind": "number",
-          "prompt": "What is the optimized common multiplier for this density?",
-          "expected": 2.6666666666666665,
-          "feedback": "A=4/(1+γ) and B=2/(1−γ²). They meet at γ=1/2, giving 8/3. A decreases and B increases, so the maximum is minimized at the crossing; this is weaker than the uniform-density factor about 2.541."
-        },
-        "solution": [
-          "The density integrates to one because ∫γ¹2α dα=1−γ².",
-          "The edge coefficient is ∫γ¹(2/α)·2α/(1−γ²)dα=4/(1+γ).",
-          "For y≥γ, exclusion probability is (1−y²)/(1−γ²), whose ratio to 1−y is (1+y)/(1−γ²), with supremum 2/(1−γ²).",
-          "For y<γ, the ratio is 1/(1−y)≤1/(1−γ)≤2/(1−γ²), so the same multiplier works.",
-          "A is decreasing and B increasing. Equality reduces to 4(1−γ)=2, so γ=1/2 and the factor is 8/3.",
-          "These are uniform coefficient guarantees. Instance-specific edge/penalty proportions could support a different tuning."
-        ],
-        "rubric": [
-          "Normalize the density and integrate its reciprocal edge charge.",
-          "Handle both y-regimes and justify the supremum penalty coefficient.",
-          "Prove the minimax parameter choice and compare the resulting guarantees."
-        ],
-        "mistake": "Using the old uniform exclusion length divides the wrong measure; a probability is an integral of the new density.",
-        "followup": "For fixed known ratio E/P, minimize A(γ)E+B(γ)P instead of their maximum, and explain why the resulting bound is instance-dependent."
-      },
-      {
-        "id": "pcst-common-threshold-dependence",
-        "title": "Nested exclusions: expectation survives, variance changes",
-        "minutes": 14,
-        "skill": "Distinguish linearity of expectation from an unjustified independence claim.",
-        "connection": "The example sums expected penalties. A single threshold makes terminal exclusions nested rather than independent.",
-        "prompt": "Let α be uniform on [1/2,1]. Two terminals have connection values 0.6 and 0.9, with penalties ten each. Derive the complete distribution of the total excluded penalty Z, compute E[Z] and Var(Z), and compare the variance with a fictitious independent-exclusion model having the same marginals. Explain why the original expected-cost proof remains correct and why concentration claims need additional work.",
-        "hints": [
-          "Split [1/2,1] at 0.6 and 0.9.",
-          "The larger-connection terminal can be excluded only when the smaller-connection terminal is also excluded."
-        ],
-        "probe": {
-          "kind": "number",
-          "prompt": "What is Var(Z) under the common threshold?",
-          "expected": 40,
-          "feedback": "Z is 0, 10 or 20 with probabilities 1/5, 3/5 and 1/5. Its mean is ten and second moment is 140, giving variance 40. Independent marginals would instead give 16+16=32."
-        },
-        "solution": [
-          "Exclusion probabilities are (1−0.6)/0.5=0.8 and (1−0.9)/0.5=0.2.",
-          "The interval probabilities give Z=0 with probability 0.2, Z=10 with probability 0.6, and Z=20 with probability 0.2.",
-          "Thus E[Z]=10 and E[Z²]=60+80=140, so Var(Z)=40.",
-          "The indicators have covariance 0.2−0.8·0.2=0.04. Their individual variances are 0.16 each, and multiplying by penalty squared gives 100(0.32+0.08)=40.",
-          "Expectation still adds to 10 without independence. Only an attempted variance or exponential-tail factorization would require extra dependence control."
-        ],
-        "rubric": [
-          "Derive the joint distribution from threshold intervals.",
-          "Compute the covariance and both variances correctly.",
-          "Identify exactly which proof step remains valid without independence."
-        ],
-        "mistake": "Independent vertex penalties would describe a different randomized construction, even if their marginal probabilities happened to match.",
-        "followup": "For y₁≤y₂ derive Cov(1{α>y₁},1{α>y₂}) symbolically and identify when it vanishes."
-      }
-    ]
-  },
-  "core-facility": {
-    "proof": {
-      "goal": "Prove feasible metric facility rounding and its expected opening-plus-connection bound from LP and dual certificates.",
-      "scope": "Williamson–Shmoys §5.8. Optimal primal/dual LP solutions and the support-distance complementary-slackness lemma are inputs. This is uncapacitated metric facility location.",
-      "frames": [
-        {
-          "title": "Open once per disjoint representative neighborhood",
-          "question": "Why does one probability distribution serve an entire cluster feasibly?",
-          "diagram": {
-            "kind": "table",
-            "columns": [
-              "Chosen neighborhood",
-              "Opening rule",
-              "Guarantee"
-            ],
-            "rows": [
-              [
-                "N(j)",
-                "choose i with chance xᵢⱼ",
-                "one facility opens"
-              ],
-              [
-                "all representatives",
-                "N(j) disjoint",
-                "no repeated opening charge"
-              ],
-              [
-                "cluster clients",
-                "assign to chosen i",
-                "all have service"
-              ]
-            ],
-            "focus": [
-              0,
-              1
-            ],
-            "note": "Within each representative neighborhood, ∑ᵢxᵢⱼ=1."
-          },
-          "claim": "Expected opening cost is at most F*=∑ᵢfᵢyᵢ*.",
-          "explanation": "Use xᵢⱼ*≤yᵢ* inside each neighborhood. Disjointness allows the neighborhood sums of fᵢyᵢ* to add to at most the full LP opening cost.",
-          "carry": "Feasibility and the opening budget do not depend on an expected number of open facilities."
-        },
-        {
-          "title": "Route a nonrepresentative through a shared support neighbor",
-          "question": "Which metric path relates a cluster client ℓ to the facility opened for j?",
-          "diagram": {
-            "kind": "inequality",
-            "lines": [
-              {
-                "left": "c(i,ℓ)",
-                "relation": "≤",
-                "right": "c(ℓ,h)+c(h,j)+c(j,i)",
-                "reason": "triangle inequality"
-              },
-              {
-                "left": "E[c(i,ℓ)]",
-                "relation": "≤",
-                "right": "vℓ*+vj*+Cj*",
-                "reason": "support lemma and averaging"
-              }
-            ],
-            "focus": 1,
-            "note": "The intermediate facility h belongs to the LP support shared by clients ℓ and j."
-          },
-          "claim": "A metric detour gives a connection bound in terms of dual prices and representative average distance.",
-          "explanation": "For positive LP assignment support, the dual price bounds each relevant client-support distance. The random final leg averages to Cj*. Nonmetric prices would not support the first inequality.",
-          "carry": "The remaining task is to control the chosen representative’s v*+C*."
-        },
-        {
-          "title": "Use the actual representative priority",
-          "question": "Why is minimizing connection average alone insufficient?",
-          "diagram": {
-            "kind": "inequality",
-            "lines": [
-              {
-                "left": "vj*+Cj*",
-                "relation": "≤",
-                "right": "vℓ*+Cℓ*",
-                "reason": "representative chosen by v*+C*"
-              },
-              {
-                "left": "E[c(i,ℓ)]",
-                "relation": "≤",
-                "right": "2vℓ*+Cℓ*",
-                "reason": "substitute into detour bound"
-              }
-            ],
-            "focus": 0,
-            "note": "The priority score contains both the dual price and connection average."
-          },
-          "claim": "Each cluster client costs at most 2vℓ*+Cℓ* in expectation.",
-          "explanation": "Client ℓ was still unassigned when j was selected, so it was a candidate in that same minimum-score comparison. This logical timing is what licenses the substitution.",
-          "carry": "The detour cost is now charged to the client’s own LP/dual quantities."
-        },
-        {
-          "title": "Close with primal and dual objectives together",
-          "question": "What prevents separately charged opening and dual prices from being counted as unrelated lower bounds?",
-          "diagram": {
-            "kind": "table",
-            "columns": [
-              "Budget",
-              "Value",
-              "Certificate"
-            ],
-            "rows": [
-              [
-                "Opening plus C*",
-                "F*+C*",
-                "optimal primal LP"
-              ],
-              [
-                "Dual client prices",
-                "∑vⱼ*",
-                "same optimal LP value"
-              ],
-              [
-                "Rounded total bound",
-                "F*+C*+2∑vⱼ*",
-                "3 times LP"
-              ]
-            ],
-            "focus": [
-              2
-            ],
-            "note": "Primal–dual equality relates the two budgets; both compare with the same OPT."
-          },
-          "claim": "E[total]≤F*+C*+2∑vⱼ*=3LP≤3OPT.",
-          "explanation": "The equality of optimal LP primal and dual objectives is essential to the numerical factor. Feasible arbitrary LP/dual values would require retaining their actual values in the bound.",
-          "carry": "One feasible rounded solution is certified by a combined expectation bound."
-        }
-      ]
-    },
-    "challenges": [
-      {
-        "id": "facility-representative-saving",
-        "title": "Recover the dual charge you need not spend",
-        "minutes": 14,
-        "skill": "Sharpen an aggregate approximation proof using the distinction between representatives and their clients.",
-        "connection": "The example’s sole client is itself a representative, so its expected connection is C*, not the coarser 2v*+C* bound.",
-        "prompt": "Assume an optimal LP and dual have three clients with (v*,C*) equal to (3,1), (4,2), and (5,3). Their total opening contribution is F*=6. The clustering chooses client 1 as the sole representative and assigns the other two clients to its cluster. Derive the refined expected total-cost bound by charging representative connections exactly, and express the general improvement over 3LP in terms of the sum of representative dual prices. Explain why this does not establish a universal 2.5 approximation.",
-        "hints": [
-          "The representative’s opened facility is sampled from its own x-distribution.",
-          "Replace 2vⱼ*+Cⱼ* by Cⱼ* only for representatives."
-        ],
-        "probe": {
-          "kind": "number",
-          "prompt": "What refined expected total-cost upper bound follows from these data?",
-          "expected": 30,
-          "feedback": "Connections cost at most C₁+(2v₂+C₂)+(2v₃+C₃)=1+10+13=24; add F*=6 for a total of 30. The generic bound is 3LP=36, and the saving is 2v₁=6."
-        },
-        "solution": [
-          "The primal LP is F*+∑C*=6+6=12, matching the dual sum 3+4+5=12.",
-          "The representative pays expected connection exactly C₁*=1 by its sampling distribution.",
-          "Other clients pay at most 2v₂*+C₂*=10 and 2v₃*+C₃*=13, so the expected total is at most 6+1+10+13=30.",
-          "For a representative set R, the same argument gives 3LP−2∑ⱼ∈R vⱼ*.",
-          "A universal factor 2.5 would require ∑R vⱼ*≥LP/4 for every instance, which this calculation neither states nor proves. Representative selection is not known here to capture that fixed fraction."
-        ],
-        "rubric": [
-          "Use exact representative connection expectations and coarse bounds only for other clients.",
-          "Check primal–dual equality for the supplied numbers.",
-          "Derive the general saving and identify the missing condition for a better universal ratio."
-        ],
-        "mistake": "An improved bound on one clustering is not a uniform theorem unless the saving is itself bounded below in every instance.",
-        "followup": "Express the guarantee as 3−2β when representative dual mass is known to be at least βLP, and state how such a mass lemma would need to be proved."
-      },
-      {
-        "id": "facility-wrong-priority",
-        "title": "The missing term in a clustering priority",
-        "minutes": 14,
-        "skill": "Diagnose the exact failed inference without overclaiming an algorithmic counterexample.",
-        "connection": "The worked example needs no detour. Multi-client clustering uses a minimum v*+C* score to close that detour bound.",
-        "prompt": "For a cluster client ℓ let vℓ*=7 and Cℓ*=2. A proposed rule chooses representative j by the smallest C* only, with vj*=10 and Cj*=1. The local metric path ℓ–h–j–i has lengths 7,10,1, and i is the chosen service facility. Check both support-distance inequalities and the resulting detour bound. Does the comparison needed to conclude 2vℓ*+Cℓ* hold? Decide whether these local data alone disprove the whole algorithm’s factor-three guarantee, and specify what additional construction a genuine global counterexample would require.",
-        "hints": [
-          "Compare the scores vj*+Cj* and vℓ*+Cℓ*, not Cj* and Cℓ* alone.",
-          "A broken proof inequality and a fully valid bad instance are different levels of evidence."
-        ],
-        "probe": {
-          "kind": "choice",
-          "prompt": "Which conclusion is justified by the stated local data?",
-          "options": [
-            "The detour is bounded by 16 because Cj*≤Cℓ* implies vj*+Cj*≤vℓ*+Cℓ*.",
-            "The detour bound is 18 rather than 16, exposing a missing priority inequality; a global factor-three counterexample still needs compatible optimal LP/dual and clustering data.",
-            "The metric assumption is violated because a path can have length 18 while Cℓ*=2.",
-            "The data prove the original v*+C* rule also fails, since it must choose j."
-          ],
-          "answer": 1,
-          "feedback": [
-            "The missing dual-price term is ten versus seven; C-ordering alone does not compare the sums.",
-            "Correct. The local substitution fails because 11>9, but these few quantities are not a complete feasible optimal primal–dual instance.",
-            "Cℓ* is an average over its own fractional assignments, not a universal upper bound on every metric path or every facility distance.",
-            "The original score rule would prefer ℓ’s score nine to j’s score eleven while both remain eligible."
-          ]
-        },
-        "solution": [
-          "The support bounds c(ℓ,h)≤vℓ*=7 and c(j,h)≤vj*=10 hold at equality.",
-          "The metric detour gives c(ℓ,i)≤7+10+1=18, whereas 2vℓ*+Cℓ*=16.",
-          "The intended substitution would require vj*+Cj*=11≤vℓ*+Cℓ*=9, which fails despite Cj*<Cℓ*.",
-          "This refutes the asserted per-client proof step under the modified rule. It does not by itself establish an approximation ratio violation on a full input.",
-          "A genuine global counterexample must supply a complete metric, feasible optimal primal and dual solutions with the advertised support, the full clustering sequence, and total rounded cost compared with actual OPT."
-        ],
-        "rubric": [
-          "Check both local support bounds and compute the two competing detour charges.",
-          "Identify the precise representative-order inequality that fails.",
-          "Distinguish a failed local certificate from a fully verified global bad instance."
-        ],
-        "mistake": "Declaring every failed sufficient bound an algorithmic counterexample skips feasibility, LP optimality, and the global objective comparison.",
-        "followup": "Investigate whether the local numbers can be embedded into a line metric with an optimal LP having the stated support; list the extra dual constraints that must be checked."
-      }
-    ]
-  },
-  "core-release": {
-    "proof": {
-      "goal": "Show randomized midpoint ordering gives expected weighted completion at most twice the relaxed optimum.",
-      "scope": "Williamson–Shmoys §5.9. The lower-bounding time-indexed relaxation and its compressed polynomial implementation are source inputs. The displayed conditional calculation uses independent per-job midpoint samples.",
-      "frames": [
-        {
-          "title": "Normalize processing into a sampled point",
-          "question": "Why is a long job not given total sampling probability larger than one?",
-          "diagram": {
-            "kind": "table",
-            "columns": [
-              "Job j",
-              "Processing mass",
-              "Midpoint law"
-            ],
-            "rows": [
-              [
-                "total relaxed work",
-                "∑t yⱼt=pⱼ",
-                "probability denominator pⱼ"
-              ],
-              [
-                "midpoint t−1/2",
-                "mass yⱼt",
-                "Pr(Xⱼ=t−1/2)=yⱼt/pⱼ"
-              ],
-              [
-                "relaxed completion",
-                "average plus pⱼ/2",
-                "Cⱼ*=E[Xⱼ]+pⱼ/2"
-              ]
-            ],
-            "focus": [
-              1,
-              2
-            ],
-            "note": "Sampling chooses one processing location per job, rather than selecting each occupied interval independently."
-          },
-          "claim": "Xⱼ is a genuine probability distribution and Cⱼ*=E[Xⱼ]+pⱼ/2.",
-          "explanation": "The relaxation allocates exactly pⱼ processing units to job j. Dividing those units by pⱼ makes its occupied midpoints equally weighted by their processing fractions.",
-          "carry": "Every job supplies exactly one ordering key."
-        },
-        {
-          "title": "Turn the sampled order into a feasible schedule",
-          "question": "How are release dates respected when a selected job is not yet available?",
-          "diagram": {
-            "kind": "inequality",
-            "lines": [
-              {
-                "left": "start(j)",
-                "relation": "=",
-                "right": "max{Cprevious,rⱼ}",
-                "reason": "earliest feasible execution"
-              },
-              {
-                "left": "Ĉⱼ",
-                "relation": "≤",
-                "right": "Rbefore+∑before pₖ+pⱼ",
-                "reason": "idle time bounded by releases"
-              }
-            ],
-            "focus": 1,
-            "note": "The order is a priority list; the machine may wait for the next job."
-          },
-          "claim": "The nonpreemptive output respects all release dates in every outcome.",
-          "explanation": "For all jobs before j whose selected midpoint is at most x, release times are at most x−1/2. Inducting along the list bounds completion by their total processing plus their latest release, not by processing alone.",
-          "carry": "Conditioning on Xⱼ=x isolates a prefix whose release contribution is controlled."
-        },
-        {
-          "title": "Cancel the job-length normalization",
-          "question": "Why does the expected preceding processing become a machine-capacity prefix sum?",
-          "diagram": {
-            "kind": "inequality",
-            "lines": [
-              {
-                "left": "E[∑before pₖ | Xⱼ=x]",
-                "relation": "≤",
-                "right": "∑ₖpₖPr(Xₖ≤x)",
-                "reason": "independent job samples"
-              },
-              {
-                "left": "∑ₖpₖPr(Xₖ≤x)",
-                "relation": "=",
-                "right": "∑ₖ∑t≤x+1/2 yₖt",
-                "reason": "pₖ cancels"
-              },
-              {
-                "left": "∑ₖ∑t≤x+1/2 yₖt",
-                "relation": "≤",
-                "right": "x+1/2",
-                "reason": "one-machine prefix capacity"
-              }
-            ],
-            "focus": 2,
-            "note": "Ties can be overcounted safely; no independence of completion times is needed."
-          },
-          "claim": "Conditioned on Xⱼ=x, expected preceding work is at most x+1/2.",
-          "explanation": "Each job’s sampling probability divides by its own processing time, which exactly cancels its contribution pₖ to the preceding-load sum. Prefix capacity then bounds all jobs together.",
-          "carry": "The release and work terms sum to at most 2x."
-        },
-        {
-          "title": "Average the conditional statement",
-          "question": "Which normalization turns pⱼ+2E[Xⱼ] into the promised factor?",
-          "diagram": {
-            "kind": "inequality",
-            "lines": [
-              {
-                "left": "E[Ĉⱼ | Xⱼ=x]",
-                "relation": "≤",
-                "right": "pⱼ+2x",
-                "reason": "combine release and work"
-              },
-              {
-                "left": "E[Ĉⱼ]",
-                "relation": "≤",
-                "right": "2Cⱼ*",
-                "reason": "Cⱼ*=E[Xⱼ]+pⱼ/2"
-              },
-              {
-                "left": "E[∑wⱼĈⱼ]",
-                "relation": "≤",
-                "right": "2OPT",
-                "reason": "wⱼ≥0 and LP lower bound"
-              }
-            ],
-            "focus": 1,
-            "note": "The final step needs an optimal relaxation value, not an arbitrary feasible relaxed schedule."
-          },
-          "claim": "Expected weighted completion is at most twice the integral optimum.",
-          "explanation": "Multiply by nonnegative weights and add by linearity. The argument does not factor any joint distribution of completion times; the sole independence used earlier concerned sampled ordering keys.",
-          "carry": "A conditional per-job bound becomes a global expected approximation."
-        }
-      ]
-    },
-    "challenges": [
-      {
-        "id": "release-three-job-order",
-        "title": "Trace sampling, idle time, and the relaxation separately",
-        "minutes": 16,
-        "skill": "Compute a rounded schedule distribution and distinguish it from the relaxed lower bound.",
-        "connection": "The two-job example has two possible orders. A third released high-density job adds a second forced interruption before the long job resumes.",
-        "prompt": "Jobs A,B,C have (p,r,w) equal to (2,0,1),(1,1,4),(1,2,3). The relaxed schedule runs A on [0,1), B on [1,2), C on [2,3), and A on [3,4). Derive each sampled midpoint law and relaxed completion value. Enumerate the rounded schedules, including necessary idle time, and compute their expected weighted completion. Verify the integral optimum by comparing possible first jobs; then compare the actual result with the theorem’s factor-two upper bound.",
-        "hints": [
-          "Only A has a random midpoint, at 0.5 or 3.5.",
-          "When B is first, the machine must wait until time one."
-        ],
-        "probe": {
-          "kind": "number",
-          "prompt": "What is the expected rounded weighted-completion objective?",
-          "expected": 24,
-          "feedback": "With A first, completions are 2,3,4 and cost 2+12+12=26. Otherwise the order is B,C,A, completions are 2,3,5 and cost 8+9+5=22. The two cases are equally likely, so the expectation is 24."
-        },
-        "solution": [
-          "A samples 0.5 or 3.5 with probability one half each; B samples 1.5 and C samples 2.5 surely.",
-          "Relaxed values are C_A*=2+1=3, C_B*=1.5+0.5=2, C_C*=2.5+0.5=3, giving objective 3+8+9=20.",
-          "The early A sample yields A,B,C with cost 26. The late A sample yields B,C,A, waiting until time one, with cost 22.",
-          "Thus expected output cost is 24. For this three-job instance, evaluating earliest-start schedules for all six orders gives 26,27,27,22,31,38, so OPT=22.",
-          "The theorem gives E[cost]≤2·20=40. The valid bound is much looser than both the exact expectation 24 and integral optimum 22."
-        ],
-        "rubric": [
-          "Normalize A’s processing samples and calculate all C* values.",
-          "Include release-date idle time in each nonpreemptive outcome.",
-          "Verify OPT independently and separate actual expectation from the theorem’s upper bound."
-        ],
-        "mistake": "Using the relaxed objective 20 as though it were an achievable nonpreemptive schedule confuses the benchmark with the output.",
-        "followup": "Increase w_C while preserving the displayed relaxed order and derive how the two rounded costs and their expectation change; state when that relaxed order remains justified."
-      },
-      {
-        "id": "release-common-quantile",
-        "title": "Does the same proof survive a shared quantile?",
-        "minutes": 16,
-        "skill": "Find a failed conditional-independence identity without falsely refuting another valid algorithm.",
-        "connection": "The example’s midpoint samples are independent across jobs. The source also discusses shared α-points, but that variant needs its own justification.",
-        "prompt": "Two length-two jobs have relaxed processing intervals B:[0,1) and [2,3), A:[1,2) and [3,4). Let r_B=0 and r_A=1. Choose one common U uniformly in (0,1), using the first occupied midpoint of each job when U≤1/2 and the second otherwise. Calculate Pr(X_B≤1.5 | X_A=1.5), compare it with the marginal probability, and compute the conditional preceding-work term for A. Identify the exact equality from the independent-sampling proof that no longer applies. Explain why this observation alone does not prove shared-α scheduling violates the factor-two theorem.",
-        "hints": [
-          "Conditioning on the early midpoint of A reveals which half of the shared U interval occurred.",
-          "The independent proof substitutes a marginal law for another job after conditioning on X_A."
-        ],
-        "probe": {
-          "kind": "choice",
-          "prompt": "What is the correct interpretation of the conditional calculation?",
-          "options": [
-            "The conditional preceding work is one, because B’s marginal chance of preceding A is one half.",
-            "The conditional preceding work is zero, because both jobs choose their first midpoint together.",
-            "The conditional preceding work is two rather than the marginal expression one; this breaks that independence substitution, not necessarily the algorithmic guarantee.",
-            "The conditional preceding work is four, proving the factor-two approximation is impossible for shared quantiles."
-          ],
-          "answer": 2,
-          "feedback": [
-            "This incorrectly replaces the conditional law under a shared random U by B’s marginal law.",
-            "B’s first midpoint is 0.5, before A’s first midpoint 1.5, so B does precede A.",
-            "Correct. X_A=1.5 forces U≤1/2 and X_B=0.5, so B contributes its full processing two. A separate proof may still establish a guarantee for shared α.",
-            "There is only one preceding job of length two; a failed proof substitution is not an impossibility theorem."
-          ]
-        },
-        "solution": [
-          "The early A event is exactly U≤1/2. Under it, B’s midpoint equals 0.5 surely, so the conditional probability is one.",
-          "Marginally B’s midpoint is 0.5 or 2.5 with equal probabilities; Pr(X_B≤1.5)=1/2.",
-          "Consequently E[p_B1{X_B≤X_A}|X_A=1.5]=2, while p_BPr(X_B≤1.5)=1.",
-          "The independent proof’s step equating the conditional other-job law to its marginal law is unavailable.",
-          "Both shared-quantile outcomes actually put B before A here. The feasible schedule runs B to time two and A to time four; nothing in this instance disproves the approximation theorem."
-        ],
-        "rubric": [
-          "Compute conditional and marginal laws from the shared seed.",
-          "Locate the failed equality and its independence hypothesis precisely.",
-          "Separate a proof failure from a verified bad approximation instance."
-        ],
-        "mistake": "Correlated sampling can invalidate one analysis while another analysis still works; the inference “proof fails, therefore algorithm fails” is not valid.",
-        "followup": "Recompute the same conditional event with independent U_A and U_B, and identify exactly where the value returns from two to one."
-      }
-    ]
-  },
-  "core-flow": {
-    "proof": {
-      "goal": "Round each commodity to a complete path and control all edge loads by a per-edge tail bound plus a union bound.",
-      "scope": "Williamson–Shmoys §§5.10–5.11. Unit demands, independent choices across commodities, and a polynomial number of edges are assumed. Path decomposition and fractional optimization are source inputs.",
-      "frames": [
-        {
-          "title": "Sample routes rather than individual edges",
-          "question": "Why does every rounded commodity still satisfy flow conservation?",
-          "diagram": {
-            "kind": "table",
-            "columns": [
-              "Commodity k",
-              "Fractional decomposition",
-              "Rounded object"
-            ],
-            "rows": [
-              [
-                "source to sink",
-                "path weights sum to 1",
-                "one complete path"
-              ],
-              [
-                "edge e",
-                "path mass pₖe",
-                "indicator Bₖe∈{0,1}"
-              ],
-              [
-                "load on e",
-                "sum of contributions",
-                "Lₑ=∑ₖBₖe"
-              ]
-            ],
-            "focus": [
-              0,
-              2
-            ],
-            "note": "Dependence between edges on one path is intentional and preserves connectivity."
-          },
-          "claim": "Each rounded commodity is feasible in every outcome; E[Lₑ]=μₑ.",
-          "explanation": "Independent rounding of edge variables could create broken routes. Sampling one path creates correlated edges within a commodity but independent commodity indicators for any fixed edge.",
-          "carry": "The fixed-edge load is a sum of independent bounded indicators."
-        },
-        {
-          "title": "Bound the exponential moment",
-          "question": "Which independence permits multiplying the moment-generating factors?",
-          "diagram": {
-            "kind": "inequality",
-            "lines": [
-              {
-                "left": "E[e^(λLₑ)]",
-                "relation": "=",
-                "right": "∏ₖE[e^(λBₖe)]",
-                "reason": "independent commodities"
-              },
-              {
-                "left": "∏ₖE[e^(λBₖe)]",
-                "relation": "≤",
-                "right": "exp(μₑ(e^λ−1))",
-                "reason": "1+u≤e^u"
-              },
-              {
-                "left": "Pr(Lₑ≥a)",
-                "relation": "≤",
-                "right": "exp(μₑ(e^λ−1)−λa)",
-                "reason": "Markov, λ>0"
-              }
-            ],
-            "focus": 2,
-            "note": "The multiplication is over commodities, never over graph edges."
-          },
-          "claim": "For a≥μₑ, choosing λ=ln(a/μₑ) gives the optimized Chernoff bound.",
-          "explanation": "The moment step is stronger than pairwise variance control. It is the source of the logarithmic-over-logarithmic congestion threshold at constant mean.",
-          "carry": "One edge now has an explicit high-load failure probability."
-        },
-        {
-          "title": "Choose a tail small enough for the whole graph",
-          "question": "Why must a constant-probability edge bound be strengthened?",
-          "diagram": {
-            "kind": "inequality",
-            "lines": [
-              {
-                "left": "Pr(Lₑ≥a)",
-                "relation": "≤",
-                "right": "(eμₑ/a)^a",
-                "reason": "drop a helpful e^(−μₑ)"
-              },
-              {
-                "left": "a",
-                "relation": "=",
-                "right": "C log n/log log n",
-                "reason": "constant μₑ regime"
-              },
-              {
-                "left": "log failure",
-                "relation": "≤",
-                "right": "−C log n+o(log n)",
-                "reason": "a log a dominates"
-              }
-            ],
-            "focus": 2,
-            "note": "The constant C must absorb the polynomial number of tested edges."
-          },
-          "claim": "A sufficiently large C makes each edge failure inverse-polynomially small.",
-          "explanation": "This asymptotic choice presumes bounded fractional mean. For large μₑ a multiplicative concentration regime is more natural; a one-size substitution should not silently discard that parameter.",
-          "carry": "The local failure target is calibrated to the number of constraints."
-        },
-        {
-          "title": "Sum failures without inventing edge independence",
-          "question": "What does independence across graph edges contribute to the final step?",
-          "diagram": {
-            "kind": "inequality",
-            "lines": [
-              {
-                "left": "Pr(∃ overloaded edge)",
-                "relation": "≤",
-                "right": "∑ₑPr(Lₑ≥a)",
-                "reason": "union bound"
-              },
-              {
-                "left": "∑ₑPr(Lₑ≥a)",
-                "relation": "≤",
-                "right": "|E|·pmax",
-                "reason": "uniform local bound"
-              }
-            ],
-            "focus": 0,
-            "note": "No edge-load independence is used in this inequality."
-          },
-          "claim": "When |E|pmax<1, some complete path selection obeys all edge bounds.",
-          "explanation": "A routing path can make many edges’ loads strongly dependent. The union bound remains valid, and a sufficiently small product supplies positive success probability and a repeatable randomized construction.",
-          "carry": "Feasible routing and congestion control have distinct proof obligations."
-        }
-      ]
-    },
-    "challenges": [
-      {
-        "id": "flow-exact-tail-calibration",
-        "title": "Calibrate a global failure budget from exact tails",
-        "minutes": 16,
-        "skill": "Choose an integer congestion threshold using a local distribution and a dependent global constraint family.",
-        "connection": "The four-commodity example computes one edge’s load. The algorithm must make the probability of any bad edge small enough.",
-        "prompt": "Suppose there are 100 edges, and each fixed edge load has distribution Binomial(8,1/4); loads on different edges may be arbitrarily dependent. Find the smallest integer threshold a for which the union bound certifies Pr(any edge has load at least a)≤0.05. Compute the relevant exact binomial tails and explain why no independence across edges is necessary. Compare this finite calibration with inserting μ=2 into a Chernoff expression.",
-        "hints": [
-          "Use a denominator 4⁸=65536 and include every term at or above the threshold.",
-          "Check a=6 and a=7; the tail is decreasing in a."
-        ],
-        "probe": {
-          "kind": "number",
-          "prompt": "What is the smallest threshold a certified by this union bound?",
-          "expected": 7,
-          "feedback": "For a=6 the local tail is (252+24+1)/65536=277/65536, yielding a global bound above 0.42. For a=7 it is 25/65536, yielding 2500/65536≈0.03815≤0.05. Thus seven is the first certified threshold."
-        },
-        "solution": [
-          "For a=6, the binomial numerator is C(8,6)3²+C(8,7)3+1=252+24+1=277.",
-          "The union bound is then 27700/65536≈0.42267, so a=6 is not certified. Any smaller a has an even larger tail.",
-          "For a=7, the local numerator is 8·3+1=25 and the global bound is 2500/65536≈0.03815.",
-          "Thus a=7 is the smallest threshold this information certifies. The actual global failure may be smaller because the union bound need not be tight.",
-          "Chernoff bounds are valid under the within-edge commodity independence, but may be looser here. The final summation works under arbitrary cross-edge dependence."
-        ],
-        "rubric": [
-          "Compute exact inclusive binomial tails and use the correct failure event.",
-          "Prove minimality relative to the union-bound certificate, not the unknown true global probability.",
-          "State the two distinct independence issues clearly."
-        ],
-        "mistake": "Using Pr(L=a) instead of Pr(L≥a) drops higher loads, while multiplying independent edge-success probabilities assumes dependence information not supplied.",
-        "followup": "If the 100 load variables are identical in every outcome, compute the true global failure at a=6 and explain how much the union bound wastes."
-      },
-      {
-        "id": "flow-pairwise-not-chernoff",
-        "title": "Pairwise independent routing bits can have a heavy tail",
-        "minutes": 18,
-        "skill": "Construct a high-order dependence obstruction to an exponential-moment argument.",
-        "connection": "The example’s binomial law comes from mutual independence across commodities. Pairwise independence preserves mean and variance but not the same tail.",
-        "prompt": "Let R be uniform in F₂⁴. For every nonzero a∈F₂⁴ define B_a=1 when a·R=0, with dot product modulo two. There are fifteen load indicators. Prove that distinct indicators are independent fair bits, derive the exact distribution of L=∑B_a, and calculate Pr(L≥12). Explain why the Chernoff product-of-moments step is unjustified even though every pair is independent. Generalize the rare high-load probability to r seed bits.",
-        "hints": [
-          "Two distinct nonzero vectors over F₂ are linearly independent.",
-          "When R≠0, its orthogonal hyperplane contains 2³ vectors including zero."
-        ],
-        "probe": {
-          "kind": "number",
-          "prompt": "What is Pr(L≥12) for the four-bit seed?",
-          "expected": 0.0625,
-          "feedback": "R=0 gives all fifteen indicators one, with probability 1/16. Every nonzero R has exactly seven nonzero orthogonal vectors, so L=7 otherwise. Pairwise independence does not remove the atom at load fifteen."
-        },
-        "solution": [
-          "For nonzero a, the functional a·R is uniform, so B_a has mean one half.",
-          "For distinct nonzero a,b, the map R↦(a·R,b·R) has rank two. Its four outputs are equally likely, proving pairwise independence.",
-          "If R=0 then L=15. If R≠0 its kernel has eight vectors, seven nonzero, so L=7.",
-          "Consequently Pr(L≥12)=1/16, although mean is 15/2 and variance still equals 15/4 as pairwise independence predicts.",
-          "The exponential moment involves products of all fifteen indicators. Pairwise independence does not factor that product.",
-          "For r bits, L=2ʳ−1 with probability 2^−r and L=2^(r−1)−1 otherwise; the extreme-load probability is 1/(n+1), not exponentially small in n."
-        ],
-        "rubric": [
-          "Prove pairwise independence using rank, not just state it.",
-          "Derive the complete two-point load distribution and its tail.",
-          "Identify why high-order moment factorization requires more than pairwise independence."
-        ],
-        "mistake": "A correct variance computation is not a Chernoff proof. Exponential tails use a family of higher moments that pairwise independence does not determine.",
-        "followup": "For r=4 compare the exact extreme-load probability with the fully independent Binomial(15,1/2) probability of load fifteen."
-      }
-    ]
-  },
-  "core-dense-color": {
-    "proof": {
-      "goal": "Use a logarithmic dominating sample, enumerate its proper colors, and reduce each extension to 2SAT.",
-      "scope": "Williamson–Shmoys §5.12. Assumes a 3-colorable graph with minimum degree at least δn for fixed δ>0. The finite tripartite picture illustrates extension; probability and enumeration bounds concern the general dense input.",
-      "frames": [
-        {
-          "title": "Make every unsampled vertex lose a color",
-          "question": "Why does domination reduce the extension to lists of size at most two?",
-          "diagram": {
-            "kind": "table",
-            "columns": [
-              "Vertex situation",
-              "Observed sample neighbor",
-              "Remaining list"
-            ],
-            "rows": [
-              [
-                "outside sample",
-                "neighbor has color 1",
-                "subset of {2,3}"
-              ],
-              [
-                "two forbidden colors",
-                "neighbors of colors 1,2",
-                "at most {3}"
-              ],
-              [
-                "three forbidden colors",
-                "neighbors of all colors",
-                "candidate fails"
-              ]
-            ],
-            "focus": [
-              0,
-              2
-            ],
-            "note": "Every outside vertex must meet the sample; otherwise it retains three choices."
-          },
-          "claim": "A properly colored dominating sample leaves at most two allowed colors per outside vertex.",
-          "explanation": "A color appearing on a sample neighbor is forbidden at the vertex. Domination guarantees at least one such forbidden color, independent of which correct candidate sample coloring is being tested.",
-          "carry": "Each remaining vertex can be encoded by at most one Boolean choice."
-        },
-        {
-          "title": "Bound a failed domination event",
-          "question": "How does minimum degree make a logarithmic sample sufficient?",
-          "diagram": {
-            "kind": "inequality",
-            "lines": [
-              {
-                "left": "Pr(v has no sampled neighbor)",
-                "relation": "≤",
-                "right": "(1−δ)^s",
-                "reason": "s independent uniform draws"
-              },
-              {
-                "left": "Pr(any such v)",
-                "relation": "≤",
-                "right": "n(1−δ)^s",
-                "reason": "union bound"
-              },
-              {
-                "left": "s",
-                "relation": "=",
-                "right": "O(log n/δ)",
-                "reason": "fixed failure target"
-              }
-            ],
-            "focus": 1,
-            "note": "Repeated sample vertices cause no problem; the number of distinct sampled vertices is at most s."
-          },
-          "claim": "With high probability the sample dominates the whole graph.",
-          "explanation": "Each draw misses a fixed vertex’s neighborhood with probability at most 1−δ. Independence concerns the sample draws; domination events for different vertices need not be independent.",
-          "carry": "One sampled set supports all candidate-coloring tests."
-        },
-        {
-          "title": "Enumerate the promised restriction",
-          "question": "Why does trying exponentially many colors of a small sample remain polynomial?",
-          "diagram": {
-            "kind": "inequality",
-            "lines": [
-              {
-                "left": "candidate restrictions",
-                "relation": "≤",
-                "right": "3^s",
-                "reason": "three colors per sampled vertex"
-              },
-              {
-                "left": "3^s",
-                "relation": "=",
-                "right": "n^O(1/δ)",
-                "reason": "s=O(log n/δ)"
-              },
-              {
-                "left": "correct restriction",
-                "relation": "∈",
-                "right": "enumerated candidates",
-                "reason": "global 3-coloring promise"
-              }
-            ],
-            "focus": 1,
-            "note": "The polynomial exponent depends on fixed density; this is not a practical small constant assertion."
-          },
-          "claim": "At least one tested sample coloring is the restriction of a valid global coloring.",
-          "explanation": "Reject improperly colored sample candidates. The promise ensures some remaining candidate agrees with one true coloring, even though most candidates may fail extension.",
-          "carry": "For that candidate, the residual Boolean constraints are satisfiable."
-        },
-        {
-          "title": "Encode forbidden edge-color pairs locally",
-          "question": "Why does an edge constraint produce a 2-clause rather than a global coloring guess?",
-          "diagram": {
-            "kind": "table",
-            "columns": [
-              "Residual edge uv",
-              "Forbidden event",
-              "Boolean clause"
-            ],
-            "rows": [
-              [
-                "common allowed color c",
-                "u=c AND v=c",
-                "(u≠c) OR (v≠c)"
-              ],
-              [
-                "singleton list",
-                "only one choice",
-                "unit clause"
-              ],
-              [
-                "correct sample restriction",
-                "global coloring remains",
-                "2SAT is satisfiable"
-              ]
-            ],
-            "focus": [
-              0,
-              2
-            ],
-            "note": "Each forbidden simultaneous choice uses at most the two endpoint Boolean variables."
-          },
-          "claim": "Solving a satisfiable extension 2SAT formula yields a proper full 3-coloring.",
-          "explanation": "Add a clause for every edge and every common permitted color. Satisfying all clauses excludes every monochromatic outside edge; lists already exclude sample-edge conflicts.",
-          "carry": "Sampling, enumeration, and exact extension each have a precise role."
-        }
-      ]
-    },
-    "challenges": [
-      {
-        "id": "dense-color-probability-budget",
-        "title": "Turn a domination failure target into an enumeration cost",
-        "minutes": 14,
-        "skill": "Calibrate the probability bound and interpret fixed-parameter polynomial time honestly.",
-        "connection": "The small tripartite example chooses a helpful sample deliberately. This challenge derives how large a genuinely random sample must be.",
-        "prompt": "Let n=1000 and minimum degree be at least 0.2n. Take s independent uniform vertex draws with replacement. Find the smallest integer s for which the displayed union-bound analysis guarantees domination failure at most 0.01. Derive a symbolic expression for general n,δ,η. Then express the corresponding 3^s color enumeration as a power of n when η=n^−c, and explain why fixed-density polynomial time does not imply a small practical search.",
-        "hints": [
-          "Require n(1−δ)^s≤η, and remember ln(1−δ) is negative.",
-          "With η=n^−c, the numerator becomes (c+1)ln n."
-        ],
-        "probe": {
-          "kind": "number",
-          "prompt": "What is the smallest s certified for the given numerical parameters?",
-          "expected": 52,
-          "feedback": "The inequality is 1000·0.8^s≤0.01, so s≥ln(10^−5)/ln(0.8)≈51.594. The smallest integer is 52; rounding down would not meet the requested certificate."
-        },
-        "solution": [
-          "For a fixed vertex, all s draws miss its neighborhood with probability at most 0.8^s.",
-          "The union bound gives failure at most 1000·0.8^s, so s≥ln(0.01/1000)/ln(0.8).",
-          "Taking the ceiling gives s=52. This is the smallest sample size certified by this worst-case bound, not necessarily by the graph’s true failure probability.",
-          "In general s=⌈ln(n/η)/(−ln(1−δ))⌉. For η=n^−c this is (c+1)ln n/(−ln(1−δ)) up to rounding.",
-          "Therefore 3^s≤3n^((c+1)ln3/(−ln(1−δ))). For fixed δ,c this is polynomial, but its exponent and finite search can be enormous."
-        ],
-        "rubric": [
-          "Derive the per-vertex and global probabilities with the correct logarithm direction.",
-          "Use the ceiling and distinguish the certificate from the unknown exact probability.",
-          "Translate the enumeration into a parameter-dependent polynomial exponent."
-        ],
-        "mistake": "Writing O(log n) without its δ-dependent constant hides the very term that controls the enumeration cost.",
-        "followup": "Repeat the calculation with sampling without replacement and derive an equal or stronger per-vertex miss bound."
-      },
-      {
-        "id": "dense-color-implication-obstruction",
-        "title": "A proper sample coloring can leave an unsatisfiable extension",
-        "minutes": 16,
-        "skill": "Construct the Boolean implication obstruction corresponding to a residual odd cycle.",
-        "connection": "The tripartite example extends cleanly. Here a locally proper partial coloring forces two-color lists that are globally inconsistent.",
-        "prompt": "Consider a five-cycle v0,…,v4, and attach a distinct pendant sample vertex s_i to each v_i. Color every s_i with color 1. This partial coloring is proper, but each cycle vertex now has list {2,3}. Introduce b_i=1 for color 3. Write all edge clauses, exhibit an implication path from b0 to ¬b0 and the reverse, and conclude that this candidate cannot extend. Show that the original graph nevertheless is 3-colorable. This local gadget illustrates the extension step, not the dense-sampling probability theorem.",
-        "hints": [
-          "For an edge, forbid both endpoints choosing 2 and both choosing 3.",
-          "Alternating around an odd cycle flips the starting Boolean value after five edges."
-        ],
-        "probe": {
-          "kind": "number",
-          "prompt": "What is the length of a shortest implication path from b0 to ¬b0 in this formula?",
-          "expected": 5,
-          "feedback": "Each edge forces the opposite Boolean value. Going once around the five-cycle yields b0→¬b1→b2→¬b3→b4→¬b0, length five. A shorter path would correspond to a shorter odd closed walk in C5."
-        },
-        "solution": [
-          "Each edge i,i+1 contributes (b_i∨b_(i+1)) and (¬b_i∨¬b_(i+1)), enforcing opposite endpoint bits. There are ten 2-clauses.",
-          "The implication path b0→¬b1→b2→¬b3→b4→¬b0 follows five edges.",
-          "Starting with ¬b0 gives the reverse-parity path ¬b0→b1→¬b2→b3→¬b4→b0. Thus b0 and ¬b0 lie in the same strongly connected component.",
-          "The 2SAT formula is unsatisfiable: a five-cycle cannot be colored with only 2 and 3.",
-          "The original graph is still 3-colorable: color the cycle with three colors and each pendant leaf with any color different from its neighbor. The failing condition is this particular sample restriction, not the original promise."
-        ],
-        "rubric": [
-          "Encode both same-color prohibitions for every residual edge.",
-          "Exhibit both implication paths and the strongly connected contradiction.",
-          "Give a global 3-coloring argument and state the local gadget’s limited role."
-        ],
-        "mistake": "Properly coloring the sample checks only its induced edges; it does not establish that the partial coloring extends to the whole graph.",
-        "followup": "Replace the five-cycle with an even cycle and describe both satisfying Boolean assignments and their interpretation as residual colorings."
       }
     ]
   },
@@ -3763,217 +2730,6 @@ const PROOF_APPROX = {
       }
     ]
   },
-  "core-planar-mis": {
-    "proof": {
-      "goal": "Lose only a small fraction of a fixed optimum by deleting one layer residue, then optimize the surviving bounded-width graph exactly.",
-      "scope": "Williamson–Shmoys §10.2. The bounded-outerplanarity/treewidth theorem for the specified planar layers and a valid tree decomposition are explicit inputs. Arbitrary layer definitions are not assumed equivalent.",
-      "frames": [
-        {
-          "title": "Partition the fixed optimum, not the algorithm’s output",
-          "question": "Why do the deletion losses add to exactly OPT?",
-          "diagram": {
-            "kind": "table",
-            "columns": [
-              "Residue",
-              "Optimum vertices lost",
-              "Surviving benchmark"
-            ],
-            "rows": [
-              [
-                "0",
-                "7",
-                "13"
-              ],
-              [
-                "1",
-                "3",
-                "17"
-              ],
-              [
-                "2",
-                "6",
-                "14"
-              ],
-              [
-                "3",
-                "4",
-                "16"
-              ]
-            ],
-            "focus": [
-              1
-            ],
-            "note": "Every vertex of one fixed optimum has exactly one layer residue."
-          },
-          "claim": "Some residue loses at most OPT/k.",
-          "explanation": "The algorithm does not know the optimum or these counts. Their sum is OPT, so averaging proves a good shift exists among the k shifts the algorithm explicitly tries.",
-          "carry": "One reduced graph retains a large feasible subset of the original optimum."
-        },
-        {
-          "title": "Keep the comparison direction when deleting",
-          "question": "Can the reduced optimum contain replacement vertices?",
-          "diagram": {
-            "kind": "inequality",
-            "lines": [
-              {
-                "left": "|O minus deleted residue|",
-                "relation": "≥",
-                "right": "(1−1/k)OPT",
-                "reason": "choose a cheap residue"
-              },
-              {
-                "left": "OPT(reduced graph)",
-                "relation": "≥",
-                "right": "|O minus deleted residue|",
-                "reason": "survivor remains independent"
-              }
-            ],
-            "focus": 1,
-            "note": "Deleting vertices cannot add an edge, but reduced optimization may improve on this restricted witness."
-          },
-          "claim": "The reduced optimum is bounded below, not asserted equal to the surviving part of O.",
-          "explanation": "The entire point of exact optimization is that it may choose different vertices. Equality with the restricted original optimum is unnecessary and can be false.",
-          "carry": "The approximation proof needs no reconstruction of the unknown O."
-        },
-        {
-          "title": "State the structural theorem before using DP",
-          "question": "Which step uses planarity rather than elementary averaging?",
-          "diagram": {
-            "kind": "table",
-            "columns": [
-              "Ingredient",
-              "Consequence",
-              "Role"
-            ],
-            "rows": [
-              [
-                "delete periodic outer layers",
-                "treewidth O(k)",
-                "planar structural theorem"
-              ],
-              [
-                "bag state I",
-                "I is independent in bag",
-                "local feasibility"
-              ],
-              [
-                "join children",
-                "Fleft+Fright−|I|",
-                "avoid double-counting bag"
-              ]
-            ],
-            "focus": [
-              0,
-              2
-            ],
-            "note": "Averaging works in any graph; bounded width is what makes exact optimization efficient here."
-          },
-          "claim": "For fixed k, independent-set bag-state DP solves each reduced component exactly.",
-          "explanation": "A valid decomposition covers every edge and keeps each vertex’s bags connected. These axioms enforce compatibility between child solutions and explain why a join counts the selected bag only once.",
-          "carry": "The reduced optimum can actually be computed without another objective loss."
-        },
-        {
-          "title": "Try all shifts and choose the best feasible output",
-          "question": "Why need the algorithm not recognize the analytically good residue?",
-          "diagram": {
-            "kind": "inequality",
-            "lines": [
-              {
-                "left": "best output over k shifts",
-                "relation": "≥",
-                "right": "output of good shift",
-                "reason": "explicit enumeration"
-              },
-              {
-                "left": "output of good shift",
-                "relation": "=",
-                "right": "OPT(reduced good graph)",
-                "reason": "exact DP"
-              },
-              {
-                "left": "best output",
-                "relation": "≥",
-                "right": "(1−1/k)OPT",
-                "reason": "surviving benchmark"
-              }
-            ],
-            "focus": 2,
-            "note": "Pick k so 1/k≤ε; structural and DP costs may depend exponentially on k but polynomially on n for fixed ε."
-          },
-          "claim": "The algorithm is a PTAS for planar maximum independent set.",
-          "explanation": "All outputs are independent sets in induced subgraphs and therefore in the original graph. Comparing their actual sizes selects a result at least as good as the unknown good shift.",
-          "carry": "Averaging, width, exact DP and shift selection remain separate obligations."
-        }
-      ]
-    },
-    "challenges": [
-      {
-        "id": "planar-weighted-join",
-        "title": "Extend the proof to weights and repair a join-node double count",
-        "minutes": 18,
-        "skill": "Transfer the layering benchmark to additive weights and justify a tree-decomposition recurrence.",
-        "connection": "The example counts surviving optimum vertices. The same proof must be rebuilt carefully when vertices contribute different weights.",
-        "prompt": "Extend the layer-deletion argument to nonnegative vertex weights. At a join bag containing adjacent vertices u,v with weights 7 and 11, consider state I={u}. The two child optima consistent with I have weights 31 and 29, each counting the selected bag. Derive the parent state value and prove the subtraction rule using the decomposition axioms, including why no edge joins two private child vertices. Explain why I={u,v} must be rejected before any arithmetic.",
-        "hints": [
-          "The overlap consists exactly of the selected bag vertices, whose contribution is weight seven here.",
-          "If an edge joined private vertices from the two children, some bag would have to contain both despite their separated occurrence subtrees."
-        ],
-        "probe": {
-          "kind": "number",
-          "prompt": "What value should the join assign to state I={u}?",
-          "expected": 53,
-          "feedback": "The child values both include u’s weight seven, so the parent value is 31+29−7=53. Subtracting one vertex or the entire bag’s weight gives the wrong weighted objective."
-        },
-        "solution": [
-          "Partition the weight of a fixed optimal independent set by layer residue. The k losses sum to OPTweight, so one is at most OPTweight/k.",
-          "The surviving weighted optimum remains a feasible benchmark, and exact weighted bag DP preserves that lower bound.",
-          "At a join, the child vertex sets intersect in the bag; a vertex occurring in both child subtrees must occur along their connecting path of bags.",
-          "No graph edge can join private vertices of the two children: edge coverage would require a bag containing both, contradicting their separated occurrence subtrees.",
-          "Thus compatible independent child solutions combine, with the selected bag counted twice. Subtract w(I)=7, giving 31+29−7=53.",
-          "The state selecting both u and v is infeasible because their bag edge is present. An arithmetic recurrence cannot rescue a nonindependent state."
-        ],
-        "rubric": [
-          "Reprove the weighted averaging benchmark using nonnegative additive weights.",
-          "Justify child overlap and absence of cross-private edges from decomposition axioms.",
-          "Apply the weighted subtraction and reject illegal bag states."
-        ],
-        "mistake": "Replacing a vertex count by weights requires changing the overlap correction as well as the final comparison; subtracting |I| would overcount heavy bag vertices.",
-        "followup": "Allow zero and negative weights. Which can be ignored safely in maximum independent set, and which parts of the averaging argument need explicit reformulation?"
-      },
-      {
-        "id": "planar-two-relative-losses",
-        "title": "How accurate must each reduced-instance solver be?",
-        "minutes": 16,
-        "skill": "Compose a structural loss and an optimization loss without pretending either is exact.",
-        "connection": "The example uses exact DP. A proposed faster routine approximates each reduced graph too.",
-        "prompt": "Suppose the layer theorem is unchanged, but the reduced-graph solver returns an independent set of size at least (1−η) times its reduced optimum. Derive the whole-graph factor and the smallest integer k certifying a 0.9 approximation when η=0.04. Compare with the naïve k=10 choice and explain why independently budgeting ten percent loss for both steps is invalid. State what feasibility guarantee the reduced solver must retain.",
-        "hints": [
-          "The second guarantee multiplies the surviving-optimum benchmark.",
-          "Solve (1−η)(1−1/k)≥1−ε for k before rounding to an integer."
-        ],
-        "probe": {
-          "kind": "number",
-          "prompt": "For η=0.04 and desired factor 0.9, what is the smallest certified k?",
-          "expected": 16,
-          "feedback": "The combined factor is 0.96(1−1/k). Requiring it at least 0.9 gives 1/k≤0.06/0.96=1/16, so k=16 is minimal. At k=10 the factor is only 0.864."
-        },
-        "solution": [
-          "The good shift retains a feasible benchmark of size at least (1−1/k)OPT.",
-          "Its reduced optimum is at least that benchmark; the approximate solver therefore returns at least (1−η)(1−1/k)OPT.",
-          "For target 1−ε, solve 1/k≤(ε−η)/(1−η), requiring η<ε for a finite meaningful k.",
-          "At ε=0.1 and η=0.04, the bound is k≥16. With k=10, 0.96·0.9=0.864, which does not meet the target.",
-          "The reduced solver must return an actual independent set, not just an approximate objective estimate. Otherwise the best-shift comparison need not produce a feasible original solution."
-        ],
-        "rubric": [
-          "Derive the product factor through the surviving benchmark.",
-          "Solve and round the k inequality correctly, including η<ε.",
-          "Distinguish feasible approximate solutions from numerical objective estimates."
-        ],
-        "mistake": "Separate relative guarantees compose multiplicatively through their benchmarks; assigning the same full error budget to both steps overspends the target.",
-        "followup": "Given a cost model for the reduced solver as a function of k and η, formulate the tradeoff needed to choose them for minimum runtime at a fixed final ε."
-      }
-    ]
-  },
   "core-hardness": {
     "proof": {
       "goal": "Preserve global proof consistency and exact gadget values, then choose error parameters giving a strict target-objective gap.",
@@ -4188,6 +2944,241 @@ const PROOF_APPROX = {
         ],
         "mistake": "Taking a reciprocal ratio is appropriate for neither an additive shift nor an objective complement; only positive multiplicative rescaling preserves the same approximation ratio directly.",
         "followup": "For a gadget objective aM+bS with a,b>0, derive the exact target ratio produced by a source ρ guarantee and analyze how a large baseline a dilutes the gap."
+      }
+    ]
+  },
+  "core-euclidean-tsp": {
+    "proof": {
+      "goal": "Derive a PTAS from geometric structure, with a valid interface and an explicit accuracy budget.",
+      "scope": "W–S §10.1. The patching structure theorem is an imported input; these frames derive its algorithmic consequences.",
+      "frames": [
+        {
+          "title": "1. Charge moving the input",
+          "question": "Why do both the benchmark tour and returned tour incur a perturbation term?",
+          "diagram": {
+            "kind": "inequality",
+            "lines": [
+              {
+                "left": "OPT′",
+                "relation": "≤",
+                "right": "OPT+B",
+                "reason": "move original optimum"
+              },
+              {
+                "left": "C",
+                "relation": "≤",
+                "right": "(1+η)OPT′+B",
+                "reason": "solve then restore"
+              },
+              {
+                "left": "C",
+                "relation": "≤",
+                "right": "(1+η)OPT+(2+η)B",
+                "reason": "substitute benchmark"
+              }
+            ],
+            "focus": 2,
+            "note": "The two perturbation terms belong to different tours; neither can be dropped."
+          },
+          "claim": "1. Charge moving the input",
+          "explanation": "Inference 1: If each point moves by at most δ, each edge changes by at most 2δ and any n-edge tour by at most 2nδ. Applying this once to the old optimum and once to the returned tour gives C≤(1+η)OPT+(2+η)2nδ.",
+          "carry": "Use this on both tours."
+        },
+        {
+          "title": "2. Allocate the accuracy",
+          "question": "How can a computable geometric lower bound set the snapping grid without knowing OPT?",
+          "diagram": {
+            "kind": "inequality",
+            "lines": [
+              {
+                "left": "η",
+                "relation": "=",
+                "right": "ε/4",
+                "reason": "internal scheme accuracy"
+              },
+              {
+                "left": "B",
+                "relation": "≤",
+                "right": "εL/8",
+                "reason": "geometric lower bound L≤OPT"
+              },
+              {
+                "left": "C/OPT",
+                "relation": "≤",
+                "right": "1+ε/4+9ε/32",
+                "reason": "0<ε≤1"
+              }
+            ],
+            "focus": 2,
+            "note": "Choose numerical tolerances from a computable lower bound, not from the unknown optimum."
+          },
+          "claim": "2. Allocate the accuracy",
+          "explanation": "Inference 2: Choose the internal scheme error η=ε/4 and ensure 2nδ≤εOPT/8 using a computable geometric lower bound L≤OPT. For 0<ε≤1, total excess is at most εOPT. Handle the zero-diameter input separately.",
+          "carry": "Continue with the structural bound and a connectivity-aware state."
+        },
+        {
+          "title": "3. Separate position and crossing restrictions",
+          "question": "Why does placing finitely many portals not itself prove a polynomial-time scheme?",
+          "diagram": {
+            "kind": "table",
+            "columns": [
+              "Restriction",
+              "Information controlled",
+              "Bound"
+            ],
+            "rows": [
+              [
+                "Portals",
+                "crossing positions",
+                "m=O(log n/η)"
+              ],
+              [
+                "Patching",
+                "crossing occurrences",
+                "r=O(1/η)"
+              ],
+              [
+                "Pairing state",
+                "connectivity of paths",
+                "at most 4r occurrences"
+              ]
+            ],
+            "focus": [
+              1
+            ],
+            "note": "The interface has three different obligations. A position restriction alone leaves a growing number of crossing choices."
+          },
+          "claim": "Portals discretize where; patching limits how often; the state records how paths connect.",
+          "explanation": "A portal-only tour may revisit portals enough times that r grows like m. The patching theorem reduces r to O(1/η), independently of n. A DP must additionally record multiplicity and entry/exit pairing so its child solutions form one valid global tour.",
+          "carry": "Invoke the source’s geometric structure theorem with both portal and lightness parameters."
+        },
+        {
+          "title": "4. Turn geometric overhead into success probability",
+          "question": "Which nonnegative random variable allows Markov to certify a good dissection?",
+          "diagram": {
+            "kind": "inequality",
+            "lines": [
+              {
+                "left": "EΔ",
+                "relation": "≤",
+                "right": "ηOPT/2",
+                "reason": "random-shift geometric charging"
+              },
+              {
+                "left": "P(Δ>ηOPT)",
+                "relation": "≤",
+                "right": "EΔ/(ηOPT)",
+                "reason": "Markov for nonnegative Δ"
+              },
+              {
+                "left": "P(good dissection)",
+                "relation": "≥",
+                "right": "1/2",
+                "reason": "complement the failure bound"
+              }
+            ],
+            "focus": 1,
+            "note": "The geometric proof controls added tour length. Markov then supplies a probability for the structured-tour event."
+          },
+          "claim": "Expected nonnegative added length at most ηOPT/2 gives a good dissection with probability at least 1/2.",
+          "explanation": "Let Δ be the additional length used to make the fixed optimal tour portal-respecting and light. Since Δ≥0, Markov at threshold ηOPT gives failure probability at most EΔ/(ηOPT)≤1/2. This does not yet construct the tour; the square DP finds the best compatible structured solution.",
+          "carry": "Find the cheapest structured tour, then repeat independent shifts if a smaller failure probability is needed."
+        },
+        {
+          "title": "5. Count boundary states and amplify",
+          "question": "How does bounding crossings independently of n change the DP exponent?",
+          "diagram": {
+            "kind": "table",
+            "columns": [
+              "Crossing bound",
+              "State/transition factor",
+              "Consequence"
+            ],
+            "rows": [
+              [
+                "r=O(m)",
+                "(log n)^{O(log n)}",
+                "quasi-polynomial"
+              ],
+              [
+                "r=O(1/η)",
+                "(log n)^{O(1/η)}",
+                "polynomial for fixed η"
+              ]
+            ],
+            "focus": [
+              1
+            ],
+            "note": "Patching changes the exponent. A logarithmic portal count is compatible with polynomial time when r is fixed with accuracy."
+          },
+          "claim": "The patched state enumeration yields n(log n)^{O(1/η)} time, and independent repetition controls failure.",
+          "explanation": "For each square and boundary pairing, enumerate compatible internal crossings and four-child states and reject premature cycles. The bound is m^{O(r)}n log n. Substituting m=O(log n/η), r=O(1/η) gives polynomial time for fixed η. Independent t-fold repetition has failure at most 2^(−t), and taking the cheapest feasible output cannot worsen the returned cost.",
+          "carry": "Undo snapping with the two-sided accuracy budget and output one feasible tour."
+        }
+      ]
+    },
+    "challenges": [
+      {
+        "id": "euclidean-budget",
+        "title": "Repair a one-sided snapping analysis",
+        "minutes": 25,
+        "skill": "Audit a geometric PTAS beyond its name",
+        "connection": "Extend the dissection and snapping proof with a changed assumption.",
+        "prompt": "Every tour length changes by at most B=2. A solver on the snapped instance is a 1.1 approximation and OPT≥100. Derive the strongest ratio certified by these facts. An examiner claims 1.12 after charging B only once. Give the correct ratio, then explain how the two comparisons arise.",
+        "hints": [
+          "Write the inequalities before substituting values.",
+          "Keep the benchmark comparison separate from the returned solution."
+        ],
+        "probe": {
+          "kind": "number",
+          "prompt": "Enter the requested numerical value.",
+          "expected": 1.142,
+          "feedback": "OPT′≤OPT+B. C≤1.1OPT′+B≤1.1OPT+2.1B=1.1OPT+4.2. Since OPT≥100, C/OPT≤1.142. The claim 1.12 missed the 1.1B benchmark perturbation."
+        },
+        "solution": [
+          "OPT′≤OPT+B.",
+          "C≤1.1OPT′+B≤1.1OPT+2.1B=1.1OPT+4.2.",
+          "Since OPT≥100, C/OPT≤1.142. The claim 1.12 missed the 1.1B benchmark perturbation.",
+          "The example uses only the lower bound OPT≥100. A smaller actual perturbation may improve the realized ratio, but it cannot be assumed from these data."
+        ],
+        "rubric": [
+          "Identify the exact invariant or theorem used.",
+          "Derive the bound with all terms included.",
+          "Explain which proposed shortcut fails."
+        ],
+        "mistake": "A valid local cost comparison does not itself establish that the global output is one feasible tour.",
+        "followup": "State the general bound in symbols and identify which parameters must be fixed."
+      },
+      {
+        "id": "euclidean-amplify",
+        "title": "Separate a portal-only QPTAS from a PTAS",
+        "minutes": 25,
+        "skill": "Audit a geometric PTAS beyond its name",
+        "connection": "Extend the dissection and snapping proof with a changed assumption.",
+        "prompt": "Take n=64 and independent shifted dissections, each structurally good with probability at least 1/2. Find the least t ensuring the worst-case failure bound 2^(−t)≤n^(−2). Then compare m^{O(r)} for r=O(m) and for r=O(1/ε), where m=O(log n/ε); explain which is polynomial for fixed ε and why portal positions alone cannot encode connectivity.",
+        "hints": [
+          "Write the inequalities before substituting values.",
+          "Keep the benchmark comparison separate from the returned solution."
+        ],
+        "probe": {
+          "kind": "number",
+          "prompt": "Enter the requested numerical value.",
+          "expected": 12,
+          "feedback": "64^(−2)=2^(−12), so t=12 suffices and no smaller t ensures this bound. If r=O(m)=O(log n) for fixed ε, m^{O(r)}=n^{O(log log n)}. If r=O(1/ε), then m^{O(r)}=(log n)^{O(1/ε)}, giving polynomial total time. The same four portal occurrences admit different pairings; distinguish them to avoid invalid disconnected subtours."
+        },
+        "solution": [
+          "64^(−2)=2^(−12), so t=12 suffices and no smaller t ensures this bound.",
+          "If r=O(m)=O(log n) for fixed ε, m^{O(r)}=n^{O(log log n)}.",
+          "If r=O(1/ε), then m^{O(r)}=(log n)^{O(1/ε)}, giving polynomial total time.",
+          "The same four portal occurrences admit different pairings; distinguish them to avoid invalid disconnected subtours."
+        ],
+        "rubric": [
+          "Identify the exact invariant or theorem used.",
+          "Derive the bound with all terms included.",
+          "Explain which proposed shortcut fails."
+        ],
+        "mistake": "A valid local cost comparison does not itself establish that the global output is one feasible tour.",
+        "followup": "State the general bound in symbols and identify which parameters must be fixed."
       }
     ]
   }

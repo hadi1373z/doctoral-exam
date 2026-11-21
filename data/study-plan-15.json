@@ -40,63 +40,57 @@
     },
     {
       "day": 3,
-      "title": "LP rounding, network design, and martingales",
+      "title": "LP MAX-SAT and martingales",
       "units": [
         "core-sat-lp",
-        "core-pcst",
-        "core-facility",
         "core-azuma"
       ],
       "reading": [
-        "Read Williamson–Shmoys §§5.4–5.8 in full. Separate LP-marginal MAX-SAT, better-of-two and transformed-marginal rounding; then follow the threshold distribution for prize collection and the precise client-selection and opening rule for facility location.",
+        "Read Williamson–Shmoys §§5.4–5.5 only: LP rounding, the clausewise better-of-two analysis, and conditional-expectation implementation.",
         "Read Alon–Spencer §§7.1–7.2, including the martingale definitions, conditional exponential-moment argument, exposure examples, and every stated bounded-difference hypothesis."
       ],
       "revisit": [
         "core-sat-random",
         "core-fkg"
       ],
-      "deliverable": "Make a separate algorithm card for each MAX-SAT method, derive the prize-collecting threshold integral, and prove one Azuma bound from conditional MGFs rather than quoting independence of increments.",
-      "challenge": "Explain why averaging two published global approximation ratios misses the MAX-SAT 3/4 guarantee. Then give an outcome where independent facility openings leave a client unserved and show what the clustering construction repairs."
+      "deliverable": "Derive the LP MAX-SAT bound and the 3/4 combination using one LP benchmark; prove an Azuma bound from conditional MGFs.",
+      "challenge": "Explain why averaging the global 1/2 and 1−1/e guarantees misses 3/4. Which clause lengths force the common-benchmark argument?"
     },
     {
       "day": 4,
-      "title": "Exposure choices and scheduling with release dates",
+      "title": "Exposure choices and concentration applications",
       "units": [
         "core-chromatic",
         "core-gradation",
-        "core-azuma-app",
-        "core-release"
+        "core-azuma-app"
       ],
       "reading": [
         "Read Alon–Spencer §§7.3–7.5 completely: chromatic concentration, gradations and adaptive exposure, and each concentration application. For every application specify the exposure and the conditional sensitivity or variance charge.",
-        "Read Williamson–Shmoys §5.9 completely, including the relaxation’s completion-time expression, the polynomial preemptive-schedule construction, independent α-points, and the shared-α variant and derandomization discussed at the end."
+        "Reconstruct a Chapter 6 correlation proof and compare the hypotheses with the exposure argument. No additional approximation section is assigned today."
       ],
       "revisit": [
-        "core-azuma",
-        "core-facility"
+        "core-azuma"
       ],
-      "deliverable": "Create an exposure table for the Chapter 7 applications and reconstruct the scheduling algorithm with release-date feasibility, a per-job expected completion bound, and polynomial implementation.",
-      "challenge": "An examiner replaces a conditional range bound by an unconditional one and says a time-indexed formulation is automatically polynomial. Locate both gaps and repair the arguments without changing the problems."
+      "deliverable": "Create an exposure table for all Chapter 7 applications and justify each conditional increment bound.",
+      "challenge": "Construct an exposure where an unconditional sensitivity estimate fails to justify a conditional martingale bound. Repair the coupling or the filtration."
     },
     {
       "day": 5,
-      "title": "Concentration in algorithms and the LFKN protocol",
+      "title": "SDP MAX-CUT and the LFKN protocol",
       "units": [
-        "core-flow",
-        "core-dense-color",
         "core-sdp-cut",
         "core-lfkn-permanent"
       ],
       "reading": [
-        "Read Williamson–Shmoys §§5.10–5.12 and §§6.1–6.2 completely: Chernoff tools, routing regimes, dense-coloring extension, PSD/Gram representations, and MAX-CUT hyperplane rounding. This finishes all main-text sections of Chapter 5; review its notes and choose exercises addressing your gaps.",
+        "Read Williamson–Shmoys §§6.1–6.2 completely: SDP/Gram representations, numerical precision and hyperplane rounding. Required Chapter 5 reading ended at §5.5.",
         "Begin the complete LFKN paper, Algebraic Methods for Interactive Proof Systems. Read its introduction, definitions, permanent-verification construction, algebraic reductions, and soundness argument. Mark the remaining sections for completion on Day 6."
       ],
       "revisit": [
         "core-sat-lp",
         "core-azuma"
       ],
-      "deliverable": "Derive one routing tail bound with the union bound visible, construct the dense-coloring 2-SAT restrictions, derive the angular MAX-CUT probability, and write the LFKN verifier’s messages and checks.",
-      "challenge": "Contrast a randomized coloring constructor with a property tester. Then defend LFKN soundness when the prover’s later polynomial messages adapt to all earlier random challenges."
+      "deliverable": "Derive the angular MAX-CUT probability and its comparison with the SDP edge objective; write LFKN messages and checks.",
+      "challenge": "Explain why a PSD matrix is a Gram matrix and why θ/π differs from (1−cos θ)/2. Defend LFKN soundness against adaptive polynomial messages."
     },
     {
       "day": 6,
@@ -185,26 +179,24 @@
     },
     {
       "day": 10,
-      "title": "Metric structure, planar structure, hardness, and BFL tests",
+      "title": "Tree metrics, Euclidean TSP, hardness and BFL",
       "units": [
         "core-tree-metrics",
-        "core-planar-mis",
+        "core-euclidean-tsp",
         "core-hardness",
         "core-bfl-multilinear"
       ],
       "reading": [
-        "Read Williamson–Shmoys §§8.5–8.6 and §10.2 completely: hierarchical tree construction, the exact tree buy-at-bulk solver and metric transfer, weighted planar independent set, tree decompositions and layer deletion.",
+        "Read Williamson–Shmoys §§8.5–8.6 and §10.1 completely: random tree metrics, buy-at-bulk transfer, nice Euclidean instances, shifted dissections, portals, patching, boundary-pairing DP and its running time. §10.2 is additional.",
         "Read Williamson–Shmoys §§16.1 and 16.3 in full. Track every constructive reduction and its YES/NO gap; keep hardness statements distinct from approximation algorithms.",
         "Continue BFL through its multilinearity tests, proximity statements, self-correction, and the use of a global algebraic witness. Read the auxiliary lemmas in the paper, not only the site’s mechanism outline."
       ],
       "revisit": [
         "core-sat-lp",
-        "core-pcst",
-        "core-facility",
         "core-azuma"
       ],
-      "deliverable": "Prove the expected metric-transfer inequality, reconstruct weighted planar MIS dynamic programming and the layer averaging argument, and state BFL testing/correction guarantees with all quantifiers.",
-      "challenge": "Explain why expected stretch for each fixed pair does not promise a uniformly low-distortion sampled tree. For BFL, distinguish “passes many local tests” from “is close to one globally consistent low-degree object.”"
+      "deliverable": "Prove a fixed-benchmark metric transfer; reconstruct the Euclidean TSP accuracy budget, structural theorem and connectivity-aware DP; state the hardness gaps and the BFL testing obligations.",
+      "challenge": "Why can neither a portal subset nor an expected maximum-stretch bound be substituted for the actual theorem? Identify the missing quantifier or connectivity information in each case."
     },
     {
       "day": 11,
@@ -223,8 +215,7 @@
       "revisit": [
         "core-chromatic",
         "core-gradation",
-        "core-azuma-app",
-        "core-release"
+        "core-azuma-app"
       ],
       "deliverable": "Prove Shearer by one global coordinate order, derive a projection bound, finish a BFL dependency chart, and write the GMW zero-knowledge definition with the simulator’s quantifiers and running-time claim.",
       "challenge": "Give a conditional distribution whose entropy exceeds the unconditional entropy for one particular conditioning value. Then explain why a simulator for an honest verifier is insufficient for the malicious-verifier claim."
@@ -244,8 +235,6 @@
         "Finish every remaining section of GMW: graph nonisomorphism and verifier certification, cryptographic assumptions and commitments, the NP construction, soundness, simulation, and the paper’s conclusions. Audit the complete paper against its own section list."
       ],
       "revisit": [
-        "core-flow",
-        "core-dense-color",
         "core-sdp-cut",
         "core-lfkn-permanent"
       ],
@@ -257,7 +246,7 @@
       "title": "Approximation synthesis and proof repair",
       "units": [],
       "reading": [
-        "Audit every assigned Williamson–Shmoys section: §§3.1–3.3; the whole of Chapter 5; §§6.1, 6.2, 6.5, 13.2; §§7.1, 7.3, 7.4; §§8.5, 8.6; §10.2; §§16.1, 16.3. Reopen unresolved proofs and the source passages behind every unclear algorithm step.",
+        "Audit exactly these required Williamson–Shmoys sections: §§3.1–3.3; §§5.1–5.5; §§6.1, 6.2, 6.5, 13.2; §§7.1, 7.3, 7.4; §§8.5, 8.6; §10.1; §§16.1, 16.3. Read every lemma and proof in those sections; no other approximation section is required.",
         "Use the algorithm stories as an index, then return to the book for subroutines, assumptions and omitted lemmas. Attempt selected source exercises targeting the gaps you found; the plan does not require solving every exercise in every chapter."
       ],
       "revisit": [
@@ -266,11 +255,6 @@
         "core-bin-scheme",
         "core-sat-random",
         "core-sat-lp",
-        "core-pcst",
-        "core-facility",
-        "core-release",
-        "core-flow",
-        "core-dense-color",
         "core-sdp-cut",
         "core-color-sdp",
         "core-gaussian-color",
@@ -278,7 +262,7 @@
         "core-dual-path",
         "core-steiner",
         "core-tree-metrics",
-        "core-planar-mis",
+        "core-euclidean-tsp",
         "core-hardness"
       ],
       "deliverable": "Prepare an algorithm inventory with input, output, precise procedure, benchmark, guarantee, randomness and time complexity. Give two closed-notes proofs from different techniques, then repair the weakest argument.",

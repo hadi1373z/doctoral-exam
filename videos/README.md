@@ -36,7 +36,7 @@ Fair-assignment MAX-3SAT, expectation and tail inequalities, Chernoff bounds, an
 
 [Watch lecture](https://www.youtube.com/watch?v=bfxz88uupx0) · [Official source](https://timroughgarden.org/w16/w16.html) · [Open player](https://hadi1373z.github.io/doctoral-exam/#video/video-approx-bfxz88uupx0)
 
-Topics: Random and biased assignments; derandomization; Chernoff bounds and randomized unsplittable routing.
+Topics: Random and biased assignments; derandomization.
 
 ### A Second Course in Algorithms (Lecture 20: Semidefinite Programming and the Maximum Cut Problem)
 
@@ -66,7 +66,7 @@ MIT 6.889 Lecture 8 develops carving/branch decompositions, a planar radius-to-w
 
 [Watch lecture](https://courses.csail.mit.edu/6.889/fall11/lectures/video/L08_720p.mp4) · [Official source](https://courses.csail.mit.edu/6.889/fall11/lectures/L08.html) · [Open player](https://hadi1373z.github.io/doctoral-exam/#video/video-approx-approximation-schemes-in-planar-graphs-branchwidth-and-baker-s-technique)
 
-Topics: Baker’s PTAS: layers, treewidth, independent-set DP.
+Topics: .
 
 
 ## Interactive proofs and zero knowledge
@@ -227,18 +227,13 @@ Topics: Dense-graph testing and the 3-coloring restriction tree; Triangle remova
 
 ## Assigned-topic coverage
 
-The catalogue has verified mappings for 29 of 50 study units. Unmapped topics use clearly labeled related-subject lectures in the website.
+The catalogue has verified mappings for 27 of 45 study units. Unmapped topics use clearly labeled related-subject lectures in the website.
 
 - **Knapsack: an FPTAS with a full bit-complexity argument**: [A Second Course in Algorithms (Lecture 15: Introduction to Approximation Algorithms)](https://www.youtube.com/watch?v=OacQnsvauZs) (background)
 - **Scheduling schemes: large jobs, rounded types, configurations**: [A Second Course in Algorithms (Lecture 15: Introduction to Approximation Algorithms)](https://www.youtube.com/watch?v=OacQnsvauZs) (background); [17. Complexity: Approximation Algorithms](https://www.youtube.com/watch?v=MEz1J9wY2iM) (background)
 - **Bin packing: linear grouping and the additive term**: No verified exact-topic mapping yet; related subject lectures are offered.
 - **Random and biased assignments; derandomization**: [A Second Course in Algorithms (Lecture 18: Five Essential Tools for Analyzing Randomized Algorithms)](https://www.youtube.com/watch?v=bfxz88uupx0) (direct)
-- **MAX-SAT rounding: recover 1−1/e and 3/4**: No verified exact-topic mapping yet; related subject lectures are offered.
-- **Prize-collecting Steiner tree: threshold rounding**: No verified exact-topic mapping yet; related subject lectures are offered.
-- **Facility location: clustering before randomized opening**: No verified exact-topic mapping yet; related subject lectures are offered.
-- **Release-date scheduling: randomized α-points**: No verified exact-topic mapping yet; related subject lectures are offered.
-- **Chernoff bounds and randomized unsplittable routing**: [A Second Course in Algorithms (Lecture 18: Five Essential Tools for Analyzing Randomized Algorithms)](https://www.youtube.com/watch?v=bfxz88uupx0) (direct)
-- **Dense 3-colorable graphs: sample, enumerate, extend**: No verified exact-topic mapping yet; related subject lectures are offered.
+- **MAX-SAT: LP rounding and the better-of-two 3/4 guarantee**: No verified exact-topic mapping yet; related subject lectures are offered.
 - **Gram matrices and the exact MAX-CUT ratio**: [A Second Course in Algorithms (Lecture 20: Semidefinite Programming and the Maximum Cut Problem)](https://www.youtube.com/watch?v=8IwoS1io5BM) (direct)
 - **Vector coloring, semicoloring, and the 0.387 exponent**: No verified exact-topic mapping yet; related subject lectures are offered.
 - **Gaussian threshold rounding for independent sets**: No verified exact-topic mapping yet; related subject lectures are offered.
@@ -246,7 +241,7 @@ The catalogue has verified mappings for 29 of 50 study units. Unmapped topics us
 - **Shortest path: why reverse deletion is essential**: No verified exact-topic mapping yet; related subject lectures are offered.
 - **Generalized Steiner tree: moat growth and the forest lemma**: [A Second Course in Algorithms (Lecture 15: Introduction to Approximation Algorithms)](https://www.youtube.com/watch?v=OacQnsvauZs) (background)
 - **Random tree metrics and buy-at-bulk transfer**: No verified exact-topic mapping yet; related subject lectures are offered.
-- **Baker’s PTAS: layers, treewidth, independent-set DP**: [Approximation schemes in planar graphs: Branchwidth and Baker's technique.](https://courses.csail.mit.edu/6.889/fall11/lectures/video/L08_720p.mp4) (background)
+- **Euclidean TSP: dissection, portals, patching and a PTAS**: No verified exact-topic mapping yet; related subject lectures are offered.
 - **Hardness: gaps, PCP predicates, and approximation conventions**: No verified exact-topic mapping yet; related subject lectures are offered.
 - **LFKN: verify the permanent, not just a Boolean sum**: [Instance Checking and the Permanent: Graduate Complexity Lecture 16 at CMU](https://www.youtube.com/watch?v=ShI2dOpg7kA) (background)
 - **LFKN: P^#P, PH, program checking and relativization**: [Instance Checking and the Permanent: Graduate Complexity Lecture 16 at CMU](https://www.youtube.com/watch?v=ShI2dOpg7kA) (background); [Lecture 1: Interactive Proofs and the Sum-Check Protocol, Part 1](https://www.youtube.com/watch?v=iqSMRO78UD0) (direct)

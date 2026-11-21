@@ -3,7 +3,7 @@
 const ROADMAP_UNIT_BY_ID=new Map(LESSONS.map(u=>[u.id,u]));
 const ROADMAP_RANK={review:0,repair:1,due:2,stale:3,untested:4,cold:5,retained:6};
 const ROADMAP_STATES={untested:'Untested',review:'Review pending',repair:'Repair needed',due:'Retest due',stale:'Refresh overdue',cold:'Cold pass',retained:'Retained',additional:'Additional'};
-const ROADMAP_CHAPTER_NAMES={'ws-3':'Approximation schemes','ws-5':'Randomized rounding','ws-6':'Semidefinite programming','ws-7':'Primal–dual algorithms','ws-8':'Tree metrics','ws-10':'Planar independent sets','ws-13':'Gaussian rounding','ws-16':'Approximation hardness','as-6':'Correlation inequalities','as-7':'Martingales & concentration','as-15':'Coding, games & entropy','as-17':'Graph property testing',lfkn:'LFKN · Algebraic interactive proofs',shamir:'Shamir · IP = PSPACE',bfl:'BFL · MIP = NEXP',gmw:'GMW · Zero knowledge'};
+const ROADMAP_CHAPTER_NAMES={'ws-3':'Approximation schemes','ws-5':'Randomized rounding','ws-6':'Semidefinite programming','ws-7':'Primal–dual algorithms','ws-8':'Tree metrics','ws-10':'Euclidean TSP','ws-13':'Gaussian rounding','ws-16':'Approximation hardness','as-6':'Correlation inequalities','as-7':'Martingales & concentration','as-15':'Coding, games & entropy','as-17':'Graph property testing',lfkn:'LFKN · Algebraic interactive proofs',shamir:'Shamir · IP = PSPACE',bfl:'BFL · MIP = NEXP',gmw:'GMW · Zero knowledge'};
 ui.roadmap={subject:'all',scope:'assigned',status:'all',search:'',chapter:'all',budget:60,id:null};
 LABELS.overview='Study roadmap';LABELS.unit='Topic workspace';LABELS.repairs='Repair desk';
 function roadmapChapter(u){if(!u.assigned)return 'additional-'+u.s;return ['ws','as'].includes(u.source)?u.source+'-'+(u.section.match(/\d+/)?.[0]||'other'):u.source;}

@@ -7,7 +7,7 @@ const BASE_BANK_QUESTIONS=CORE_UNITS.flatMap(u=>[
  bankItem(u,{slug:'source-proof',tier:'doctoral',kind:'proof',title:u.title,prompt:u.task,minutes:u.stretch?45:30,guide:u.answer.slice(),followup:'Which implication would fail first if the main hypothesis were removed? Give an explicit obstruction.',deliverable:'A complete blackboard argument with definitions, every central implication, and explicit bounds or resource accounting.'}),
  ...u.followups.map(([q,a],i)=>bankItem(u,{slug:'oral-check-'+(i+1),tier:'oral',kind:'oral-defense',title:q,prompt:q,minutes:8,guide:[a],followup:'Justify the decisive claim with a calculation, construction or counterexample rather than its name.',deliverable:'A concise but justified oral defense. This is a short prerequisite check, not a research problem.'}))
 ]);
-const EXPANDED_BANK_QUESTIONS=[...BANK_APPROX,...BANK_COMPLEXITY,...BANK_PROBABILITY].map(q=>{
+const EXPANDED_BANK_QUESTIONS=[...BANK_APPROX,...BANK_COMPLEXITY,...BANK_PROBABILITY].filter(q=>BANK_UNIT_MAP.has(q.unit)).map(q=>{
  const u=BANK_UNIT_MAP.get(q.unit);if(!u)throw Error('Unknown question topic: '+q.unit);return bankItem(u,q);
 });
 const QUESTION_BANK=[...BASE_BANK_QUESTIONS,...EXPANDED_BANK_QUESTIONS];

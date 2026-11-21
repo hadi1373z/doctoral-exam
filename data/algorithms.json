@@ -61,7 +61,8 @@
           "reference": "Algorithm 3.2; Theorem 3.5",
           "role": "Main section"
         }
-      ]
+      ],
+      "bookAnchor": "approx-knapsack"
     },
     {
       "id": "makespan",
@@ -181,7 +182,8 @@
           "reference": "Background comparison",
           "role": "Additional background"
         }
-      ]
+      ],
+      "bookAnchor": "approx-scheduling-scheme"
     },
     {
       "id": "bin-packing",
@@ -298,14 +300,15 @@
           "reference": "Theorem 3.12",
           "role": "Main section"
         }
-      ]
+      ],
+      "bookAnchor": "approx-bin-scheme"
     },
     {
       "id": "max-sat",
       "title": "Weighted MAX-SAT",
       "family": "Satisfiability",
       "scope": "assigned",
-      "sections": "§§5.1–5.6",
+      "sections": "§§5.1–5.5",
       "units": [
         "core-sat-random",
         "core-sat-lp"
@@ -434,9 +437,11 @@
           ],
           "proof": "The lower envelope bounds positive-literal failure and the upper envelope bounds negative-literal failure. Both signs must be controlled.",
           "pitfall": "A transformation that only satisfies the lower bound need not handle negative literals correctly.",
-          "role": "Main section"
+          "role": "Main section",
+          "additional": true
         }
-      ]
+      ],
+      "bookAnchor": "approx-sat-random"
     },
     {
       "id": "max-cut",
@@ -533,17 +538,16 @@
           "reference": "Theorem 6.9",
           "role": "Main section"
         }
-      ]
+      ],
+      "bookAnchor": "approx-sdp-cut"
     },
     {
       "id": "prize-collecting-steiner",
       "title": "Rooted prize-collecting Steiner tree",
       "family": "Network design",
-      "scope": "assigned",
+      "scope": "additional",
       "sections": "§5.7",
-      "units": [
-        "core-pcst"
-      ],
+      "units": [],
       "input": "A graph with nonnegative edge costs, a root r, and a nonnegative penalty πᵥ for each vertex.",
       "goal": "Choose a tree containing r, paying for its edges and for every excluded vertex.",
       "objective": "\\min_{T\\ni r}\\left(\\sum_{e\\in E(T)}c_e+\\sum_{v\\notin V(T)}\\pi_v\\right).",
@@ -576,11 +580,9 @@
       "id": "facility-location",
       "title": "Metric uncapacitated facility location",
       "family": "Network design",
-      "scope": "assigned",
+      "scope": "additional",
       "sections": "§5.8",
-      "units": [
-        "core-facility"
-      ],
+      "units": [],
       "input": "Potential facilities with opening costs, clients, and connection costs induced by a metric.",
       "goal": "Open facilities and assign every client to one of them, minimizing opening plus assignment cost. Facilities have no capacity limit.",
       "objective": "\\min_{F'\\subseteq F,\\ a:D\\to F'}\\left(\\sum_{i\\in F'}f_i+\\sum_{j\\in D}c_{a(j),j}\\right).",
@@ -613,11 +615,9 @@
       "id": "release-date-scheduling",
       "title": "Single-machine weighted completion time with release dates",
       "family": "Scheduling",
-      "scope": "assigned",
+      "scope": "additional",
       "sections": "§5.9",
-      "units": [
-        "core-release"
-      ],
+      "units": [],
       "input": "Jobs with processing times pⱼ>0, release dates rⱼ≥0, and weights wⱼ≥0.",
       "goal": "Schedule jobs nonpreemptively on one machine, start each no earlier than its release date, and minimize weighted completion time.",
       "objective": "\\min\\sum_j w_jC_j\\quad\\text{with}\\quad S_j\\ge r_j\\quad\\text{and nonoverlapping job intervals}.",
@@ -691,11 +691,9 @@
       "id": "integer-routing",
       "title": "Minimum-congestion integer multicommodity routing",
       "family": "Routing",
-      "scope": "assigned",
+      "scope": "additional",
       "sections": "§§5.10–5.11",
-      "units": [
-        "core-flow"
-      ],
+      "units": [],
       "input": "An undirected graph and source–sink pairs (sᵢ,tᵢ), each requiring one path.",
       "goal": "Choose a simple path for every pair, minimizing the maximum number of selected paths sharing an edge.",
       "objective": "\\min_{P_i:s_i\\leadsto t_i}\\ \\max_{e\\in E}\\sum_i\\mathbf1[e\\in P_i].",
@@ -748,11 +746,9 @@
       "id": "dense-three-coloring",
       "title": "Proper 3-coloring of dense 3-colorable graphs",
       "family": "Cuts and coloring",
-      "scope": "assigned",
+      "scope": "additional",
       "sections": "§5.12",
-      "units": [
-        "core-dense-color"
-      ],
+      "units": [],
       "input": "A graph promised to be 3-colorable, with every vertex having at least δn neighbors for a fixed δ>0.",
       "goal": "Find a proper coloring using at most three colors.",
       "objective": "\\text{Find }c:V\\to\\{1,2,3\\}\\quad\\text{such that}\\quad c(u)\\ne c(v)\\ \\text{for every }uv\\in E.",
@@ -979,7 +975,8 @@
           "pitfall": "This improvement is an explicitly attributed exercise extension, not Theorem 6.24.",
           "role": "Source exercise extension"
         }
-      ]
+      ],
+      "bookAnchor": "approx-color-sdp"
     },
     {
       "id": "three-colorable-independent-set",
@@ -1016,7 +1013,8 @@
           "reference": "Algorithm 13.2; Theorem 13.9",
           "role": "Main section"
         }
-      ]
+      ],
+      "bookAnchor": "approx-gaussian-color"
     },
     {
       "id": "set-cover",
@@ -1074,7 +1072,8 @@
           "reference": "Additional background",
           "role": "Additional background"
         }
-      ]
+      ],
+      "bookAnchor": "approx-dual-cover"
     },
     {
       "id": "shortest-path",
@@ -1110,7 +1109,8 @@
           "reference": "Algorithm 7.4",
           "role": "Main section"
         }
-      ]
+      ],
+      "bookAnchor": "approx-dual-path"
     },
     {
       "id": "steiner-forest",
@@ -1167,7 +1167,8 @@
           "reference": "Algorithm 7.6",
           "role": "Main section"
         }
-      ]
+      ],
+      "bookAnchor": "approx-steiner"
     },
     {
       "id": "tree-metric-embedding",
@@ -1178,7 +1179,7 @@
       "units": [
         "core-tree-metrics"
       ],
-      "bookAnchor": "approx-frt-embedding-section-8.5",
+      "bookAnchor": "approx-tree-metrics",
       "input": "A finite metric d on n points, with positive distances rescaled when needed.",
       "goal": "Construct a distribution of dominating tree metrics with logarithmic expected pairwise stretch.",
       "objective": "d(u,v)\\le d_T(u,v)\\quad\\text{for every sample},\\qquad\\mathbb E[d_T(u,v)]\\le O(\\log n)\\,d(u,v).",
@@ -1215,7 +1216,7 @@
       "units": [
         "core-tree-metrics"
       ],
-      "bookAnchor": "approx-buy-at-bulk-network-design-section-8.6",
+      "bookAnchor": "approx-tree-metrics",
       "input": "Edge lengths ℓₑ, terminal-pair demands dᵢ, and a common nondecreasing capacity cost f with f(0)=0 and f(u)/u nonincreasing for positive u (economies of scale).",
       "goal": "Choose a route for each demand and enough edge capacity, minimizing total installation cost.",
       "objective": "\\min_{P_i,\\,u_e}\\sum_e\\ell_e f(u_e)\\quad\\text{subject to}\\quad u_e\\ge\\sum_{i:e\\in P_i}d_i.",
@@ -1288,11 +1289,9 @@
       "id": "planar-independent-set",
       "title": "Maximum-weight independent set in planar graphs",
       "family": "Independent sets",
-      "scope": "assigned",
+      "scope": "additional",
       "sections": "§10.2",
-      "units": [
-        "core-planar-mis"
-      ],
+      "units": [],
       "input": "A planar graph with nonnegative vertex weights and a planar embedding, obtained by a standard polynomial-time embedding routine if needed.",
       "goal": "Find an independent set of maximum total vertex weight approximately; cardinality is the special case of unit weights.",
       "objective": "\\max_{I\\subseteq V\\,\\text{independent}}\\sum_{v\\in I}w_v,\\qquad w_v\\ge0.",
@@ -1416,7 +1415,8 @@
           "pitfall": "The argument uses odd arity. For even-arity parity constraints, the two constant assignments need not complement one another.",
           "role": "Main section"
         }
-      ]
+      ],
+      "bookAnchor": "approx-hardness"
     },
     {
       "id": "metric-tsp",
@@ -1452,31 +1452,41 @@
       "id": "euclidean-tsp",
       "title": "Euclidean traveling salesman problem",
       "family": "Tours",
-      "scope": "additional",
-      "sections": "§10.1 · additional background",
-      "units": [],
-      "background": "embeddings-ptas",
+      "scope": "assigned",
+      "sections": "§10.1",
+      "units": [
+        "core-euclidean-tsp"
+      ],
+      "background": null,
       "input": "A set of points in the Euclidean plane.",
       "goal": "Find a shortest Euclidean tour through all points.",
       "objective": "\\min_{\\text{tours }C}\\sum_{uv\\in C}\\lVert u-v\\rVert_2.",
       "algorithms": [
         {
           "name": "Geometric dissection, portals, and dynamic programming",
-          "technique": "Dynamic programming",
+          "technique": "Geometric dynamic programming",
           "label": "PTAS",
-          "guarantee": "For each fixed accuracy ε, obtain a (1+ε)-approximation for the planar Euclidean instance in polynomial time.",
-          "tex": "\\operatorname{length}(C)\\le(1+\\varepsilon)\\operatorname{OPT}.",
+          "guarantee": "For fixed ε>0, Euclidean TSP in the plane admits a randomized (1+ε) approximation in n·(log n)^{O(1/ε)} time, with success probability at least 1/2 per random dissection; all polynomially many integer shifts may be enumerated.",
+          "tex": "m=O(\\varepsilon^{-1}\\log n),\\quad r=O(\\varepsilon^{-1}),\\quad T(n)=n(\\log n)^{O(1/\\varepsilon)}.",
           "steps": [
-            "Use a shifted geometric dissection and a bounded set of permitted boundary portals.",
-            "Modify an optimum so crossings are restricted to portals and satisfy a bounded crossing pattern, accounting for the added length.",
-            "Run dynamic programming over the boundary states and return the best represented tour."
+            "Snap and scale to a nice instance, keeping the two-way tour-length perturbation explicit.",
+            "Randomly shift a recursive square dissection; place nested portals on each side.",
+            "Use the crossing/patching structure theorem: m=O(log n/ε) portals per side and r=O(1/ε) crossings suffice with probability at least 1/2.",
+            "Dynamic-program over squares, boundary portal occurrences and entry/exit pairings; merge four children without creating premature cycles.",
+            "Shortcut portal visits by the Euclidean triangle inequality, undo snapping and allocate accuracy across the reductions."
           ],
-          "proof": "Geometry bounds the expected or selected extra length charged to boundaries and portals.",
-          "pitfall": "This is additional §10.1 material. The assigned §10.2 problem is planar independent set.",
+          "proof": "If each point moves by at most δ, each edge changes by at most 2δ and any n-edge tour by at most 2nδ. Applying this once to the old optimum and once to the returned tour gives C≤(1+η)OPT+(2+η)2nδ. A boundary state must record portal occurrences with multiplicity and which entry is paired with which exit. Four boundary points can have identical used portals but different connections, so a portal subset alone is insufficient. The structural theorem is the hard geometric input. Random shift makes scale-specific patching and portal detours cheap in expectation. With expected overhead ≤ηOPT/2, Markov gives overhead ≤ηOPT with probability ≥1/2. With m=O(log n/η) and r=O(1/η), the DP costs m^{O(r)}n log n, absorbed into n(log n)^{O(1/η)} for fixed η. The weaker r=O(m) bound only yields n^{O(log log n)}. For each state enumerate compatible internal crossings and pairings of four child squares, reject inconsistent connections and closed subtours that leave points outside, then minimize the sum of child costs. At the root require one closed tour. Independent repetition t times reduces structural failure to at most 2^(−t); taking the best feasible output never worsens cost. Enumerating all O(n²) shifts of a nice instance also finds a good shift.",
+          "pitfall": "Two partial solutions can use the same four portals but pair them as (a,b),(c,d) or (a,c),(b,d). Only one may connect to the outside without a premature cycle. Record multiplicity and connectivity.",
           "id": "euclidean-tsp-0",
-          "role": "Additional background"
+          "role": "Main assigned section",
+          "section": "§10.1 · Lemma 10.1; Theorems 10.2–10.4; Corollaries 10.5–10.6",
+          "sourceSections": [
+            "10.1"
+          ],
+          "reference": "Lemma 10.1; Theorems 10.2–10.4; Corollaries 10.5–10.6"
         }
-      ]
+      ],
+      "bookAnchor": "approx-euclidean-tsp"
     },
     {
       "id": "vertex-cover",
@@ -1643,94 +1653,6 @@
       "tool": null
     },
     {
-      "section": "5.6",
-      "methods": [
-        {
-          "problem": "max-sat",
-          "algorithm": "sat-nonlinear"
-        }
-      ],
-      "reductions": [],
-      "tool": null
-    },
-    {
-      "section": "5.7",
-      "methods": [
-        {
-          "problem": "prize-collecting-steiner",
-          "algorithm": "pcst-random-threshold"
-        }
-      ],
-      "reductions": [],
-      "tool": null
-    },
-    {
-      "section": "5.8",
-      "methods": [
-        {
-          "problem": "facility-location",
-          "algorithm": "facility-cluster-round"
-        }
-      ],
-      "reductions": [],
-      "tool": null
-    },
-    {
-      "section": "5.9",
-      "methods": [
-        {
-          "problem": "release-date-scheduling",
-          "algorithm": "schedule-relaxation"
-        },
-        {
-          "problem": "release-date-scheduling",
-          "algorithm": "schedule-independent-alpha"
-        },
-        {
-          "problem": "release-date-scheduling",
-          "algorithm": "schedule-shared-alpha"
-        }
-      ],
-      "reductions": [],
-      "tool": null
-    },
-    {
-      "section": "5.10",
-      "methods": [],
-      "reductions": [],
-      "tool": "Chernoff upper/lower tails, moment-generating functions and edge-wise union bounds. Used by routing and dense coloring; an analysis tool rather than a separate optimization algorithm."
-    },
-    {
-      "section": "5.11",
-      "methods": [
-        {
-          "problem": "integer-routing",
-          "algorithm": "routing-path-round"
-        },
-        {
-          "problem": "integer-routing",
-          "algorithm": "routing-flow-lp"
-        }
-      ],
-      "reductions": [],
-      "tool": null
-    },
-    {
-      "section": "5.12",
-      "methods": [
-        {
-          "problem": "dense-three-coloring",
-          "algorithm": "dense-sample-enumerate"
-        },
-        {
-          "problem": "dense-three-coloring",
-          "algorithm": "dense-two-sat"
-        }
-      ],
-      "reductions": [],
-      "tool": null
-    },
-    {
       "section": "6.1",
       "methods": [
         {
@@ -1870,29 +1792,15 @@
       "tool": null
     },
     {
-      "section": "10.2",
+      "section": "10.1",
       "methods": [
         {
-          "problem": "planar-independent-set",
-          "algorithm": "mis-tree"
-        },
-        {
-          "problem": "planar-independent-set",
-          "algorithm": "mis-bag-dp"
-        },
-        {
-          "problem": "planar-independent-set",
-          "algorithm": "mis-planar-decomposition"
-        },
-        {
-          "problem": "planar-independent-set",
-          "algorithm": "planar-baker"
+          "problem": "euclidean-tsp",
+          "algorithm": "euclidean-tsp-0"
         }
       ],
-      "reductions": [
-        "clique-complement"
-      ],
-      "tool": null
+      "reductions": [],
+      "tool": "Nice-instance reduction, random dissection, portals, patching lemma and connectivity-aware dynamic programming."
     },
     {
       "section": "16.1",

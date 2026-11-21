@@ -1,6 +1,7 @@
-/* Source-linked public lectures. Metadata checked 6 November 2026; providers control availability. */
-const VIDEO_VERIFIED_DATE="2026-11-06";
-const EDUCATIONAL_VIDEOS=[
+'use strict';
+/* Required approximation scope corrected from the user's explicit list, 21 November 2026. */
+const VIDEO_VERIFIED_DATE = "2026-11-06";
+const EDUCATIONAL_VIDEOS = [
   {
     "id": "video-approx-OacQnsvauZs",
     "subject": "approx",
@@ -47,8 +48,7 @@ const EDUCATIONAL_VIDEOS=[
     "watchUrl": "https://www.youtube.com/watch?v=bfxz88uupx0",
     "youtubeId": "bfxz88uupx0",
     "topics": [
-      "core-sat-random",
-      "core-flow"
+      "core-sat-random"
     ],
     "coverage": "direct",
     "level": "advanced",
@@ -99,9 +99,7 @@ const EDUCATIONAL_VIDEOS=[
     "sourceUrl": "https://courses.csail.mit.edu/6.889/fall11/lectures/L08.html",
     "watchUrl": "https://courses.csail.mit.edu/6.889/fall11/lectures/video/L08_720p.mp4",
     "mediaUrl": "https://courses.csail.mit.edu/6.889/fall11/lectures/video/L08_720p.mp4",
-    "topics": [
-      "core-planar-mis"
-    ],
+    "topics": [],
     "coverage": "background",
     "level": "advanced",
     "scopeNote": "MIT 6.889 Lecture 8 develops carving/branch decompositions, a planar radius-to-width bound, and Baker's technique through minimum vertex cover. It supports the structural idea behind planar MIS, but uses a different objective and decomposition presentation from the assigned proof.",

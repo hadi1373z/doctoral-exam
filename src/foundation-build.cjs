@@ -5,7 +5,7 @@ module.exports=function(root=__dirname){
  for(const f of ['core-units.js','foundation-approx.js','foundation-complexity.js','foundation-probability.js'])vm.runInContext(fs.readFileSync(path.join(root,f),'utf8'),ctx);
  const data=JSON.parse(vm.runInContext('JSON.stringify({datasets:[FOUNDATION_APPROX,FOUNDATION_COMPLEXITY,FOUNDATION_PROBABILITY],legacy:QUESTIONS,units:CORE_UNITS,lessons:LESSONS,sources:CORE_SOURCES})',ctx));
  const metadata=Object.assign(Object.create(null),...data.datasets.map(d=>d.legacy)),fresh=data.datasets.flatMap(d=>d.questions),math={},katex=require(path.join(root,'vendor/katex.cjs'));
- if(fresh.length!==150||data.legacy.length!==68||Object.keys(metadata).length!==68)throw Error('Foundation bank needs 150 assigned questions and metadata for all 68 original questions');
+ if(fresh.length!==data.units.length*3||data.legacy.length!==68||Object.keys(metadata).length!==68)throw Error('Foundation bank needs 150 assigned questions and metadata for all 68 original questions');
  for(const unit of data.units)if(fresh.filter(q=>q.topic===unit.id).length!==3)throw Error('Need exactly three foundation questions for '+unit.id);
  const questions=[...data.legacy.map(q=>({...q,...metadata[q.id],assigned:false,subject:data.lessons.find(l=>l.id===q.topic).s})),...fresh.map(q=>({...q,assigned:true,subject:data.units.find(u=>u.id===q.topic)?.s}))];
  if(new Set(questions.map(q=>q.id)).size!==questions.length)throw Error('Duplicate foundation question IDs');

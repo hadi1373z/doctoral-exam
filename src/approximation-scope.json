@@ -1,0 +1,52 @@
+{
+  "updated": "2026-11-21",
+  "source": "User-confirmed section list",
+  "requiredSections": [
+    "3.1",
+    "3.2",
+    "3.3",
+    "5.1",
+    "5.2",
+    "5.3",
+    "5.4",
+    "5.5",
+    "6.1",
+    "6.2",
+    "6.5",
+    "13.2",
+    "7.1",
+    "7.3",
+    "7.4",
+    "8.5",
+    "8.6",
+    "10.1",
+    "16.1",
+    "16.3"
+  ],
+  "requiredUnits": [
+    "core-knapsack",
+    "core-scheduling-scheme",
+    "core-bin-scheme",
+    "core-sat-random",
+    "core-sat-lp",
+    "core-sdp-cut",
+    "core-color-sdp",
+    "core-gaussian-color",
+    "core-dual-cover",
+    "core-dual-path",
+    "core-steiner",
+    "core-tree-metrics",
+    "core-euclidean-tsp",
+    "core-hardness"
+  ],
+  "additionalSections": [
+    "5.6",
+    "5.7",
+    "5.8",
+    "5.9",
+    "5.10",
+    "5.11",
+    "5.12",
+    "10.2"
+  ]
+}

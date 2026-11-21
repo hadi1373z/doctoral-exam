@@ -18,28 +18,13 @@
       "id": "sat",
       "subject": "approx",
       "title": "Randomization and conditional expectation",
-      "source": "W–S §§5.1–5.6",
+      "source": "W–S §§5.1–5.5",
       "idea": "Turn a probability calculation into an algorithm, then combine it with an LP bound.",
       "units": [
         "core-sat-random",
         "core-sat-lp"
       ],
       "before": "Linearity of expectation, independent events, and linear programming relaxations."
-    },
-    {
-      "id": "rounding",
-      "subject": "approx",
-      "title": "Randomized rounding in five settings",
-      "source": "W–S §§5.7–5.12",
-      "idea": "Identify what a relaxation preserves and repair what independent rounding destroys.",
-      "units": [
-        "core-pcst",
-        "core-facility",
-        "core-release",
-        "core-flow",
-        "core-dense-color"
-      ],
-      "before": "The preceding MAX-SAT lectures; LP feasibility, conditional expectation, and a union bound."
     },
     {
       "id": "sdp",
@@ -70,14 +55,14 @@
     {
       "id": "structure",
       "subject": "approx",
-      "title": "Exploit metric and planar structure",
-      "source": "W–S §§8.5–8.6, 10.2",
-      "idea": "Transfer to a simpler space, and prove how much the transfer costs.",
+      "title": "Tree metrics and Euclidean dissection",
+      "source": "W–S §§8.5–8.6, 10.1",
+      "idea": "Replace a difficult instance by structured subproblems and prove the transfer cost.",
       "units": [
         "core-tree-metrics",
-        "core-planar-mis"
+        "core-euclidean-tsp"
       ],
-      "before": "Shortest-path metrics, trees, planar layers, and dynamic programming."
+      "before": "Metric distances, hierarchical partitions, dynamic programming and boundary connectivity."
     },
     {
       "id": "hardness",
@@ -248,31 +233,6 @@
       "The LP spreads truth mass across variables. We will compare clause satisfaction after rounding with the fractional clause value, then combine guarantees without switching the maximization-ratio convention.",
       "The applications that follow preserve a different constraint in each problem; the rounding analysis must change with it."
     ],
-    "pcst": [
-      "Turn fractional inclusion into an actual tree",
-      "Separate connection cost from omitted-vertex penalties. Thresholding chooses which terminals to connect, and each part of the objective needs its own comparison with the fractional solution.",
-      "Facility location also rounds inclusion decisions, but nearby clients need coordinated openings."
-    ],
-    "facility": [
-      "Why independent openings leave a gap",
-      "A fractional assignment can spread one client across many facilities. Clustering first creates representatives and disjoint opening decisions; the distance analysis must account for reassignment to a representative.",
-      "Scheduling replaces spatial distances with a fractional distribution over completion times."
-    ],
-    "release": [
-      "Round a distribution over time",
-      "An α-point selects a position in a fractional schedule. The proof must connect the selected position to an actual feasible schedule and then integrate its cost over the random choice of α.",
-      "Routing changes the obstacle from time feasibility to simultaneous congestion on many edges."
-    ],
-    "flow": [
-      "Expectation alone cannot enforce capacities",
-      "Independent path choices have the right expected loads but can overload an edge. Write a tail bound for one normalized edge load, then choose the congestion factor so a union bound controls all edges.",
-      "Dense coloring instead samples information about an unknown global partition."
-    ],
-    "dense-color": [
-      "A small sample can expose a global partition",
-      "The sample is useful because a dense neighborhood is unlikely to be missed. Enumerate its possible colorings, extend the compatible ones, and keep the probability calculation separate from the extension argument.",
-      "The next chapter replaces sampled discrete labels with vectors and geometric rounding."
-    ],
     "sdp-cut": [
       "An angle becomes a separation probability",
       "Represent the relaxation by vectors and choose a random hyperplane. The central calculation takes place in the plane spanned by two endpoint vectors; the guarantee follows from comparing that probability with the SDP contribution.",
@@ -306,12 +266,7 @@
     "tree-metrics": [
       "A distribution over trees can preserve expected cost",
       "A single dominating tree may distort some pairs badly. Randomization permits an expectation bound for each pair; linearity then transfers the cost of a fixed solution, with algorithmic adaptation checked separately.",
-      "Planar layers give another structural reduction, this time to bounded-width pieces."
-    ],
-    "planar-mis": [
-      "Delete a little, solve the rest exactly",
-      "Delete one residue class of planar layers. One choice loses only a small share of an optimal independent set; bounded treewidth makes the remaining instance tractable by dynamic programming.",
-      "The hardness lecture asks which guarantees cannot be achieved without exploiting extra structure."
+      "Euclidean TSP uses a geometric dissection and boundary states rather than replacing a general metric by a tree."
     ],
     "hardness": [
       "A decision reduction needs a quantitative gap",
@@ -472,6 +427,11 @@
       "Preservation under induced subgraphs is the key condition",
       "One-sided sampling can reject only through a forbidden induced subgraph. The induced removal theorem supplies a bounded witness size for each distance threshold; its dependence on that threshold is part of the guarantee.",
       "Finish by comparing ordinary removal, induced removal, and the exact sampling model in the assigned chapter."
+    ],
+    "euclidean-tsp": [
+      "Geometry limits the information crossing a boundary",
+      "A recursive square decomposition becomes useful only when a near-optimal tour has a bounded boundary description. Portals discretize where it crosses; patching limits how often it crosses. The DP must preserve how the crossings connect.",
+      "Close the approximation course by distinguishing constructive guarantees from PCP gap hardness."
     ]
   },
   "sections": [
@@ -906,6 +866,68 @@
           "title": "5. Recover Loomis–Whitney and test the hypothesis",
           "text": "Take the n projections that omit one coordinate each. Every coordinate occurs n−1 times, yielding the usual exponent. If a coordinate is uncovered, a family can vary freely in that coordinate while all chosen projections stay fixed; this explains why the multiplicity assumption is indispensable.",
           "tex": "|A|^{n-1}\\leq\\prod_{i=1}^{n}|\\pi_{[n]\\setminus\\{i\\}}(A)|."
+        }
+      ]
+    },
+    "core-euclidean-tsp": {
+      "title": "From geometric perturbation to a connectivity-aware PTAS",
+      "scope": "W–S §10.1. The patching structure theorem is an explicit imported lemma; the cost, probability and DP consequences are derived below.",
+      "steps": [
+        {
+          "title": "1. Charge moving the input",
+          "text": "If each point moves by at most δ, each edge changes by at most 2δ and any n-edge tour by at most 2nδ. Applying this once to the old optimum and once to the returned tour gives C≤(1+η)OPT+(2+η)2nδ.",
+          "tex": "|\\ell(T)-\\ell(T')|\\le 2n\\delta,\\qquad C\\le(1+\\eta)\\mathrm{OPT}+(2+\\eta)2n\\delta."
+        },
+        {
+          "title": "2. Allocate the accuracy",
+          "text": "Choose the internal scheme error η=ε/4 and ensure 2nδ≤εOPT/8 using a computable geometric lower bound L≤OPT. For 0<ε≤1, total excess is at most εOPT. Handle the zero-diameter input separately.",
+          "tex": "\\eta+(2+\\eta)\\varepsilon/8\\le\\varepsilon/4+9\\varepsilon/32<\\varepsilon."
+        },
+        {
+          "title": "3. Separate portals from patching",
+          "text": "Nested portals discretize crossing positions. The first structure theorem permits r=O(m), giving quasi-polynomial time. The patching lemma bounds r independently of n, which is the decisive improvement.",
+          "tex": "m=O(\\eta^{-1}\\log n),\\qquad r=O(\\eta^{-1})."
+        },
+        {
+          "title": "4. Derive a probability from expected overhead",
+          "text": "The structure proof bounds nonnegative added length by ηOPT/2 in expectation over the shifted dissection. Markov bounds the probability that added length exceeds ηOPT by 1/2.",
+          "tex": "\\Pr[\\Delta>\\eta\\mathrm{OPT}]\\le\\frac{\\mathbb E\\Delta}{\\eta\\mathrm{OPT}}\\le\\frac12."
+        },
+        {
+          "title": "5. Preserve connectivity, not only used portals",
+          "text": "A state specifies the square, at most r boundary crossing occurrences per side, and their entry/exit pairing. Multiplicity matters. Combine four children by enumerating consistent internal crossings and connections; reject a premature closed component. At the root accept exactly one tour."
+        },
+        {
+          "title": "6. Count time and amplify",
+          "text": "For fixed accuracy the boundary-state enumeration is polynomial in n. Independent repetition makes failure exponentially small in the number of runs; output the cheapest feasible candidate.",
+          "tex": "T(n)=m^{O(r)}n\\log n=n(\\log n)^{O(1/\\eta)},\\qquad \\Pr[\\text{all }t\\text{ runs fail}]\\le2^{-t}."
+        }
+      ]
+    },
+    "core-sat-lp": {
+      "title": "Use one LP benchmark for both MAX-SAT algorithms",
+      "scope": "W–S §§5.4–5.5 only. Nonlinear rounding in §5.6 is additional.",
+      "steps": [
+        {
+          "title": "Step 1",
+          "text": "Normalize clauses and solve the MAX-SAT LP with zC≤sum of literal marginals and zC≤1."
+        },
+        {
+          "title": "Step 2",
+          "text": "Independently set each variable true with its LP marginal; bound a k-literal clause by (1−(1−1/k)^k)zC."
+        },
+        {
+          "title": "Step 3",
+          "text": "A fair assignment satisfies that clause with probability 1−2^(−k)≥(1−2^(−k))zC."
+        },
+        {
+          "title": "Step 4",
+          "text": "For every k≥1, half the sum of these two coefficients is at least 3/4; sum by clause weight and take the better assignment."
+        },
+        {
+          "title": "Check the 3/4 comparison",
+          "text": "For k=1 the two coefficients are 1/2 and 1; for k=2 they are 3/4 and 3/4. For k≥3, 1−2^(−k)≥7/8 and 1−(1−1/k)^k≥1−1/e, whose sum exceeds 3/2. The maximum of two objective values is at least their mean.",
+          "tex": "\\max\\{\\mathbb E W_F,\\mathbb E W_L\\}\\ge\\tfrac12(\\mathbb E W_F+\\mathbb E W_L)\\ge\\tfrac34\\sum_Cw_Cz_C\\ge\\tfrac34\\mathrm{OPT}."
         }
       ]
     }

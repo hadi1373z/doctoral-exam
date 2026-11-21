@@ -1,37 +1,41 @@
-# MAX-SAT rounding: recover 1−1/e and 3/4
+# MAX-SAT: LP rounding and the better-of-two 3/4 guarantee
 
-§§5.4–5.6 · Williamson–Shmoys · The Design of Approximation Algorithms
+§§5.4–5.5 · Williamson–Shmoys · The Design of Approximation Algorithms
 
 12 questions: 4 doctoral proofs, 4 examiner challenges, 2 research investigations, and 2 short oral checks.
 
 [All topics](../README.md) · [Open this topic on the website](https://hadi1373z.github.io/doctoral-exam/#topic/core-sat-lp)
 
-## 1. MAX-SAT rounding: recover 1−1/e and 3/4
+## 1. MAX-SAT: LP rounding and the better-of-two 3/4 guarantee
 
 **Doctoral proof · proof · 30 minutes suggested**
 
 ID: core-sat-lp--source-proof
 
-Derive the 1−1/e factor from the clause LP. Prove a 3/4 factor by comparing the better of fair and LP assignments, including the exceptional unit-clause case. Identify why averaging two global ratios loses the sharper bound.
+Derive the LP-rounding clause bound with AM–GM, then prove the better-of-two 3/4 guarantee clause by clause. Explain why averaging 1/2 and 1−1/e is too weak and why the same LP objective is necessary.
 
 **Required output:** A complete blackboard argument with definitions, every central implication, and explicit bounds or resource accounting.
 
-**Prerequisites:** LP-marginal rounding gives a (1−1/e) guarantee; combining it with a fair assignment gives 3/4. Nonlinear marginal transformations offer another 3/4 analysis.
+**Prerequisites:** Independent LP-marginal rounding gives 1−1/e; choosing the better of fair and LP rounding gives a 3/4 approximation, by a clausewise comparison with the same LP benchmark.
 
 **Examiner follow-up:** Which implication would fail first if the main hypothesis were removed? Give an explicit obstruction.
 
 <details>
 <summary>Solution route / investigation plan</summary>
 
-1. For k literals, AM–GM bounds failure by (1−z/k)^k, so success is at least [1−(1−1/k)^k]z for z∈[0,1]. This is at least (1−1/e)z.
+1. Normalize clauses and solve the MAX-SAT LP with zC≤sum of literal marginals and zC≤1.
 
-2. The fair assignment gives at least (1−2^−k)z. Averaging with LP rounding gives 3/4 for k=1, at least 3/4 for k=2, and at least 3/4 for k≥3 using (1−2^−k)+(1−1/e)≥3/2.
+2. Independently set each variable true with its LP marginal; bound a k-literal clause by (1−(1−1/k)^k)zC.
 
-3. The maximum of the two final objective values is at least their average for each joint outcome. For nonlinear rounding, verify the section’s condition on f separately instead of assuming f(y)=y.
+3. A fair assignment satisfies that clause with probability 1−2^(−k)≥(1−2^(−k))zC.
+
+4. For every k≥1, half the sum of these two coefficients is at least 3/4; sum by clause weight and take the better assignment.
+
+5. For k=1 the two coefficients are 1/2 and 1; for k=2 they are 3/4 and 3/4. For k≥3, 1−2^(−k)≥7/8 and 1−(1−1/k)^k≥1−1/e, whose sum exceeds 3/2. The maximum of two objective values is at least their mean.
 
 </details>
 
-[Williamson–Shmoys · The Design of Approximation Algorithms · §§5.4–5.6](https://designofapproxalgs.com/)
+[Williamson–Shmoys · The Design of Approximation Algorithms · §§5.4–5.5](https://designofapproxalgs.com/)
 
 [Open this question on the website](https://hadi1373z.github.io/doctoral-exam/#question/core-sat-lp--source-proof)
 
@@ -47,7 +51,7 @@ Why is the LP a correct benchmark for maximization?
 
 **Required output:** A concise but justified oral defense. This is a short prerequisite check, not a research problem.
 
-**Prerequisites:** LP-marginal rounding gives a (1−1/e) guarantee; combining it with a fair assignment gives 3/4. Nonlinear marginal transformations offer another 3/4 analysis.
+**Prerequisites:** Independent LP-marginal rounding gives 1−1/e; choosing the better of fair and LP rounding gives a 3/4 approximation, by a clausewise comparison with the same LP benchmark.
 
 **Examiner follow-up:** Justify the decisive claim with a calculation, construction or counterexample rather than its name.
 
@@ -58,7 +62,7 @@ Why is the LP a correct benchmark for maximization?
 
 </details>
 
-[Williamson–Shmoys · The Design of Approximation Algorithms · §§5.4–5.6](https://designofapproxalgs.com/)
+[Williamson–Shmoys · The Design of Approximation Algorithms · §§5.4–5.5](https://designofapproxalgs.com/)
 
 [Open this question on the website](https://hadi1373z.github.io/doctoral-exam/#question/core-sat-lp--oral-check-1)
 
@@ -74,7 +78,7 @@ Can correlations between repeated literals invalidate AM–GM?
 
 **Required output:** A concise but justified oral defense. This is a short prerequisite check, not a research problem.
 
-**Prerequisites:** LP-marginal rounding gives a (1−1/e) guarantee; combining it with a fair assignment gives 3/4. Nonlinear marginal transformations offer another 3/4 analysis.
+**Prerequisites:** Independent LP-marginal rounding gives 1−1/e; choosing the better of fair and LP rounding gives a 3/4 approximation, by a clausewise comparison with the same LP benchmark.
 
 **Examiner follow-up:** Justify the decisive claim with a calculation, construction or counterexample rather than its name.
 
@@ -85,7 +89,7 @@ Can correlations between repeated literals invalidate AM–GM?
 
 </details>
 
-[Williamson–Shmoys · The Design of Approximation Algorithms · §§5.4–5.6](https://designofapproxalgs.com/)
+[Williamson–Shmoys · The Design of Approximation Algorithms · §§5.4–5.5](https://designofapproxalgs.com/)
 
 [Open this question on the website](https://hadi1373z.github.io/doctoral-exam/#question/core-sat-lp--oral-check-2)
 
@@ -114,7 +118,7 @@ For k≥2 take all 2^k clauses containing each of x_1,…,x_k exactly once, with
 
 </details>
 
-[Williamson–Shmoys · The Design of Approximation Algorithms · §§5.4–5.6](https://designofapproxalgs.com/)
+[Williamson–Shmoys · The Design of Approximation Algorithms · §§5.4–5.5](https://designofapproxalgs.com/)
 
 [Open this question on the website](https://hadi1373z.github.io/doctoral-exam/#question/core-sat-lp--all-signs-gap)
 
@@ -143,42 +147,13 @@ Fix a normalized clause with k≥2 literals and literal-truth marginals q_i∈[0
 
 </details>
 
-[Williamson–Shmoys · The Design of Approximation Algorithms · §§5.4–5.6](https://designofapproxalgs.com/)
+[Williamson–Shmoys · The Design of Approximation Algorithms · §§5.4–5.5](https://designofapproxalgs.com/)
 
 [Open this question on the website](https://hadi1373z.github.io/doctoral-exam/#question/core-sat-lp--clause-extremal-chord)
 
 ---
 
-## 6. Prove a concrete transformed-marginal rounding rule
-
-**Examiner challenge · proof · 55 minutes suggested**
-
-ID: core-sat-lp--affine-nonlinear-rule
-
-Set each variable true independently with probability f(y)=1/4+y/2. Prove this produces expected clause weight at least 3/4 of the standard MAX-SAT LP value. Treat unit clauses separately and give an elementary verification for all clause widths.
-
-**Required output:** A complete 3/4 proof for the specified rounding function.
-
-**Prerequisites:** clause LP; AM–GM; concavity
-
-**Examiner follow-up:** Why is the identity f(1−y)=1−f(y) necessary to use the same literal calculation for both signs?
-
-<details>
-<summary>Solution route / investigation plan</summary>
-
-1. A literal with LP truth marginal q has rounded truth probability 1/4+q/2, for either sign. For width k and LP value z, failure is at most (3/4−z/(2k))^k. The corresponding success function is concave in z, so it suffices to check z=0 and z=1 for a lower bound 3z/4.
-
-2. For k=1, success is 1/4+z/2≥3z/4. At z=1, width two gives failure 1/4; widths three and four give respectively (7/12)^3 and (5/8)^4, both below 1/4; for k≥5 use failure≤(3/4)^5<1/4. Sum the resulting inequalities with nonnegative weights.
-
-</details>
-
-[Williamson–Shmoys · The Design of Approximation Algorithms · §§5.4–5.6](https://designofapproxalgs.com/)
-
-[Open this question on the website](https://hadi1373z.github.io/doctoral-exam/#question/core-sat-lp--affine-nonlinear-rule)
-
----
-
-## 7. LP-optimal marginals can have different rounding values
+## 6. LP-optimal marginals can have different rounding values
 
 **Examiner challenge · synthesis · 40 minutes suggested**
 
@@ -201,13 +176,13 @@ For a single positive k-literal clause of weight one, restrict to LP optima sati
 
 </details>
 
-[Williamson–Shmoys · The Design of Approximation Algorithms · §§5.4–5.6](https://designofapproxalgs.com/)
+[Williamson–Shmoys · The Design of Approximation Algorithms · §§5.4–5.5](https://designofapproxalgs.com/)
 
 [Open this question on the website](https://hadi1373z.github.io/doctoral-exam/#question/core-sat-lp--optimal-face-rounding)
 
 ---
 
-## 8. Perturb a tight two-variable gap
+## 7. Perturb a tight two-variable gap
 
 **Examiner challenge · construction · 35 minutes suggested**
 
@@ -230,13 +205,13 @@ Give the four possible signed two-literal clauses on x,y positive weights a,b,c,
 
 </details>
 
-[Williamson–Shmoys · The Design of Approximation Algorithms · §§5.4–5.6](https://designofapproxalgs.com/)
+[Williamson–Shmoys · The Design of Approximation Algorithms · §§5.4–5.5](https://designofapproxalgs.com/)
 
 [Open this question on the website](https://hadi1373z.github.io/doctoral-exam/#question/core-sat-lp--weighted-gap-sensitivity)
 
 ---
 
-## 9. Research exercise: certify rounding from an approximate LP
+## 8. Research exercise: certify rounding from an approximate LP
 
 **Research seminar · research-extension · 85 minutes suggested**
 
@@ -259,13 +234,13 @@ Suppose y∈[0,1]^n,z∈[0,1]^m violate each clause constraint by at most δ_C�
 
 </details>
 
-[Williamson–Shmoys · The Design of Approximation Algorithms · §§5.4–5.6](https://designofapproxalgs.com/)
+[Williamson–Shmoys · The Design of Approximation Algorithms · §§5.4–5.5](https://designofapproxalgs.com/)
 
 [Open this question on the website](https://hadi1373z.github.io/doctoral-exam/#question/core-sat-lp--approximate-solver-robustness)
 
 ---
 
-## 10. Research exercise: numerically audit the clause inequality
+## 9. Research exercise: numerically audit the clause inequality
 
 **Research seminar · research-extension · 75 minutes suggested**
 
@@ -288,13 +263,13 @@ For widths 2≤k≤6 and z on {0,1/10,…,1}, enumerate rational marginal vector
 
 </details>
 
-[Williamson–Shmoys · The Design of Approximation Algorithms · §§5.4–5.6](https://designofapproxalgs.com/)
+[Williamson–Shmoys · The Design of Approximation Algorithms · §§5.4–5.5](https://designofapproxalgs.com/)
 
 [Open this question on the website](https://hadi1373z.github.io/doctoral-exam/#question/core-sat-lp--marginal-extremal-grid)
 
 ---
 
-## 11. An integral LP coordinate need not persist in an integer optimum
+## 10. An integral LP coordinate need not persist in an integer optimum
 
 **Doctoral proof · counterexample · 40 minutes suggested**
 
@@ -317,13 +292,13 @@ For 0<a<1, take the four clauses x∨L_y∨L_z for every sign choice of y,z, eac
 
 </details>
 
-[Williamson–Shmoys · The Design of Approximation Algorithms · §§5.4–5.6](https://designofapproxalgs.com/)
+[Williamson–Shmoys · The Design of Approximation Algorithms · §§5.4–5.5](https://designofapproxalgs.com/)
 
 [Open this question on the website](https://hadi1373z.github.io/doctoral-exam/#question/core-sat-lp--integral-coordinate-nonpersistency)
 
 ---
 
-## 12. Preserve a truth budget for positive clauses
+## 11. Preserve a truth budget for positive clauses
 
 **Examiner challenge · construction · 55 minutes suggested**
 
@@ -346,6 +321,35 @@ For positive clauses only, impose sum_i y_i=k with integer k. Prove that the ind
 
 </details>
 
-[Williamson–Shmoys · The Design of Approximation Algorithms · §§5.4–5.6](https://designofapproxalgs.com/)
+[Williamson–Shmoys · The Design of Approximation Algorithms · §§5.4–5.5](https://designofapproxalgs.com/)
 
 [Open this question on the website](https://hadi1373z.github.io/doctoral-exam/#question/core-sat-lp--positive-budget-pipage)
+
+---
+
+## 12. Repair a combination of incompatible lower bounds
+
+**Examiner challenge · counterexample · 30 minutes suggested**
+
+ID: core-sat-lp--common-lp-benchmark
+
+A proof averages the global 1/2 fair-assignment ratio with the global 1−1/e LP-rounding ratio, then claims 3/4. Compute what that argument actually proves. Repair it using the k=1, k=2 and k≥3 clause cases and one LP benchmark.
+
+**Required output:** An explicit failed calculation, a complete clausewise repair and a justified expectation inequality.
+
+**Prerequisites:** Independent LP-marginal rounding gives 1−1/e; choosing the better of fair and LP rounding gives a 3/4 approximation, by a clausewise comparison with the same LP benchmark.
+
+**Examiner follow-up:** Can the maximum of expectations be substituted for the expectation of the maximum as an equality? Give a two-outcome counterexample.
+
+<details>
+<summary>Solution route / investigation plan</summary>
+
+1. For k=1 the two coefficients are 1/2 and 1; for k=2 they are 3/4 and 3/4. For k≥3, 1−2^(−k)≥7/8 and 1−(1−1/k)^k≥1−1/e, whose sum exceeds 3/2. The maximum of two objective values is at least their mean.
+
+2. The global average is 3/4−1/(2e), about 0.566. It is weaker because the hard clauses for the two analyses differ. The clausewise sum is at least 3/2 times zC.
+
+</details>
+
+[Williamson–Shmoys · The Design of Approximation Algorithms · §§5.4–5.5](https://designofapproxalgs.com/)
+
+[Open this question on the website](https://hadi1373z.github.io/doctoral-exam/#question/core-sat-lp--common-lp-benchmark)

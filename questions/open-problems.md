@@ -1,6 +1,6 @@
 # Supplementary open-problem agendas
 
-Status references checked 5 November 2026. These agendas are separate from the 600 course questions. A proof of the unrestricted question is not expected; each agenda specifies a bounded seminar task.
+Status references checked 5 November 2026. These agendas are separate from the 540 course questions. A proof of the unrestricted question is not expected; each agenda specifies a bounded seminar task.
 
 ## 1. P versus NP: distinguish a barrier from a proof
 

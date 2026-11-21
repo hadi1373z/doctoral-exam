@@ -1,4 +1,5 @@
-/* Authored LaTeX for the 50 assigned lessons. Mathematical prose is not auto-converted. */
+'use strict';
+/* Required approximation scope corrected from the user's explicit list, 21 November 2026. */
 const LESSON_LATEX = {
   "core-knapsack": {
     "tex": "K\\sum_{i\\in O}p_i'\\ge \\mathrm{OPT}-nK\\ge(1-\\varepsilon)\\mathrm{OPT}"
@@ -16,22 +17,6 @@ const LESSON_LATEX = {
   },
   "core-sat-lp": {
     "tex": "\\Pr(C\\text{ is satisfied})\\ge\\left[1-\\left(1-\\frac1k\\right)^k\\right]z_C\\ge\\left(1-\\frac1e\\right)z_C"
-  },
-  "core-pcst": {
-    "tex": "\\mathbb E[\\mathrm{cost}]\\le\\frac{2\\ln(1/\\gamma)}{1-\\gamma}\\,E+\\frac{1}{1-\\gamma}\\,P"
-  },
-  "core-facility": {
-    "tex": "\\begin{aligned}\\mathbb E[\\mathrm{cost}]&\\le F^*+\\sum_j C_j^*+2\\sum_j v_j^*\\\\&\\le 3\\,\\mathrm{OPT}.\\end{aligned}",
-    "note": "F* is fractional opening cost, Cⱼ* is fractional connection cost for client j, and vⱼ* is its dual price."
-  },
-  "core-release": {
-    "tex": "\\mathbb E[\\widehat C_j]\\le p_j+2\\mathbb E[X_j]=2C_j^*"
-  },
-  "core-flow": {
-    "tex": "\\Pr(X\\ge a)\\le e^{a-\\mu}\\left(\\frac{\\mu}{a}\\right)^a\\le\\left(\\frac{e\\mu}{a}\\right)^a,\\qquad a\\ge\\mu,\\ a>0"
-  },
-  "core-dense-color": {
-    "tex": "\\Pr\\bigl(\\exists v:\\ N(v)\\cap S=\\varnothing\\bigr)\\le n\\,e^{-p\\delta n}"
   },
   "core-sdp-cut": {
     "tex": "\\alpha_{\\mathrm{GW}}=\\min_{0<\\theta\\le\\pi}\\frac{2\\theta}{\\pi(1-\\cos\\theta)}\\approx0.87856"
@@ -55,9 +40,6 @@ const LESSON_LATEX = {
   },
   "core-tree-metrics": {
     "tex": "\\mathbb E_T\\!\\left[\\sum_{e\\in E}f(c_e^*)\\,d_T(e)\\right]\\le\\alpha\\sum_{e\\in E}f(c_e^*)\\,d(e)"
-  },
-  "core-planar-mis": {
-    "tex": "|I_{\\mathrm{best}}|\\ge\\left(1-\\frac1k\\right)\\mathrm{OPT}"
   },
   "core-hardness": {
     "tex": "\\begin{gathered}\\mathrm{YES}\\ge(4-\\varepsilon)M,\\qquad\\mathrm{NO}\\le\\left(\\frac72+\\delta\\right)M,\\\\ \\rho(4-\\varepsilon)>\\frac72+\\delta.\\end{gathered}",
@@ -166,5 +148,8 @@ const LESSON_LATEX = {
   "core-hereditary": {
     "tex": "\\begin{gathered}\\mathcal P\\text{ hereditary}\\\\ \\Longrightarrow\\ \\mathcal P=\\operatorname{Forb}_{\\mathrm{ind}}(\\mathcal F)\\\\ \\Longrightarrow\\ \\mathcal P\\text{ is one-sided testable}.\\end{gathered}",
     "note": "F is a family of forbidden induced subgraphs. The final implication uses the induced-removal input."
+  },
+  "core-euclidean-tsp": {
+    "tex": "\\begin{aligned}C&\\le(1+\\eta)\\mathrm{OPT}+(2+\\eta)2n\\delta,\\\\m&=O(\\eta^{-1}\\log n),\\quad r=O(\\eta^{-1}),\\\\T(n)&=n(\\log n)^{O(1/\\eta)}.\\end{aligned}"
   }
 };

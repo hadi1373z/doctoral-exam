@@ -4,7 +4,7 @@ const c={console,document:{addEventListener(){},getElementById(){return null;}},
 vm.createContext(c);for(const m of html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi))vm.runInContext(m[1],c);
 const run=s=>vm.runInContext(s,c);
 const ids=run('CORE_UNITS.map(u=>u.id)');
-assert.equal(ids.length,50);assert.equal(run('Object.keys(LESSON_PICTURE_MAP).length'),50);
+assert.equal(ids.length,45);assert.equal(run('Object.keys(LESSON_PICTURE_MAP).length'),50);
 for(const id of ids){
  const family=run(`pictureModel(${JSON.stringify(id)}).family`);assert.ok(family,id);
  for(let n=0;n<12;n++){
@@ -34,5 +34,5 @@ const before=run('JSON.stringify(progress)');
 for(const id of ids)for(const op of ['cycle','step','toggle','schedule','balance','reset'])run(`pictureInteract(${JSON.stringify(id)},${JSON.stringify(op)},'1')`);
 assert.equal(run('JSON.stringify(progress)'),before,'Picture experimentation changed learner progress');
 assert.equal(run('examTotals().cold'),0);assert.equal(run('guidedTotals().completed'),0);
-console.log('PASS: all 50 assigned lessons have accessible interactive pictures; exact finite probability, graph, scheduling and protocol examples agree with their stated values.');
+console.log('PASS: all 45 assigned lessons have accessible interactive pictures; exact finite probability, graph, scheduling and protocol examples agree with their stated values.');
 console.log('PASS: exploring every picture leaves learning checkpoints and cold-exam evidence unchanged.');

@@ -1,6 +1,6 @@
 # Doctoral question repository
 
-600 original course questions across 50 assigned topics: 12 per topic, including two research seminar investigations. Short oral checks are labeled separately from full proof, examiner and research tasks. The 100 cold-exam transfer prompts remain outside this study bank and are shown only after proof commitment in the website.
+540 original course questions across 45 assigned topics: 12 per topic, including two research seminar investigations. Short oral checks are labeled separately from full proof, examiner and research tasks. The 90 cold-exam transfer prompts remain outside this study bank and are shown only after proof commitment in the website.
 
 Research seminar exercises are not claims of new results. The two open-problem agendas are supplementary, and solving an unrestricted open problem is not expected. All work here is practice; exam progress uses the separate cold evidence rules.
 
@@ -12,12 +12,7 @@ Research seminar exercises are not claims of new results. The two open-problem a
 - [§3.2 · Scheduling schemes: large jobs, rounded types, configurations](approx/scheduling-scheme.md) — 12 questions
 - [§3.3 · Bin packing: linear grouping and the additive term](approx/bin-scheme.md) — 12 questions
 - [§§5.1–5.3 · Random and biased assignments; derandomization](approx/sat-random.md) — 12 questions
-- [§§5.4–5.6 · MAX-SAT rounding: recover 1−1/e and 3/4](approx/sat-lp.md) — 12 questions
-- [§5.7 · Prize-collecting Steiner tree: threshold rounding](approx/pcst.md) — 12 questions
-- [§5.8 · Facility location: clustering before randomized opening](approx/facility.md) — 12 questions
-- [§5.9 · Release-date scheduling: randomized α-points](approx/release.md) — 12 questions
-- [§§5.10–5.11 · Chernoff bounds and randomized unsplittable routing](approx/flow.md) — 12 questions
-- [§5.12 · Dense 3-colorable graphs: sample, enumerate, extend](approx/dense-color.md) — 12 questions
+- [§§5.4–5.5 · MAX-SAT: LP rounding and the better-of-two 3/4 guarantee](approx/sat-lp.md) — 12 questions
 - [§§6.1–6.2 · Gram matrices and the exact MAX-CUT ratio](approx/sdp-cut.md) — 12 questions
 - [§6.5 · Vector coloring, semicoloring, and the 0.387 exponent](approx/color-sdp.md) — 12 questions
 - [§13.2 · Gaussian threshold rounding for independent sets](approx/gaussian-color.md) — 12 questions
@@ -25,7 +20,7 @@ Research seminar exercises are not claims of new results. The two open-problem a
 - [§7.3 · Shortest path: why reverse deletion is essential](approx/dual-path.md) — 12 questions
 - [§7.4 · Generalized Steiner tree: moat growth and the forest lemma](approx/steiner.md) — 12 questions
 - [§§8.5–8.6 · Random tree metrics and buy-at-bulk transfer](approx/tree-metrics.md) — 12 questions
-- [§10.2 · Baker’s PTAS: layers, treewidth, independent-set DP](approx/planar-mis.md) — 12 questions
+- [§10.1 · Euclidean TSP: dissection, portals, patching and a PTAS](approx/euclidean-tsp.md) — 12 questions
 - [§§16.1, 16.3 · Hardness: gaps, PCP predicates, and approximation conventions](approx/hardness.md) — 12 questions
 
 ## Interactive proofs and zero knowledge
